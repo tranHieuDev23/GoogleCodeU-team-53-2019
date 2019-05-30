@@ -25,11 +25,11 @@ function buildTeamMemberDiv(member) {
     const informationList = document.createElement('ul');
 
     const feelzItem = document.createElement('li');
-    feelzItem.appendChild(document.createTextNode(member.summerFeelz));
+    feelzItem.appendChild(document.createTextNode("Summer Feelz: " + member.summerFeelz));
     const hobbyItem = document.createElement('li');
-    hobbyItem.appendChild(document.createTextNode(member.aspirationalHobby));
+    hobbyItem.appendChild(document.createTextNode("Aspirational Hobby: " + member.aspirationalHobby));
     const askMeItem = document.createElement('li');
-    askMeItem.appendChild(document.createTextNode(member.askMeAbout));
+    askMeItem.appendChild(document.createTextNode("Ask me About: " + member.askMeAbout));
 
     informationList.appendChild(feelzItem);
     informationList.appendChild(hobbyItem);
