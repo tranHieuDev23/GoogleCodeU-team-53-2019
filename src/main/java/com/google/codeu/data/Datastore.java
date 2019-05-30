@@ -119,7 +119,7 @@ public class Datastore {
     public List<TeamMember> getAllTeamMember() {
         List<TeamMember> members = new ArrayList<>();
 
-        Query query = new Query("Team Member");
+        Query query = new Query("Team Member").addSort("Timestamp", SortDirection.ASCENDING);
         PreparedQuery results = datastore.prepare(query);
 
         for (Entity entity : results.asIterable()) {
