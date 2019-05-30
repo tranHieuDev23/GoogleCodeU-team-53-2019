@@ -49,15 +49,13 @@ public class Datastore {
     /**
      * Gets messages posted by a specific user.
      *
-     * @return a list of messages posted by the user, or empty list if user has never posted a
-     * message. List is sorted by time descending.
+     * @return a list of messages posted by the user, or empty list if user has
+     *         never posted a message. List is sorted by time descending.
      */
     public List<Message> getMessages(String user) {
         List<Message> messages = new ArrayList<>();
 
-        Query query =
-            new Query("Message")
-                .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
+        Query query = new Query("Message").setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
                 .addSort("timestamp", SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
 
@@ -80,11 +78,16 @@ public class Datastore {
         return messages;
     }
 
+    /**
+     * Gets every messages posted by all user.
+     * 
+     * @return a list of messages posted by the user, or empty list if user has
+     *         never posted a message. List is sorted by time descending.
+     */
     public List<Message> getAllMessage() {
         List<Message> messages = new ArrayList<>();
 
-        Query query = new Query("Message")
-            .addSort("timestamp", SortDirection.DESCENDING);
+        Query query = new Query("Message").addSort("timestamp", SortDirection.DESCENDING);
         PreparedQuery results = datastore.prepare(query);
 
         for (Entity entity : results.asIterable()) {
@@ -104,5 +107,39 @@ public class Datastore {
             }
         }
         return messages;
+    }
+
+    /**
+     * Get information about every team member
+     * 
+     * @return a list of team member information, or empty list if there is no data.
+     *         List is sorted by order of appearance, which is for now according to
+     *         a Date/Time property named "Timestamp"
+     */
+    public List<TeamMember> getAllTeamMember() {
+        List<TeamMember> members = new ArrayList<>();
+
+        Query query = new Query("Team Member").addSort("Timestamp", SortDirection.ASCENDING);
+        PreparedQuery results = datastore.prepare(query);
+
+        for (Entity entity : results.asIterable()) {
+            try {
+                String idString = entity.getKey().getName();
+                UUID id = UUID.fromString(idString);
+                String name = (String) entity.getProperty("Name");
+                String summerFeelz = (String) entity.getProperty("Summer Feelz");
+                String aspirationalHobby = (String) entity.getProperty("Aspirational Hobby");
+                String askMeAbout = (String) entity.getProperty("Ask Me About");
+
+                TeamMember member = new TeamMember(id, name, summerFeelz, aspirationalHobby, askMeAbout);
+                members.add(member);
+            } catch (Exception e) {
+                System.err.println("Error loading team member's information!");
+                System.err.println(entity.toString());
+                e.printStackTrace();
+            }
+        }
+
+        return members;
     }
 }
