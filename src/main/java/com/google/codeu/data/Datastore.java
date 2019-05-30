@@ -114,24 +114,22 @@ public class Datastore {
      * 
      * @return a list of team member information, or empty list if there is no data.
      *         List is sorted by order of appearance, which is for now according to
-     *         a Date/Time property named "Timestamp"
+     *         a Date/Time property named "Timestamp".
      */
     public List<TeamMember> getAllTeamMember() {
         List<TeamMember> members = new ArrayList<>();
 
-        Query query = new Query("Team Member").addSort("Timestamp", SortDirection.ASCENDING);
+        Query query = new Query("Team Member");
         PreparedQuery results = datastore.prepare(query);
 
         for (Entity entity : results.asIterable()) {
             try {
-                String idString = entity.getKey().getName();
-                UUID id = UUID.fromString(idString);
                 String name = (String) entity.getProperty("Name");
                 String summerFeelz = (String) entity.getProperty("Summer Feelz");
                 String aspirationalHobby = (String) entity.getProperty("Aspirational Hobby");
-                String askMeAbout = (String) entity.getProperty("Ask Me About");
+                String askMeAbout = (String) entity.getProperty("Ask me About");
 
-                TeamMember member = new TeamMember(id, name, summerFeelz, aspirationalHobby, askMeAbout);
+                TeamMember member = new TeamMember(name, summerFeelz, aspirationalHobby, askMeAbout);
                 members.add(member);
             } catch (Exception e) {
                 System.err.println("Error loading team member's information!");
