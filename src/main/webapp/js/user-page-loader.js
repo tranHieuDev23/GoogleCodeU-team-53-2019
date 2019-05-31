@@ -96,6 +96,7 @@ function buildUI() {
   setPageTitle();
   showMessageFormIfViewingSelf();
   fetchMessages();
+    fetchAboutMe();
 }
 
 /** Fetch aboutMe */

@@ -12,6 +12,9 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.User;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
 /**Handles fetching and saving user data.*/
 @WebServlet("/about")
 public class AboutMeServlet extends HttpServlet {
@@ -57,7 +60,9 @@ public class AboutMeServlet extends HttpServlet {
     }
 
     String userEmail = userService.getCurrentUser().getEmail();
-    String aboutMe = request.getParameter("about-me");
+    /**String aboutMe = request.getParameter("about-me");
+     jsoup lib to sanitize content */
+    String aboutMe = Jsoup.clean(request.getParameter("about-me"), Whitelist.none());
 
     User user = new User(userEmail, aboutMe);
     datastore.storeUser(user);
