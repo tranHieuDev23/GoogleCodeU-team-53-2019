@@ -136,11 +136,9 @@ public class Datastore {
                 e.printStackTrace();
             }
         }
-
         return members;
     }
-    return messages;
-  }
+
   /** Stores the User in Datastore */
   public void storeUser(User user){
       Entity userEntity = new Entity("User", user.getEmail());
@@ -166,4 +164,5 @@ public class Datastore {
       
       return user;
   }
+  //return messages;
 }
