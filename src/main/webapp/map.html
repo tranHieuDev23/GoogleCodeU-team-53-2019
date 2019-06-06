@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Maps - Part 1 Demo</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/user-page.css">
+    <style>
+        #map {
+            width: 500px;
+            height: 500px;
+            border: thin solid black;
+        }
+    </style>
+</head>
+
+<body onload="createMap();">
+    <div id="content">
+        <nav>
+            <ul id="navigation">
+                <li><a href="/">Home</a></li>
+                <li><a href="/feed.html">Public Feed</a></li>
+                <li><a href="/aboutus.html">About Our Team</a></li>
+                <li><a href="/stats.html">Stats Page</a></li>
+            </ul>
+        </nav>
+        <h1>Maps - Part 1 Demo</h1>
+        <div id="map"></div>
+        <p>This page shows a Google Map, and ask for your permission to access your location. If provided, it will place
+            a marker on the map according to where you are.</p>
+    </div>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBA_zkF41AfqEybRL2E551rDt9Hs5-UwU8"></script>
+    <script src="js/map-loader.js"></script>
+</body>
+
+</html>
