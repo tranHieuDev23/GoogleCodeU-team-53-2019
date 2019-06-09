@@ -20,6 +20,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.UserInput;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -46,8 +47,8 @@ public class MessageServlet extends HttpServlet {
   }
 
   /**
-   * Responds with a JSON representation of {@link Message} data for a specific user. Responds with
-   * an empty array if the user is not provided.
+   * Responds with a JSON representation of {@link Message} data for a specific
+   * user. Responds with an empty array if the user is not provided.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -80,7 +81,9 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String input = request.getParameter("text"); // markdown input
+    String htmlString = UserInput.TransformToHTML(input);
+    String userText = UserInput.sanitizingHtmlInput(htmlString);
 
     /** Create regular expression */
     String regex = "(https?://\\S+\\.(png|jpg))";
