@@ -41,6 +41,10 @@ public class MessageServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
+  public Datastore getDatastore() {
+    return datastore;
+  }
+
   /**
    * Responds with a JSON representation of {@link Message} data for a specific user. Responds with
    * an empty array if the user is not provided.
