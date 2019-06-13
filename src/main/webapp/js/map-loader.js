@@ -1,28 +1,26 @@
 function createMap() {
     const map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 37.422, lng: -122.084 },
-        zoom: 16
+        center: { lat: 40.430905, lng: -100.814640 },
+        zoom: 3
     });
 
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition((position) => {
-            var pos = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            }
-            addLandmark(map, pos, "Your location", "This is where you are now.")
-            map.setCenter(pos)
-        }, (error) => {
-            handleError(true, map)
+    fetch('/map').then((response) => {
+        return response.json();
+    }).then((sightings) => {
+        const ufoIconURL = 'images/icons/ufo.png'
+        sightings.forEach((item) => {
+            const description = item.description;
+            const position = { lat: item.lat, lng: item.lng };
+            addLandmark(map, position, ufoIconURL, description);
         })
-    } else {
-        handleError(false, map)
-    }
+    }).catch((reason) => {
+        alert(reason)
+    })
 }
 
-function addLandmark(map, position, title, description) {
+function addLandmark(map, position, icon, description) {
     const marker = new google.maps.Marker({
-        position, map, title
+        position, map, icon
     })
     const infoWindow = new google.maps.InfoWindow({
         content: description
@@ -30,14 +28,4 @@ function addLandmark(map, position, title, description) {
     marker.addListener('click', () => {
         infoWindow.open(map, marker)
     })
-}
-
-function handleError(hasGeolocation, map) {
-    const infoWindow = new google.maps.InfoWindow({
-        content: (hasGeolocation
-            ? 'Error: The Geolocation service failed!'
-            : 'Error: Your browser does not support Geolocation!')
-    })
-    infoWindow.setPosition(map.getCenter())
-    infoWindow.open(map)
 }
