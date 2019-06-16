@@ -96,7 +96,8 @@ function buildUI() {
   setPageTitle();
   showMessageFormIfViewingSelf();
   fetchMessages();
-    fetchAboutMe();
+  fetchAboutMe();
+  turnIntoNewEditor();
 }
 
 /** Fetch aboutMe */
@@ -111,4 +112,10 @@ function fetchAboutMe(){
         }
         aboutMeContainer.innerHTML = aboutMe;
     });
+}
+
+/** Turn basic editor into a rich text editor*/
+function turnIntoNewEditor()  {
+  const config = {removePlugins: [ 'List', 'Table']};  
+  ClassicEditor.create( document.getElementById('message-input'), config);
 }
