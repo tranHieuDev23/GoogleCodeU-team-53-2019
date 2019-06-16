@@ -116,6 +116,6 @@ function fetchAboutMe(){
 
 /** Turn basic editor into a rich text editor*/
 function turnIntoNewEditor()  {
-  ClassicEditor.create( document.getElementById('message-input') );
-
+  const config = {removePlugins: [ 'List', 'Table']};  
+  ClassicEditor.create( document.getElementById('message-input'), config);
 }

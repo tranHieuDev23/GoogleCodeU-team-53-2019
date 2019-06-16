@@ -22,14 +22,18 @@ import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.codeu.data.UserInput;
 import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.List;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -81,7 +85,9 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    String input = request.getParameter("text"); // markdown input
+    String input = request.getParameter("text");
+    /** Unescape input unto HTML format. */
+    input = StringEscapeUtils.unescapeHtml4(input);
     String htmlString = UserInput.TransformToHTML(input);
     String userText = UserInput.sanitizingHtmlInput(htmlString);
 
