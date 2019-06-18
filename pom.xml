@@ -61,6 +61,21 @@ limitations under the License.
       <version>1.52.0</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.vladsch.flexmark/flexmark-all -->
+    <dependency>
+        <groupId>com.vladsch.flexmark</groupId>
+        <artifactId>flexmark-all</artifactId>
+        <version>0.42.12</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.9</version>
+    </dependency>
+
+
   </dependencies>
 
   <build>

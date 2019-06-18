@@ -20,15 +20,20 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.UserInput;
 import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.List;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -41,9 +46,13 @@ public class MessageServlet extends HttpServlet {
     datastore = new Datastore();
   }
 
+  public Datastore getDatastore() {
+    return datastore;
+  }
+
   /**
-   * Responds with a JSON representation of {@link Message} data for a specific user. Responds with
-   * an empty array if the user is not provided.
+   * Responds with a JSON representation of {@link Message} data for a specific
+   * user. Responds with an empty array if the user is not provided.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -76,7 +85,11 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
-    String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String input = request.getParameter("text");
+    /** Unescape input unto HTML format. */
+    input = StringEscapeUtils.unescapeHtml4(input);
+    String htmlString = UserInput.TransformToHTML(input);
+    String userText = UserInput.sanitizingHtmlInput(htmlString);
 
     /** Create regular expression */
     String regex = "(https?://\\S+\\.(png|jpg))";
