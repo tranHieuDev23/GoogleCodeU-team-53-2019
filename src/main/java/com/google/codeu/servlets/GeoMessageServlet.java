@@ -38,7 +38,7 @@ public class GeoMessageServlet extends HttpServlet {
             return;
         }
 
-        String user = userService.getCurrentUser().getEmail();
+        String user = request.getParameter("user");
         double latitude = Double.parseDouble(request.getParameter("latitude"));
         double longitude = Double.parseDouble(request.getParameter("longitude"));
         String input = request.getParameter("text");
@@ -57,6 +57,6 @@ public class GeoMessageServlet extends HttpServlet {
         GeoMessage message = new GeoMessage(user, latitude, longitude, textWithImagesReplaced);
         GeoMessage.storeGeoMessage(message);
 
-        response.sendRedirect("/user-page.html?user=" + user);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }
