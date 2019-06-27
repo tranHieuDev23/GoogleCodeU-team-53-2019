@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponse;
  * This Servlet can then analyze the image using Vision API
  */
 
-@WebServlet("/image-anaylsis")
+@WebServlet("/image-analysis")
 public class ImageAnalysisServlet extends HttpServlet {
 
     @Override
@@ -70,7 +70,7 @@ public class ImageAnalysisServlet extends HttpServlet {
          * Output some HTML that shows the data that user entered
          */
         response.setContentType("text/html");
-        out.println("<p>Here's the image that you uploaded</p>");
+        out.println("<p>Here's the image that you uploaded:</p>");
         out.println("<a href=\"" + imageUrl + "\">");
         out.println("<img src=\"" + imageUrl + "\" />");
         out.println("</a>");

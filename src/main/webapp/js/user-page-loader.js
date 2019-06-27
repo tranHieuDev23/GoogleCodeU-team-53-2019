@@ -98,6 +98,7 @@ function buildUI() {
   fetchMessages();
   fetchAboutMe();
   turnIntoNewEditor();
+  fetchBlobstoreUrlAndShowForm();
 }
 
 /** Fetch aboutMe */
@@ -116,6 +117,7 @@ function fetchAboutMe(){
 
 /** Turn basic editor into a rich text editor*/
 function turnIntoNewEditor()  {
-  const config = {removePlugins: [ 'List', 'Table']};  
+  const config = {removePlugins: [ 'List', 'Table']};
   ClassicEditor.create( document.getElementById('message-input'), config);
 }
+
