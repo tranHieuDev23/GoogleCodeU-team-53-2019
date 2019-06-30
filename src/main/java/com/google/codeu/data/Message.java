@@ -18,6 +18,9 @@ package com.google.codeu.data;
 
 import java.util.UUID;
 
+import java.sql.Timestamp; 
+import java.util.Date;    
+
 /** A single message posted by a user. */
 public class Message {
 
@@ -55,5 +58,12 @@ public class Message {
 
   public long getTimestamp() {
     return timestamp;
+  }
+
+  public String getTime() {
+    Timestamp ts = new Timestamp(getTimestamp());
+    Date date = ts;
+    String result = date.toString();
+    return result;
   }
 }
