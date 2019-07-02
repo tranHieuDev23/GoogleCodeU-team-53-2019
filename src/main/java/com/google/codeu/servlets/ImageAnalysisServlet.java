@@ -55,7 +55,8 @@ public class ImageAnalysisServlet extends HttpServlet {
 
         //User did not upload a file, so render an error msg
         if (blobKey == null) {
-            out.println("Please upload an image file");
+            //out.println("Please upload an image file");
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
