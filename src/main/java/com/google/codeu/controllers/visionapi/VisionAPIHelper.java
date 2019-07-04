@@ -28,10 +28,11 @@ public class VisionAPIHelper {
     /**
      * Predict relevant tags from a list of images, using the Vision API.
      * 
-     * @param imageStreams List of byte streams describing the input images.
+     * @param imageStreams   List of byte streams describing the input images.
+     * @param maxResultCount The maximum number of results to return.
      * @return An array of predicted tags, sorted by relevance.
      */
-    public String[] predictTags(List<InputStream> imageStreams) {
+    public String[] predictTags(List<InputStream> imageStreams, int maxResultCount) {
         String[] result = null;
         /**
          * TODO: Implement tag prediction, using Vision API here. There should not be
