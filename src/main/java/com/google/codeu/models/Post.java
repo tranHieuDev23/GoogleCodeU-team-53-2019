@@ -13,7 +13,7 @@ public class Post {
     private String descriptionText;
     private List<PostImage> postImages;
     private List<Tag> tags;
-    private List<User> likedUsers;
+    private List<String> likedUserIds;
 
     /**
      * Construct a new <code>Post</code> object without ID, creation time and list
@@ -47,10 +47,10 @@ public class Post {
      * @param descriptionText The post's description text.
      * @param postImages      The list of images associated with this post.
      * @param tags            The list of tags this post has.
-     * @param likedUsers      The list of users who liked this post.
+     * @param likedUserIds      The list of users who liked this post.
      */
     public Post(UUID id, User author, Location location, long creationTime, String descriptionText,
-            List<PostImage> postImages, List<Tag> tags, List<User> likedUsers) {
+            List<PostImage> postImages, List<Tag> tags, List<String> likedUserIds) {
         this.id = id;
         this.author = author;
         this.location = location;
@@ -58,7 +58,7 @@ public class Post {
         this.descriptionText = descriptionText;
         this.postImages = postImages;
         this.tags = tags;
-        this.likedUsers = likedUsers;
+        this.likedUserIds = likedUserIds;
     }
 
     public UUID getId() {
@@ -89,8 +89,8 @@ public class Post {
         return tags;
     }
 
-    public List<User> getLikedUsers() {
-        return likedUsers;
+    public List<String> getLikedUserIds() {
+        return likedUserIds;
     }
 
     public List<Comment> getComments() {

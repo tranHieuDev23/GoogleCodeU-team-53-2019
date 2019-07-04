@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.codeu.models.*;
 
 public class PostDao {
@@ -16,6 +17,7 @@ public class PostDao {
     private static final String PROPERTY_NAME_CREATION_TIME = "CreationTime";
     private static final String PROPERTY_NAME_DESCRIPTION_TEXT = "DescriptionText";
     private static final String PROPERTY_NAME_TAGS = "Tags";
+    private static final String PROPERTY_NAME_LIKED_USER_IDS = "LikedUserIds";
 
     private DatastoreService datastore;
     private UserDao userDao;
@@ -36,6 +38,7 @@ public class PostDao {
         entity.setProperty(PROPERTY_NAME_CREATION_TIME, post.getCreationTime());
         entity.setProperty(PROPERTY_NAME_DESCRIPTION_TEXT, post.getDescriptionText());
         entity.setProperty(PROPERTY_NAME_TAGS, getIdsFromTags(post.getTags()));
+        entity.setProperty(PROPERTY_NAME_LIKED_USER_IDS, post.getLikedUserIds());
         datastore.put(entity);
 
         postImageDao.storePostImages(post.getPostImages());
@@ -48,26 +51,49 @@ public class PostDao {
 
         PreparedQuery result = datastore.prepare(query);
         Entity entity = result.asSingleEntity();
-        if (entity == null)
-            return null;
+        return getPostFromEntity(entity);
+    }
 
-        String userId = (String) entity.getProperty(PROPERTY_NAME_USER_ID);
-        User author = userDao.getUser(userId);
+    public List<Post> getPosts(long maxCreationTime, int limit) {
+        Query query = new Query(ENTITY_KIND).setFilter(new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
+                FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime))
+                .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+        PreparedQuery result = datastore.prepare(query);
+        List<Post> posts = new ArrayList<>();
+        for (Entity entity : result.asIterable()) {
+            Post post = getPostFromEntity(entity);
+            if (post != null)
+                posts.add(post);
+        }
+        return posts;
+    }
 
-        String locationId = (String) entity.getProperty(PROPERTY_NAME_LOCATION_ID);
-        Location location = new Location(locationId);
+    public List<Post> getPosts(String userId, int limit) {
+        Query query = new Query(ENTITY_KIND)
+                .setFilter(new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId))
+                .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+        PreparedQuery result = datastore.prepare(query);
+        List<Post> posts = new ArrayList<>();
+        for (Entity entity : result.asIterable()) {
+            Post post = getPostFromEntity(entity);
+            if (post != null)
+                posts.add(post);
+        }
+        return posts;
+    }
 
-        long creationTime = (long) entity.getProperty(PROPERTY_NAME_CREATION_TIME);
-        String descriptionText = (String) entity.getProperty(PROPERTY_NAME_DESCRIPTION_TEXT);
-
-        List<PostImage> postImages = postImageDao.getPostImages(id);
-
-        @SuppressWarnings("unchecked")
-        List<String> tagIds = (List<String>) entity.getProperty(PROPERTY_NAME_TAGS);
-        List<Tag> tags = getTagsFromIds(tagIds);
-
-        Post post = new Post(id, author, location, creationTime, descriptionText, postImages, tags, null);
-        return post;
+    public List<Post> getPosts(UUID tagId, int limit) {
+        Query query = new Query(ENTITY_KIND)
+                .setFilter(new Query.FilterPredicate(PROPERTY_NAME_TAGS, FilterOperator.IN, tagId))
+                .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+        PreparedQuery result = datastore.prepare(query);
+        List<Post> posts = new ArrayList<>();
+        for (Entity entity : result.asIterable()) {
+            Post post = getPostFromEntity(entity);
+            if (post != null)
+                posts.add(post);
+        }
+        return posts;
     }
 
     private List<String> getIdsFromTags(List<Tag> tags) {
@@ -85,5 +111,37 @@ public class PostDao {
                 result.add(tag);
         }
         return result;
+    }
+
+    private Post getPostFromEntity(Entity entity) {
+        if (entity == null)
+            return null;
+        try {
+            String idString = entity.getKey().getName();
+            UUID id = UUID.fromString(idString);
+
+            String userId = (String) entity.getProperty(PROPERTY_NAME_USER_ID);
+            User author = userDao.getUser(userId);
+
+            String locationId = (String) entity.getProperty(PROPERTY_NAME_LOCATION_ID);
+            Location location = new Location(locationId);
+
+            long creationTime = (long) entity.getProperty(PROPERTY_NAME_CREATION_TIME);
+            String descriptionText = (String) entity.getProperty(PROPERTY_NAME_DESCRIPTION_TEXT);
+
+            List<PostImage> postImages = postImageDao.getPostImages(id);
+
+            @SuppressWarnings("unchecked")
+            List<String> tagIds = (List<String>) entity.getProperty(PROPERTY_NAME_TAGS);
+            List<Tag> tags = getTagsFromIds(tagIds);
+
+            @SuppressWarnings("unchecked")
+            List<String> likedUserIds = (List<String>) entity.getProperty(PROPERTY_NAME_LIKED_USER_IDS);
+
+            Post post = new Post(id, author, location, creationTime, descriptionText, postImages, tags, likedUserIds);
+            return post;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
