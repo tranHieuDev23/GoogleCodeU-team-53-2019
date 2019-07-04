@@ -62,9 +62,11 @@ public class PostDao {
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Query query = new Query(ENTITY_KIND).setFilter(maxCreationTimeFilter).addSort(PROPERTY_NAME_CREATION_TIME,
                 SortDirection.DESCENDING);
+
         PreparedQuery result = datastore.prepare(query);
+        FetchOptions options = FetchOptions.Builder.withLimit(limit);
         List<Post> posts = new ArrayList<>();
-        for (Entity entity : result.asIterable()) {
+        for (Entity entity : result.asIterable(options)) {
             Post post = getPostFromEntity(entity);
             if (post != null)
                 posts.add(post);
@@ -88,8 +90,9 @@ public class PostDao {
                 CompositeFilterOperator.and(maxCreationTimeFilter, swLatFilter, swLngFilter, neLatFilter, neLngFilter))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
         PreparedQuery result = datastore.prepare(query);
+        FetchOptions options = FetchOptions.Builder.withLimit(limit);
         List<Post> posts = new ArrayList<>();
-        for (Entity entity : result.asIterable()) {
+        for (Entity entity : result.asIterable(options)) {
             Post post = getPostFromEntity(entity);
             if (post != null)
                 posts.add(post);
@@ -105,8 +108,9 @@ public class PostDao {
         Query query = new Query(ENTITY_KIND).setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, userIdFiler))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
         PreparedQuery result = datastore.prepare(query);
+        FetchOptions options = FetchOptions.Builder.withLimit(limit);
         List<Post> posts = new ArrayList<>();
-        for (Entity entity : result.asIterable()) {
+        for (Entity entity : result.asIterable(options)) {
             Post post = getPostFromEntity(entity);
             if (post != null)
                 posts.add(post);
@@ -122,8 +126,9 @@ public class PostDao {
         Query query = new Query(ENTITY_KIND).setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, tagFilter))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
         PreparedQuery result = datastore.prepare(query);
+        FetchOptions options = FetchOptions.Builder.withLimit(limit);
         List<Post> posts = new ArrayList<>();
-        for (Entity entity : result.asIterable()) {
+        for (Entity entity : result.asIterable(options)) {
             Post post = getPostFromEntity(entity);
             if (post != null)
                 posts.add(post);

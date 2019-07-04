@@ -1,15 +1,10 @@
 package com.google.codeu.controllers.datastore;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.google.appengine.api.datastore.DatastoreService;
-import com.google.appengine.api.datastore.DatastoreServiceFactory;
-import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.codeu.models.PostImage;
 
@@ -47,7 +42,7 @@ public class PostImageDao {
             try {
                 String idString = entity.getKey().getName();
                 UUID id = UUID.fromString(idString);
-                URL imageUrl = new URL((String) entity.getProperty(PROPERTY_NAME_IMAGE_URL));
+                Link imageUrl = (Link) entity.getProperty(PROPERTY_NAME_IMAGE_URL);
                 String descriptionText = (String) entity.getProperty(PROPERTY_NAME_IMAGE_DESCRIPTION);
 
                 PostImage image = new PostImage(id, postId, imageUrl, descriptionText);

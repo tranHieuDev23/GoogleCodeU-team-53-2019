@@ -1,7 +1,8 @@
 package com.google.codeu.models;
 
-import java.net.URL;
 import java.util.Date;
+
+import com.google.appengine.api.datastore.Link;
 
 /**
  * The class representing a user
@@ -12,7 +13,7 @@ public class User {
     private String username;
     private Date birthdate;
     private String bioText;
-    private URL avatarUrl;
+    private Link avatarUrl;
 
     /**
      * Constructing a new <code>User</code> object with an ID and a username. Used
@@ -27,7 +28,7 @@ public class User {
      *                  returned by <code>User.getEmail()</code>.
      * @param avatarUrl The URL to the user's avatar.
      */
-    public User(String id, String username, URL avatarUrl) {
+    public User(String id, String username, Link avatarUrl) {
         this(id, username, null, "", avatarUrl);
     }
 
@@ -44,7 +45,7 @@ public class User {
      * @param bioText   The user's bio text, or an empty string if there is none.
      * @param avatarUrl The URL to the user's avatar.
      */
-    public User(String id, String username, Date birthdate, String bioText, URL avatarUrl) {
+    public User(String id, String username, Date birthdate, String bioText, Link avatarUrl) {
         this.id = id;
         this.username = username;
         this.birthdate = birthdate;
@@ -68,7 +69,7 @@ public class User {
         return bioText;
     }
 
-    public URL getAvatarUrl() {
+    public Link getAvatarUrl() {
         return avatarUrl;
     }
 }

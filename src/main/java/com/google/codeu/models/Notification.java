@@ -1,7 +1,9 @@
 package com.google.codeu.models;
 
-import java.net.URL;
 import java.util.UUID;
+
+import com.google.appengine.api.datastore.Link;
+
 
 /**
  * Class representing a user's notification.
@@ -12,8 +14,8 @@ public class Notification {
     private String userId;
     private long creationTime;
     private String notificationText;
-    private URL iconUrl;
-    private URL targetUrl;
+    private Link iconUrl;
+    private Link targetUrl;
 
     /**
      * Construct a new <code>Notification</code> object with the user's ID, the
@@ -30,7 +32,7 @@ public class Notification {
      * @param targetUrl        The URL the user will be redirected to once they
      *                         clicked on the notification.
      */
-    public Notification(String userId, String notificationText, URL iconUrl, URL targetUrl) {
+    public Notification(String userId, String notificationText, Link iconUrl, Link targetUrl) {
         this(UUID.randomUUID(), userId, System.currentTimeMillis(), notificationText, iconUrl, targetUrl);
     }
 
@@ -46,8 +48,8 @@ public class Notification {
      * @param targetUrl        The URL the user will be redirected to once they
      *                         clicked on the notification.
      */
-    public Notification(UUID id, String userId, long creationTime, String notificationText, URL iconUrl,
-            URL targetUrl) {
+    public Notification(UUID id, String userId, long creationTime, String notificationText, Link iconUrl,
+            Link targetUrl) {
         this.id = id;
         this.userId = userId;
         this.creationTime = creationTime;
@@ -72,11 +74,11 @@ public class Notification {
         return notificationText;
     }
 
-    public URL getIconUrl() {
+    public Link getIconUrl() {
         return iconUrl;
     }
 
-    public URL getTargetUrl() {
+    public Link getTargetUrl() {
         return targetUrl;
     }
 }

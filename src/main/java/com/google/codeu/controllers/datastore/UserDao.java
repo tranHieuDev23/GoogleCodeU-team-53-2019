@@ -1,6 +1,5 @@
 package com.google.codeu.controllers.datastore;
 
-import java.net.URL;
 import java.util.Date;
 
 import com.google.appengine.api.datastore.*;
@@ -40,16 +39,10 @@ public class UserDao {
         if (userEntity == null)
             return null;
 
-        URL avatarUrl;
-        try {
-            avatarUrl = new URL((String) userEntity.getProperty(PROPERTY_NAME_AVATAR));
-        } catch (Exception e) {
-            return null;
-        }
-
         String username = (String) userEntity.getProperty(PROPERTY_NAME_USERNAME);
         Date birthdate = (Date) userEntity.getProperty(PROPERTY_NAME_BIRTHDATE);
         String bioText = (String) userEntity.getProperty(PROPERTY_NAME_BIO_TEXT);
+        Link avatarUrl = (Link) userEntity.getProperty(PROPERTY_NAME_AVATAR);
         User user = new User(id, username, birthdate, bioText, avatarUrl);
         return user;
     }

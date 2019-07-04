@@ -1,7 +1,8 @@
 package com.google.codeu.models;
 
-import java.net.URL;
 import java.util.UUID;
+
+import com.google.appengine.api.datastore.Link;
 
 /**
  * Class representing an image in a post.
@@ -10,7 +11,7 @@ public class PostImage {
 
     private UUID id;
     private UUID postId;
-    private URL imageUrl;
+    private Link imageUrl;
     private String imageDescription;
 
     /**
@@ -22,7 +23,7 @@ public class PostImage {
      * @param imageURL         The image's URL.
      * @param imageDescription The image's description.
      */
-    public PostImage(UUID postId, URL imageURL, String imageDescription) {
+    public PostImage(UUID postId, Link imageURL, String imageDescription) {
         this(UUID.randomUUID(), postId, imageURL, imageDescription);
     }
 
@@ -34,7 +35,7 @@ public class PostImage {
      * @param imageURL         The image's URL.
      * @param imageDescription The image's description.
      */
-    public PostImage(UUID id, UUID postId, URL imageURL, String imageDescription) {
+    public PostImage(UUID id, UUID postId, Link imageURL, String imageDescription) {
         this.id = id;
         this.postId = id;
         this.imageUrl = imageURL;
@@ -49,7 +50,7 @@ public class PostImage {
         return postId;
     }
 
-    public URL getImageUrl() {
+    public Link getImageUrl() {
         return imageUrl;
     }
 
