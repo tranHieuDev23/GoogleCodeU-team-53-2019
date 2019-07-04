@@ -15,6 +15,7 @@ package com.google.codeu.models;
 public class Location {
 
     private String placeId;
+    private double latitude, longitude;
 
     /**
      * Construct a new <code>Location</code> object.
@@ -23,11 +24,21 @@ public class Location {
      *                <a href='https://developers.google.com/places/place-id'>Place
      *                Id</a> on Google Maps.
      */
-    public Location(String placeId) {
+    public Location(String placeId, double latitude, double longitude) {
         this.placeId = placeId;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public String getPlaceId() {
         return placeId;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }
