@@ -68,7 +68,7 @@ public class User {
         return bioText;
     }
 
-    private URL getAvatarUrl() {
+    public URL getAvatarUrl() {
         return avatarUrl;
     }
 }
