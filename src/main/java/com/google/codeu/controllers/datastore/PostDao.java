@@ -141,6 +141,26 @@ public class PostDao {
         datastore.delete(key);
     }
 
+    public void likePost(UUID id, String userId) {
+        Post post = getPost(id);
+        if (post == null)
+            return;
+        if (post.getLikedUserIds().contains(userId))
+            return;
+        post.getLikedUserIds().add(userId);
+        storePost(post);
+    }
+
+    public void unlikePost(UUID id, String userId) {
+        Post post = getPost(id);
+        if (post == null)
+            return;
+        if (!post.getLikedUserIds().contains(userId))
+            return;
+        post.getLikedUserIds().remove(userId);
+        storePost(post);
+    }
+
     private List<String> getIdsFromTags(List<Tag> tags) {
         List<String> result = new ArrayList<>();
         for (Tag t : tags)

@@ -54,4 +54,9 @@ public class CommentDao {
         }
         return comments;
     }
+
+    public void deleteComment(UUID id) {
+        Key key = KeyFactory.createKey(ENTITY_KIND, id.toString());
+        datastore.delete(key);
+    }
 }
