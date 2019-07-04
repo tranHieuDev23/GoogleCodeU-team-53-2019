@@ -84,9 +84,9 @@ public class PostDao {
         Filter neLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE,
                 FilterOperator.LESS_THAN_OR_EQUAL, southWest.getLongitude());
 
-        Query query = new Query(ENTITY_KIND)
-            .setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, swLatFilter, swLngFilter, neLatFilter, neLngFilter))
-            .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+        Query query = new Query(ENTITY_KIND).setFilter(
+                CompositeFilterOperator.and(maxCreationTimeFilter, swLatFilter, swLngFilter, neLatFilter, neLngFilter))
+                .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
         PreparedQuery result = datastore.prepare(query);
         List<Post> posts = new ArrayList<>();
         for (Entity entity : result.asIterable()) {
@@ -118,7 +118,7 @@ public class PostDao {
         Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Filter tagFilter = new Query.FilterPredicate(PROPERTY_NAME_TAGS, FilterOperator.IN, tagId);
-        
+
         Query query = new Query(ENTITY_KIND).setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, tagFilter))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
         PreparedQuery result = datastore.prepare(query);
@@ -129,6 +129,11 @@ public class PostDao {
                 posts.add(post);
         }
         return posts;
+    }
+
+    public void deletePost(UUID id) {
+        Key key = KeyFactory.createKey(ENTITY_KIND, id.toString());
+        datastore.delete(key);
     }
 
     private List<String> getIdsFromTags(List<Tag> tags) {
