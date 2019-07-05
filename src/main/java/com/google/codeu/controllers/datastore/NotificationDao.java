@@ -23,7 +23,7 @@ public class NotificationDao {
         datastore = DatastoreServiceFactory.getDatastoreService();
     }
 
-    public void storeComment(Notification notification) {
+    public void storeNotification(Notification notification) {
         Entity entity = new Entity(ENTITY_KIND, notification.getId().toString());
         entity.setProperty(PROPERTY_NAME_USER_ID, notification.getUserId());
         entity.setProperty(PROPERTY_NAME_CREATION_TIME, notification.getCreationTime());
@@ -33,7 +33,7 @@ public class NotificationDao {
         datastore.put(entity);
     }
 
-    public List<Notification> getComments(String userId, long maxCreationTime, int limit) {
+    public List<Notification> getNotifications(String userId, long maxCreationTime, int limit) {
         Filter userFilter = new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId);
         Filter timeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME, FilterOperator.LESS_THAN_OR_EQUAL,
                 maxCreationTime);
