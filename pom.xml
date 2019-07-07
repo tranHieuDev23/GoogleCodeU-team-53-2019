@@ -81,6 +81,13 @@ limitations under the License.
       <version>1.6</version>
     </dependency>
 
+    <!-- https://googleapis.dev/java/google-cloud-clients/latest/index.html?com/google/cloud/vision/v1/package-summary.html -->
+    <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>google-cloud-vision</artifactId>
+        <version>1.55.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>
