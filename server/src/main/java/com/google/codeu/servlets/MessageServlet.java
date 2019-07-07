@@ -21,8 +21,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.codeu.data.UserInput;
+import com.google.codeu.utils.ServletLink;
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -36,7 +36,7 @@ import org.jsoup.safety.Whitelist;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /** Handles fetching and saving {@link Message} instances. */
-@WebServlet("/messages")
+@WebServlet(ServletLink.MESSAGES)
 public class MessageServlet extends HttpServlet {
 
   private Datastore datastore;

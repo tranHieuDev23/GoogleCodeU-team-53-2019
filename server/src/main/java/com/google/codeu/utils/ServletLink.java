@@ -17,6 +17,7 @@ public final class ServletLink {
 
   /** Url handled by {@link LogoutServlet}. */
   public static final String LOGOUT = SERVLET_PREFIX + "/logout";
+  public static final String MESSAGES = SERVLET_PREFIX + "/messages";
 
   /** Index url handled by the client. */
   public static final String INDEX = "/";

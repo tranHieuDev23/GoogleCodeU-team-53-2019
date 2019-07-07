@@ -37,3 +37,5 @@ export const ABOUT_US = servletPrefix + '/aboutus';
 export const HOME = '/';
 /** Client link to the user's page. */
 export const USER_PAGE = '/userpage';
+
+export const UPLOAD_PAGE = '/create-post';
