@@ -18,6 +18,7 @@ package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.codeu.utils.ServletLink;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
@@ -29,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Returns login data as JSON, e.g. {"isLoggedIn": true, "username": "alovelace@codeustudents.com"}
  */
-@WebServlet("/login-status")
+@WebServlet(ServletLink.LOGIN_STATUS)
 public class LoginStatusServlet extends HttpServlet {
 
   @Override

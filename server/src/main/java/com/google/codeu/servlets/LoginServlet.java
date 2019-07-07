@@ -19,6 +19,8 @@ package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.codeu.utils.ServletLink;
+
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Redirects the user to the Google login page or their page if they're already logged in.
  */
-@WebServlet("/login")
+@WebServlet(ServletLink.LOGIN)
 public class LoginServlet extends HttpServlet {
 
   @Override
