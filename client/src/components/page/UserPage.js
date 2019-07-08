@@ -57,7 +57,7 @@ class UserPage extends Component {
   /** Fetches messages and add them to the page. */
   fetchMessages() {
     const url = MESSAGE + '?user=' + userEmailParam;
-    fetch(url)
+    fetch(url, {method: 'POST'})
       .then(response => {
         return response.json();
       })
