@@ -1,4 +1,4 @@
-target
+server/target
 .settings
 .classpath
 .project
@@ -8,3 +8,6 @@ target
 .vscode
 .factorypath
 eclipse-formatter.xml
+client/package-lock.json
+client/node_modules
+client/yarn.lock
