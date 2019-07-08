@@ -42,7 +42,7 @@ public class PostImageDao {
             try {
                 String idString = entity.getKey().getName();
                 UUID id = UUID.fromString(idString);
-                Link imageUrl = (Link) entity.getProperty(PROPERTY_NAME_IMAGE_URL);
+                Link imageUrl = new Link((String) entity.getProperty(PROPERTY_NAME_IMAGE_URL));
                 String descriptionText = (String) entity.getProperty(PROPERTY_NAME_IMAGE_DESCRIPTION);
 
                 PostImage image = new PostImage(id, postId, imageUrl, descriptionText);

@@ -21,4 +21,19 @@ public final class ServletLink {
 
   /** Index url handled by the client. */
   public static final String INDEX = "/";
+
+  /** URL to Login page. */
+  public static final String LOGIN_PAGE = "/login";
+
+  /** URL to User Page. Format to create a specific URl. */
+  public static final String USER_PAGE = "/user/%s";
+
+  /** URL to Create Post Page. */
+  public static final String CREATE_POST_PAGE = "/new-post";
+
+  /** URL to Post Page. Format to create a specific URl. */
+  public static final String POST_PAGE = "/post/%s";
+
+  /** URL to Tag Page. Format to create a specific URL. */
+  public static final String TAG_PAGE = "/tag/%s";
 }

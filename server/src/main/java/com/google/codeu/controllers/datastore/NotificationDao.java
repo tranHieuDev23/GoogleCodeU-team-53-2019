@@ -49,8 +49,8 @@ public class NotificationDao {
                 UUID id = UUID.fromString(idString);
                 long creationTime = (long) entity.getProperty(PROPERTY_NAME_CREATION_TIME);
                 String notificationText = (String) entity.getProperty(PROPERTY_NAME_NOTIFICATION_TEXT);
-                Link iconUrl = (Link) entity.getProperty(PROPERTY_NAME_ICON_URL);
-                Link targetUrl = (Link) entity.getProperty(PROPERTY_NAME_TARGET_URL);
+                Link iconUrl = new Link((String) entity.getProperty(PROPERTY_NAME_ICON_URL));
+                Link targetUrl = new Link((String) entity.getProperty(PROPERTY_NAME_TARGET_URL));
 
                 Notification notification = new Notification(id, userId, creationTime, notificationText, iconUrl,
                         targetUrl);
