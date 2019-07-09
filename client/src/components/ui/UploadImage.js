@@ -8,12 +8,6 @@ class UploadImage extends React.Component {
       selectedFile: null,
       imageDescription: '',
     }
-
-    let id = this.props.imageId;
-    while (this.props.postDetail.images.length < id + 1)  {
-      this.props.postDetail.images.push(this.state);
-    }
-
     this.fileHandleChange = this.fileHandleChange.bind(this);
     this.textHandleChange = this.textHandleChange.bind(this);
     this.handleAddPicure = this.handleAddPicure.bind(this);
@@ -29,10 +23,10 @@ class UploadImage extends React.Component {
   }
 
   handleAddPicure = ()  =>  {
-    let id = this.props.imageId;
     let arr = [...this.props.postDetail.images];
-    arr[id] = this.state;
+    arr.push(this.state);
     this.props.onChange("images", arr);
+    this.props.handleClose();
   }
 
   render()  {

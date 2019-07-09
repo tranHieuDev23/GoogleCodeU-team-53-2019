@@ -22,7 +22,6 @@ import 'css/userPage.css';
 import { HIDDEN } from 'constants/css.js';
 import { MESSAGE } from 'constants/links.js';
 import Message from 'components/ui/Message.js';
-import RichTextEditor from 'components/ui/RichTextEditor.js';
 
 /** Gets the parameters from the url. Parameters are after the ? in the url. */
 const urlParams = new URLSearchParams(window.location.search);
@@ -84,11 +83,6 @@ class UserPage extends Component {
       <div className='container'>
         <h1 className='center'>{userEmailParam}</h1>
         <form action={MESSAGE} method='POST' className={hiddenIfViewingOther}>
-          Enter a new message:
-          
-          <br />
-          <RichTextEditor id='text' className='message-input'/>
-          <br />
           <input type='file' />
           <input type='submit' value='Submit' />
         </form>
