@@ -17,7 +17,18 @@ public final class ServletLink {
 
   /** Url handled by {@link LogoutServlet}. */
   public static final String LOGOUT = SERVLET_PREFIX + "/logout";
-  public static final String MESSAGES = SERVLET_PREFIX + "/messages";
+
+  /** URL handled by {@link RetrievePostsServlet} */
+  public static final String API_RETRIEVE_POSTS = SERVLET_PREFIX + "/retrieve-posts";
+
+  /** URL handled by {@link RetrievePostServlet} */
+  public static final String API_RETRIEVE_POST = SERVLET_PREFIX + "/retrieve-post";
+
+  /** URL handled by {@link CreatePostsServlet} */
+  public static final String API_CREATE_POST = SERVLET_PREFIX + "/create-post";
+
+  /** URL handled by {@link DeletePostServlet} */
+  public static final String API_DELETE_POST = SERVLET_PREFIX + "/delete-post";
 
   /** Index url handled by the client. */
   public static final String INDEX = "/";

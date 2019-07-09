@@ -44,4 +44,17 @@ public class TagDao {
         Tag tag = new Tag(id, tagName);
         return tag;
     }
+
+    public Tag getTag(String tagName) {
+        Query query = new Query(ENTITY_KIND)
+                .setFilter(new Query.FilterPredicate(PROPERTY_NAME_TAG_NAME, FilterOperator.EQUAL, tagName));
+        PreparedQuery result = datastore.prepare(query);
+        Entity entity = result.asSingleEntity();
+        if (entity == null)
+            return null;
+        String idString = (String) entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
+        Tag tag = new Tag(id, tagName);
+        return tag;
+    }
 }
