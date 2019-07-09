@@ -36,7 +36,7 @@ public class LogoutServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         UserService userService = UserServiceFactory.getUserService();
         String googleLogoutUrl = userService.createLogoutURL(ServletLink.INDEX);
         response.sendRedirect(googleLogoutUrl);

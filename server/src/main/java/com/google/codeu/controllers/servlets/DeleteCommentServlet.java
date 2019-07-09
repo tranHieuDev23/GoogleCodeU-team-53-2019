@@ -1,5 +1,6 @@
 package com.google.codeu.controllers.servlets;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -10,29 +11,29 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.codeu.controllers.datastore.PostDao;
-import com.google.codeu.models.Post;
+import com.google.codeu.controllers.datastore.CommentDao;
+import com.google.codeu.models.Comment;
 import com.google.codeu.utils.ServletLink;
 
-@WebServlet(ServletLink.API_DELETE_POST)
-public class DeletePostServlet extends HttpServlet {
+@WebServlet(ServletLink.API_DELETE_COMMENT)
+public class DeleteCommentServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private PostDao postDao;
+    private CommentDao commentDao;
 
     @Override
     public void init() throws ServletException {
-        postDao = new PostDao();
+        commentDao = new CommentDao();
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         res.setContentType("application/json");
 
-        UUID postId = UUID.fromString(req.getParameter("postId"));
-        Post post = postDao.getPost(postId);
-        if (post == null) {
+        UUID commentId = UUID.fromString(req.getParameter("commentId"));
+        Comment comment = commentDao.getComment(commentId);
+        if (comment == null) {
             res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
@@ -44,11 +45,11 @@ public class DeletePostServlet extends HttpServlet {
         }
 
         String userId = userService.getCurrentUser().getUserId();
-        if (post.getAuthor().getId() != userId) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if (comment.getAuthorId() != userId) {
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
 
-        postDao.deletePost(postId);
+        commentDao.deleteComment(commentId);
     }
 }

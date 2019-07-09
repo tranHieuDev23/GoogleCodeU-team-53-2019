@@ -30,6 +30,21 @@ public final class ServletLink {
   /** URL handled by {@link DeletePostServlet} */
   public static final String API_DELETE_POST = SERVLET_PREFIX + "/delete-post";
 
+  /** URL handled by {@link LikePostServlet} */
+  public static final String API_LIKE_POST = SERVLET_PREFIX + "/like";
+
+  /** URL handled by {@link UnlikePostServlet} */
+  public static final String API_UNLIKE_POST = SERVLET_PREFIX + "/unlike";
+
+  /** URL handled by {@link RetrieveUserServlet} */
+  public static final String API_RETRIEVE_USER = SERVLET_PREFIX + "/retrieve-user";
+
+  /** URL handled by {@link CreateCommentServlet} */
+  public static final String API_CREATE_COMMENT = SERVLET_PREFIX + "/create-comment";
+
+  /** URL handled by {@link RetrieveUserServlet} */
+  public static final String API_DELETE_COMMENT = SERVLET_PREFIX + "/delete-comment";
+
   /** Index url handled by the client. */
   public static final String INDEX = "/";
 

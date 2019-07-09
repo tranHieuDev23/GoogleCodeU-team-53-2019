@@ -1,5 +1,6 @@
 package com.google.codeu.controllers.servlets;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.servlet.ServletException;
@@ -10,45 +11,41 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
-import com.google.codeu.controllers.datastore.PostDao;
-import com.google.codeu.models.Post;
+import com.google.codeu.controllers.datastore.CommentDao;
+import com.google.codeu.models.Comment;
 import com.google.codeu.utils.ServletLink;
+import com.google.gson.Gson;
 
-@WebServlet(ServletLink.API_DELETE_POST)
-public class DeletePostServlet extends HttpServlet {
+@WebServlet(ServletLink.API_CREATE_COMMENT)
+public class CreateCommentServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    private PostDao postDao;
+    private CommentDao commentDao;
+    private Gson gson;
 
     @Override
     public void init() throws ServletException {
-        postDao = new PostDao();
+        commentDao = new CommentDao();
+        gson = new Gson();
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) {
+    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         res.setContentType("application/json");
+        UserService userService = UserServiceFactory.getUserService();
+        if (!userService.isUserLoggedIn())
+        {
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+        String userId = userService.getCurrentUser().getUserId();
 
         UUID postId = UUID.fromString(req.getParameter("postId"));
-        Post post = postDao.getPost(postId);
-        if (post == null) {
-            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            return;
-        }
+        String commentText = req.getParameter("commentText");
+        Comment comment = new Comment(userId, postId, commentText);
+        commentDao.storeComment(comment);
 
-        UserService userService = UserServiceFactory.getUserService();
-        if (!userService.isUserLoggedIn()) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-
-        String userId = userService.getCurrentUser().getUserId();
-        if (post.getAuthor().getId() != userId) {
-            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return;
-        }
-
-        postDao.deletePost(postId);
+        res.getWriter().println(gson.toJson(comment));
     }
 }

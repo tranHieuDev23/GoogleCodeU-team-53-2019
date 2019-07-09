@@ -42,6 +42,11 @@ public class CreatePostServlet extends HttpServlet {
         res.setContentType("application/json");
 
         UserService userService = UserServiceFactory.getUserService();
+        if (!userService.isUserLoggedIn())
+        {
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
         String userId = userService.getCurrentUser().getUserId();
         User author = userDao.getUser(userId);
 
