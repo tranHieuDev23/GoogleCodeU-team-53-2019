@@ -13,6 +13,7 @@ public class PostImage {
     private UUID postId;
     private Link imageUrl;
     private String imageDescription;
+    private long orderInPost;
 
     /**
      * Construct a new <code>PostImage</code> object with the image's URL, the
@@ -22,9 +23,10 @@ public class PostImage {
      * @param postId           The post's ID.
      * @param imageURL         The image's URL.
      * @param imageDescription The image's description.
+     * @param orderInPost The image's order in the post.
      */
-    public PostImage(UUID postId, Link imageURL, String imageDescription) {
-        this(UUID.randomUUID(), postId, imageURL, imageDescription);
+    public PostImage(UUID postId, Link imageURL, String imageDescription, long orderInPost) {
+        this(UUID.randomUUID(), postId, imageURL, imageDescription, orderInPost);
     }
 
     /**
@@ -34,12 +36,14 @@ public class PostImage {
      * @param postId           The post's ID.
      * @param imageURL         The image's URL.
      * @param imageDescription The image's description.
+     * @param orderInPost The image's order in the post.
      */
-    public PostImage(UUID id, UUID postId, Link imageURL, String imageDescription) {
+    public PostImage(UUID id, UUID postId, Link imageURL, String imageDescription, long orderInPost) {
         this.id = id;
         this.postId = postId;
         this.imageUrl = imageURL;
         this.imageDescription = imageDescription;
+        this.orderInPost = orderInPost;
     }
 
     public UUID getId() {
@@ -56,5 +60,9 @@ public class PostImage {
 
     public String getImageDescription() {
         return imageDescription;
+    }
+
+    public long getOrderInPost() {
+        return orderInPost;
     }
 }

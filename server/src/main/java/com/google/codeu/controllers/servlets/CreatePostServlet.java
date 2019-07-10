@@ -117,7 +117,7 @@ public class CreatePostServlet extends HttpServlet {
         for (int i = 0; i < imageCount; i++) {
             String description = imageDescriptions.getString(i);
             Link url = imageUrls.get(i);
-            postImages.add(new PostImage(postId, url, description));
+            postImages.add(new PostImage(postId, url, description, i));
         }
         imageDao.storePostImages(postImages);
 

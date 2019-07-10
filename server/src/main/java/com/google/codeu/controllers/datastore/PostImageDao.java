@@ -1,6 +1,7 @@
 package com.google.codeu.controllers.datastore;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +15,7 @@ public class PostImageDao {
     private static final String PROPERTY_NAME_POST_ID = "PostId";
     private static final String PROPERTY_NAME_IMAGE_URL = "ImageURL";
     private static final String PROPERTY_NAME_IMAGE_DESCRIPTION = "ImageDescription";
+    private static final String PROPERTY_NAME_ORDER_IN_POST = "OrderInPost";
 
     private DatastoreService datastore;
 
@@ -31,6 +33,7 @@ public class PostImageDao {
             entity.setProperty(PROPERTY_NAME_POST_ID, image.getPostId().toString());
             entity.setProperty(PROPERTY_NAME_IMAGE_URL, image.getImageUrl().toString());
             entity.setProperty(PROPERTY_NAME_IMAGE_DESCRIPTION, image.getImageDescription());
+            entity.setProperty(PROPERTY_NAME_ORDER_IN_POST, image.getOrderInPost());
             entities.add(entity);
         }
         datastore.put(entities);
@@ -39,9 +42,10 @@ public class PostImageDao {
     public List<PostImage> getPostImages(UUID postId) {
         if (postId == null)
             return new ArrayList<>();
-            
+
         Query query = new Query(ENTITY_KIND)
                 .setFilter(new Query.FilterPredicate(PROPERTY_NAME_POST_ID, FilterOperator.EQUAL, postId.toString()));
+
         PreparedQuery results = datastore.prepare(query);
         List<PostImage> images = new ArrayList<>();
         for (Entity entity : results.asIterable()) {
@@ -50,8 +54,9 @@ public class PostImageDao {
                 UUID id = UUID.fromString(idString);
                 Link imageUrl = new Link((String) entity.getProperty(PROPERTY_NAME_IMAGE_URL));
                 String descriptionText = (String) entity.getProperty(PROPERTY_NAME_IMAGE_DESCRIPTION);
+                long orderInPost = (long) entity.getProperty(PROPERTY_NAME_ORDER_IN_POST);
 
-                PostImage image = new PostImage(id, postId, imageUrl, descriptionText);
+                PostImage image = new PostImage(id, postId, imageUrl, descriptionText, orderInPost);
                 images.add(image);
             } catch (Exception e) {
                 System.err.println("Error reading image.");
@@ -59,6 +64,13 @@ public class PostImageDao {
                 e.printStackTrace();
             }
         }
+
+        images.sort(new Comparator<PostImage>() {
+            @Override
+            public int compare(PostImage o1, PostImage o2) {
+                return Long.compare(o1.getOrderInPost(), o2.getOrderInPost());
+            }
+        });
         return images;
     }
 }
