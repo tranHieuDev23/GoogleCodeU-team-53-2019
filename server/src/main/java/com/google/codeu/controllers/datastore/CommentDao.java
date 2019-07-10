@@ -23,6 +23,9 @@ public class CommentDao {
     }
 
     public void storeComment(Comment comment) {
+        if (comment == null)
+            return;
+
         Entity entity = new Entity(ENTITY_KIND, comment.getId().toString());
         entity.setProperty(PROPERTY_NAME_USER_ID, comment.getAuthorId());
         entity.setProperty(PROPERTY_NAME_POST_ID, comment.getPostId().toString());
@@ -32,6 +35,9 @@ public class CommentDao {
     }
 
     public Comment getComment(UUID commentId) {
+        if (commentId == null)
+            return null;
+
         Query query = new Query(ENTITY_KIND)
                 .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, commentId.toString()))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.ASCENDING);
@@ -50,6 +56,9 @@ public class CommentDao {
     }
 
     public List<Comment> getComments(UUID postId) {
+        if (postId == null)
+            return null;
+
         Query query = new Query(ENTITY_KIND)
                 .setFilter(new Query.FilterPredicate(PROPERTY_NAME_POST_ID, FilterOperator.EQUAL, postId.toString()))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.ASCENDING);
@@ -73,8 +82,10 @@ public class CommentDao {
         return comments;
     }
 
-    public void deleteComment(UUID id) {
-        Key key = KeyFactory.createKey(ENTITY_KIND, id.toString());
+    public void deleteComment(UUID commentId) {
+        if (commentId == null)
+            return;
+        Key key = KeyFactory.createKey(ENTITY_KIND, commentId.toString());
         datastore.delete(key);
     }
 }

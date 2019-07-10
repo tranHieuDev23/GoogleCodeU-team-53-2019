@@ -22,6 +22,9 @@ public class UserDao {
     }
 
     public void storeUser(User user) {
+        if (user == null)
+            return;
+
         Entity userEntity = new Entity(ENTITY_KIND);
         userEntity.setProperty(PROPERTY_NAME_ID, user.getId());
         userEntity.setProperty(PROPERTY_NAME_USERNAME, user.getUsername());
@@ -33,6 +36,9 @@ public class UserDao {
     }
 
     public User getUser(String id) {
+        if (id == null)
+            return null;
+            
         Query query = new Query(ENTITY_KIND)
                 .setFilter(new Query.FilterPredicate(PROPERTY_NAME_ID, FilterOperator.EQUAL, id));
         PreparedQuery results = datastore.prepare(query);

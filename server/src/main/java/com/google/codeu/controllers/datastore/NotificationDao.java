@@ -24,6 +24,9 @@ public class NotificationDao {
     }
 
     public void storeNotification(Notification notification) {
+        if (notification == null)
+            return;
+
         Entity entity = new Entity(ENTITY_KIND, notification.getId().toString());
         entity.setProperty(PROPERTY_NAME_USER_ID, notification.getUserId());
         entity.setProperty(PROPERTY_NAME_CREATION_TIME, notification.getCreationTime());
@@ -34,6 +37,9 @@ public class NotificationDao {
     }
 
     public List<Notification> getNotifications(String userId, long maxCreationTime, int limit) {
+        if (userId == null)
+            return new ArrayList<>();
+            
         Filter userFilter = new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId);
         Filter timeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME, FilterOperator.LESS_THAN_OR_EQUAL,
                 maxCreationTime);

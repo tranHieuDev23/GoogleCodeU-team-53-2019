@@ -22,6 +22,9 @@ public class PostImageDao {
     }
 
     public void storePostImages(List<PostImage> images) {
+        if (images == null)
+            return;
+
         List<Entity> entities = new ArrayList<Entity>();
         for (PostImage image : images) {
             Entity entity = new Entity(ENTITY_KIND, image.getId().toString());
@@ -34,6 +37,9 @@ public class PostImageDao {
     }
 
     public List<PostImage> getPostImages(UUID postId) {
+        if (postId == null)
+            return new ArrayList<>();
+            
         Query query = new Query(ENTITY_KIND)
                 .setFilter(new Query.FilterPredicate(PROPERTY_NAME_POST_ID, FilterOperator.EQUAL, postId.toString()));
         PreparedQuery results = datastore.prepare(query);

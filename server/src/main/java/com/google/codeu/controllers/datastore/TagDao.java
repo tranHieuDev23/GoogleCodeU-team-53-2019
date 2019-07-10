@@ -24,6 +24,9 @@ public class TagDao {
     }
 
     public void storeTags(List<Tag> tags) {
+        if (tags == null)
+            return;
+
         List<Entity> entities = new ArrayList<Entity>();
         for (Tag tag : tags) {
             Entity entity = new Entity(ENTITY_KIND, tag.getId().toString());
@@ -34,6 +37,9 @@ public class TagDao {
     }
 
     public Tag getTag(UUID id) {
+        if (id == null)
+            return null;
+
         Query query = new Query(ENTITY_KIND)
                 .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id.toString()));
         PreparedQuery result = datastore.prepare(query);
@@ -46,6 +52,9 @@ public class TagDao {
     }
 
     public Tag getTag(String tagName) {
+        if (tagName == null)
+            return null;
+            
         Query query = new Query(ENTITY_KIND)
                 .setFilter(new Query.FilterPredicate(PROPERTY_NAME_TAG_NAME, FilterOperator.EQUAL, tagName));
         PreparedQuery result = datastore.prepare(query);
