@@ -14,7 +14,9 @@ import com.google.codeu.controllers.datastore.PostDao;
 import com.google.codeu.models.Location;
 import com.google.codeu.models.Post;
 import com.google.codeu.utils.ServletLink;
-import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @WebServlet(ServletLink.API_RETRIEVE_POSTS)
 public class RetrievePostsServlet extends HttpServlet {
@@ -22,27 +24,41 @@ public class RetrievePostsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private PostDao postDao;
-    private Gson gson;
 
     @Override
     public void init() throws ServletException {
         postDao = new PostDao();
-        gson = new Gson();
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         res.setContentType("application/json");
 
-        List<Post> result = null;
-        if (req.getParameterMap().containsKey("sw"))
-            result = getPostsBasedOnLocation(req);
-        if (req.getParameterMap().containsKey("userId"))
-            result = getPostsBasedOnUser(req);
-        if (req.getParameterMap().containsKey("tagId"))
-            result = getPostsBasedOnTag(req);
+        boolean baseOnLocation = req.getParameterMap().containsKey("sw");
+        boolean baseOnUser = req.getParameterMap().containsKey("userId");
+        boolean baseOnTag = req.getParameterMap().containsKey("tagId");
+        boolean baseOnTime = (!baseOnLocation) && (!baseOnUser) && (!baseOnTag);
+        
+        List<Post> posts = null;
+        if (baseOnTime)
+            posts = getPostsBasedOnTime(req);
+        if (baseOnLocation)
+            posts = getPostsBasedOnLocation(req);
+        if (baseOnUser)
+            posts = getPostsBasedOnUser(req);
+        if (baseOnTag)
+            posts = getPostsBasedOnTag(req);
 
-        res.getWriter().println(gson.toJson(result));
+        JSONObject result = new JSONObject();
+        result.put("posts", new JSONArray(posts));
+        res.getWriter().println(result.toString());
+    }
+
+    private List<Post> getPostsBasedOnTime(HttpServletRequest req) {
+        long maxCreationTime = Long.parseLong(req.getParameter("maxCreationTime"));
+        int limit = Integer.parseInt(req.getParameter("limit"));
+        List<Post> result = postDao.getPosts(maxCreationTime, limit);
+        return result;
     }
 
     private List<Post> getPostsBasedOnLocation(HttpServletRequest req) {
