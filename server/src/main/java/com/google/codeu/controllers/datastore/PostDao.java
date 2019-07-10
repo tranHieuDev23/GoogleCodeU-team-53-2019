@@ -222,10 +222,14 @@ public class PostDao {
 
             @SuppressWarnings("unchecked")
             List<String> tagIds = (List<String>) entity.getProperty(PROPERTY_NAME_TAGS);
+            if (tagIds == null)
+                tagIds = new ArrayList<>();
             List<Tag> tags = getTagsFromIds(tagIds);
 
             @SuppressWarnings("unchecked")
             List<String> likedUserIds = (List<String>) entity.getProperty(PROPERTY_NAME_LIKED_USER_IDS);
+            if (likedUserIds == null)
+                likedUserIds = new ArrayList<>();
 
             Post post = new Post(id, author, location, creationTime, descriptionText, postImages, tags, likedUserIds);
             return post;
