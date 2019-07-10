@@ -44,7 +44,7 @@ public class DeletePostServlet extends HttpServlet {
         }
 
         String userId = userService.getCurrentUser().getUserId();
-        if (post.getAuthor().getId() != userId) {
+        if (!post.getAuthor().getId().equals(userId)) {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
