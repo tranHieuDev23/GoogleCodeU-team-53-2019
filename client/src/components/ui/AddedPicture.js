@@ -18,7 +18,7 @@ class AddedPicture extends React.Component  {
       
     }
     return  (
-      <div>
+      <div className={classes.Wrapper}>
         {items}
       </div>
     );

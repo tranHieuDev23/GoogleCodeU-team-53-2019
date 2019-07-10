@@ -17,7 +17,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {Navbar, Nav} from 'react-bootstrap'
 import { SERVER_OK } from 'constants/webCodes.js';
 import {
   ABOUT_US,
@@ -25,10 +24,13 @@ import {
   LOGIN,
   LOGIN_STATUS,
   LOGOUT,
-  USER_PAGE
+  USER_PAGE,
+  UPLOAD_PAGE,
 } from 'constants/links.js';
 import { HIDDEN } from 'constants/css.js';
 import { UserDataAction, storeUserData } from 'reducers/userData.js';
+import { Link } from 'react-router-dom';
+
 
 /** The common navbar ui used throughout the application. */
 class CustomNavBar extends Component {
@@ -56,23 +58,23 @@ class CustomNavBar extends Component {
     const { userEmail } = this.props.userData;
     const hideIfSignedIn = userEmail ? HIDDEN : null;
     const hideIfSignedOut = !userEmail ? HIDDEN : null;
-
+    
     return (
-      <div className='CustomNavBar'>
-        <Navbar bg="light" variant="light">
-              <Navbar.Brand href={HOME}>Home</Navbar.Brand>
-              <Nav.Link href={ABOUT_US}>About our Team</Nav.Link>
-            <div className={hideIfSignedOut}>
-              <Nav.Link href={USER_PAGE + '?user=' + userEmail}>Your Page</Nav.Link>
-            </div>
-            <div className={hideIfSignedIn}>
-              <Nav.Link href={LOGIN}>Sign in</Nav.Link>
-            </div>
-            <div className={hideIfSignedOut}>
-              <Nav.Link href={LOGOUT}>Logout</Nav.Link>
-            </div>
-        </Navbar>
+      <div className="navbar navbar-dark bg-dark">
+        <div>
+        <Link to={HOME} className="navbar-brand">Home</Link>
+        <Link to={ABOUT_US} className="navbar-toggler">About our team</Link>
+        </div>
+        <div className={hideIfSignedOut}>
+          <Link to={USER_PAGE + '/' + userEmail} className="navbar-toggler">Your Page</Link>
+          <Link to={UPLOAD_PAGE} className="navbar-toggler">Create new post</Link>
+          <a href={LOGOUT} className="navbar-toggler">Logout</a>
+        </div>
+        <div className={hideIfSignedIn}>
+          <a href={LOGIN} className="navbar-toggler">Login</a>
+        </div>
       </div>
+     
     );
   }
 }

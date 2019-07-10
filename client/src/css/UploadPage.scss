@@ -1,0 +1,20 @@
+.UploadPage {
+
+}
+
+.UploadImage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate((-50%, -50%));
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  & input[type="text"] {
+    width: 90%;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+}

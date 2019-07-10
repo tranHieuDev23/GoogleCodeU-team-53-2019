@@ -1,9 +1,10 @@
 import React from 'react';
 import axios from 'axios'
-import { CREATE_POST } from 'constants/serverLink';
+import { CREATE_POST } from 'constants/links';
 import Popup from '../ui/Popup/Popup';
 import RichTextEditor from 'components/ui/RichTextEditor'
 import AddedPicture from '../ui/AddedPicture';
+import 'css/UploadPage.scss';
 
 class UploadPage extends React.Component {
   constructor() {
@@ -21,7 +22,6 @@ class UploadPage extends React.Component {
       curImageIndex: 0,
     }
 
-
   }
 
   handleSetState = (name, newState) => {
@@ -32,12 +32,10 @@ class UploadPage extends React.Component {
     const data = new FormData();
     data.append('description', this.state.description);
     const { images } = this.state;
-    console.log(this.state);
     for (let i = 0; i < images.length; i++) {
-      console.log(images[i].selectedFile);
       if (images[i].selectedFile != null) {
-
-        data.append('image', images[i].selectedFile);
+        data.append('images', images[i].selectedFile);
+        data.append('imageDescription', images[i].imageDescription);
       }
     }
     axios.post(CREATE_POST, data, {
@@ -57,7 +55,7 @@ class UploadPage extends React.Component {
       })
     }
   }
-  
+
   handleAddPicture = (event) => {
     event.stopPropagation();
     if (!this.state.popup)
@@ -69,7 +67,7 @@ class UploadPage extends React.Component {
   render() {
     console.log(this.state.images);
     return (
-      <div>
+      <div className="UploadPage">
         <h2>Create new post:</h2>
         <RichTextEditor
           description="Please enter description here"
@@ -79,13 +77,13 @@ class UploadPage extends React.Component {
         {}
         <button onClick={this.handleAddPicture} className="btn btn-success">Add new picture</button>
         <button onClick={this.handlePost} className="btn btn-primary">Share this post</button>
-        <AddedPicture images={this.state.images} />
-        {this.state.popup ? 
-          <Popup 
-            handleClose={this.handleClosePopup} 
+        <AddedPicture images={this.state.images}/>
+        {this.state.popup ?
+          <Popup
+            handleClose={this.handleClosePopup}
             postDetail={this.state}
             onChange={this.handleSetState}
-          /> : 
+          /> :
           null
         }
       </div>

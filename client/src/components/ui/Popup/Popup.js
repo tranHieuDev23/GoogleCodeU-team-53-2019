@@ -3,11 +3,11 @@ import * as classes from './Popup.module.scss';
 import UploadPicture from 'components/ui/UploadImage.js'
 
 class Popup extends React.Component {
-  render()  {
+  render() {
     return (
       <div className={classes.Wrapper}>
         <div className={classes.Popup} onClick={e => e.stopPropagation()}>
-          <UploadPicture {...this.props} />
+          <UploadPicture {...this.props} className={classes.Upload} />
         </div>
       </div>
     );
