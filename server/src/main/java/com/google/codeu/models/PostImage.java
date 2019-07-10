@@ -37,7 +37,7 @@ public class PostImage {
      */
     public PostImage(UUID id, UUID postId, Link imageURL, String imageDescription) {
         this.id = id;
-        this.postId = id;
+        this.postId = postId;
         this.imageUrl = imageURL;
         this.imageDescription = imageDescription;
     }

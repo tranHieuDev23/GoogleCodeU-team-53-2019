@@ -37,14 +37,14 @@ public class CommentDao {
     public Comment getComment(UUID commentId) {
         if (commentId == null)
             return null;
+        Key key = KeyFactory.createKey(ENTITY_KIND, commentId.toString());
 
-        Query query = new Query(ENTITY_KIND)
-                .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, commentId.toString()))
-                .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.ASCENDING);
-        PreparedQuery result = datastore.prepare(query);
-        Entity entity = result.asSingleEntity();
-        if (entity == null)
+        Entity entity = null;
+        try {
+            entity = datastore.get(key);
+        } catch (EntityNotFoundException e) {
             return null;
+        }
 
         String userId = (String) entity.getProperty(PROPERTY_NAME_USER_ID);
         UUID postId = UUID.fromString((String) entity.getProperty(PROPERTY_NAME_USER_ID));

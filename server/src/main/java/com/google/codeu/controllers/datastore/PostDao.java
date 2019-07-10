@@ -54,12 +54,13 @@ public class PostDao {
     public Post getPost(UUID id) {
         if (id == null)
             return null;
-
-        Query query = new Query(ENTITY_KIND)
-                .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id.toString()));
-
-        PreparedQuery result = datastore.prepare(query);
-        Entity entity = result.asSingleEntity();
+        Key key = KeyFactory.createKey(ENTITY_KIND, id.toString());
+        Entity entity = null;
+        try {
+            entity = datastore.get(key);
+        } catch (EntityNotFoundException e) {
+            return null;
+        }
         return getPostFromEntity(entity);
     }
 
@@ -229,6 +230,7 @@ public class PostDao {
             Post post = new Post(id, author, location, creationTime, descriptionText, postImages, tags, likedUserIds);
             return post;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
