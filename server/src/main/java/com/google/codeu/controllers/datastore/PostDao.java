@@ -33,6 +33,9 @@ public class PostDao {
     }
 
     public void storePost(Post post) {
+        if (post == null)
+            return;
+
         Entity entity = new Entity(ENTITY_KIND, post.getId().toString());
         entity.setProperty(PROPERTY_NAME_USER_ID, post.getAuthor().getId());
         entity.setProperty(PROPERTY_NAME_LOCATION_ID, post.getLocation().getPlaceId());
@@ -49,11 +52,15 @@ public class PostDao {
     }
 
     public Post getPost(UUID id) {
-        Query query = new Query(ENTITY_KIND)
-                .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id.toString()));
-
-        PreparedQuery result = datastore.prepare(query);
-        Entity entity = result.asSingleEntity();
+        if (id == null)
+            return null;
+        Key key = KeyFactory.createKey(ENTITY_KIND, id.toString());
+        Entity entity = null;
+        try {
+            entity = datastore.get(key);
+        } catch (EntityNotFoundException e) {
+            return null;
+        }
         return getPostFromEntity(entity);
     }
 
@@ -75,6 +82,9 @@ public class PostDao {
     }
 
     public List<Post> getPosts(Location southWest, Location northEast, long maxCreationTime, int limit) {
+        if (southWest == null || northEast == null)
+            return new ArrayList<>();
+
         Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Filter swLatFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LATITUDE,
@@ -101,6 +111,9 @@ public class PostDao {
     }
 
     public List<Post> getPosts(String userId, long maxCreationTime, int limit) {
+        if (userId == null)
+            return new ArrayList<>();
+
         Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Filter userIdFiler = new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId);
@@ -119,6 +132,9 @@ public class PostDao {
     }
 
     public List<Post> getPosts(UUID tagId, long maxCreationTime, int limit) {
+        if (tagId == null)
+            return new ArrayList<>();
+
         Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Filter tagFilter = new Query.FilterPredicate(PROPERTY_NAME_TAGS, FilterOperator.IN, tagId);
@@ -136,12 +152,16 @@ public class PostDao {
         return posts;
     }
 
-    public void deletePost(UUID id) {
-        Key key = KeyFactory.createKey(ENTITY_KIND, id.toString());
+    public void deletePost(UUID postId) {
+        if (postId == null)
+            return;
+        Key key = KeyFactory.createKey(ENTITY_KIND, postId.toString());
         datastore.delete(key);
     }
 
     public void likePost(UUID id, String userId) {
+        if (userId == null)
+            return;
         Post post = getPost(id);
         if (post == null)
             return;
@@ -152,6 +172,8 @@ public class PostDao {
     }
 
     public void unlikePost(UUID id, String userId) {
+        if (userId == null)
+            return;
         Post post = getPost(id);
         if (post == null)
             return;
@@ -200,14 +222,19 @@ public class PostDao {
 
             @SuppressWarnings("unchecked")
             List<String> tagIds = (List<String>) entity.getProperty(PROPERTY_NAME_TAGS);
+            if (tagIds == null)
+                tagIds = new ArrayList<>();
             List<Tag> tags = getTagsFromIds(tagIds);
 
             @SuppressWarnings("unchecked")
             List<String> likedUserIds = (List<String>) entity.getProperty(PROPERTY_NAME_LIKED_USER_IDS);
+            if (likedUserIds == null)
+                likedUserIds = new ArrayList<>();
 
             Post post = new Post(id, author, location, creationTime, descriptionText, postImages, tags, likedUserIds);
             return post;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

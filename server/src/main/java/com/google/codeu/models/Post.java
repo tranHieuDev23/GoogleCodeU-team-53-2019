@@ -92,10 +92,4 @@ public class Post {
     public List<String> getLikedUserIds() {
         return likedUserIds;
     }
-
-    public List<Comment> getComments() {
-        List<Comment> result = new ArrayList<>();
-        // TODO: Return comments here
-        return result;
-    }
 }

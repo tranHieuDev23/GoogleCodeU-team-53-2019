@@ -36,7 +36,7 @@ import org.jsoup.safety.Whitelist;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 /** Handles fetching and saving {@link Message} instances. */
-@WebServlet(ServletLink.MESSAGES)
+@WebServlet("/api/message")
 public class MessageServlet extends HttpServlet {
 
   private Datastore datastore;

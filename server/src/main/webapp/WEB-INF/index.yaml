@@ -18,3 +18,7 @@ indexes:
   - name: user
   - name: timestamp
     direction: desc
+- kind: PostImage
+  properties:
+  - name: PostId
+  - name: OrderInPost
