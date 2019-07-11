@@ -93,14 +93,15 @@ public class CreatePostServlet extends HttpServlet {
         descriptionText = UserInput.sanitizingHtmlInput(descriptionText);
 
         Location location = null;
-        if (postDetails.has("location")) {
+        try {
             JSONObject locationJson = postDetails.getJSONObject("location");
-            if (locationJson.has("placeId") && locationJson.has("lat") && locationJson.has("lng")) {
-                String placeId = locationJson.getString("placeId");
-                double lat = locationJson.getDouble("lat");
-                double lng = locationJson.getDouble("lng");
-                location = new Location(placeId, lat, lng);
-            }
+            String placeId = locationJson.getString("placeId");
+            double lat = locationJson.getDouble("lat");
+            double lng = locationJson.getDouble("lng");
+            location = new Location(placeId, lat, lng);
+        } catch (Exception e) {
+            System.out.println("Cannot extract Location from request");
+            e.printStackTrace();
         }
 
         JSONArray imageDescriptions = postDetails.getJSONArray("imageDescriptions");
