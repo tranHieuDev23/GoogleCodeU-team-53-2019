@@ -95,22 +95,29 @@ public class CreatePostServlet extends HttpServlet {
         Location location = null;
         if (postDetails.has("location")) {
             JSONObject locationJson = postDetails.getJSONObject("location");
-            String placeId = locationJson.getString("placeId");
-            double lat = locationJson.getDouble("lat");
-            double lng = locationJson.getDouble("lng");
-            location = new Location(placeId, lat, lng);
+            if (locationJson.has("placeId") && locationJson.has("lat") && locationJson.has("lng")) {
+                String placeId = locationJson.getString("placeId");
+                double lat = locationJson.getDouble("lat");
+                double lng = locationJson.getDouble("lng");
+                location = new Location(placeId, lat, lng);
+            }
         }
 
         JSONArray imageDescriptions = postDetails.getJSONArray("imageDescriptions");
         int imageCount = imageDescriptions.length();
         List<InputStream> imageStreams = new ArrayList<>();
         for (int i = 0; i < imageCount; i++) {
-            Part filePart = req.getPart("file-" + i);
-            InputStream fileContent = filePart.getInputStream();
-            imageStreams.add(fileContent);
+            try {
+                Part filePart = req.getPart("file-" + i);
+                InputStream fileContent = filePart.getInputStream();
+                imageStreams.add(fileContent);
+            } catch (Exception e) {
+                System.out.println("Error happens while handling image files!");
+                e.printStackTrace();
+            }
         }
         List<Link> imageUrls = new ArrayList<>();
-        for (int i = 0; i < imageCount; i++) {
+        for (int i = 0; i < imageStreams.size(); i++) {
             imageUrls.add(new Link("/"));
         }
         /**
