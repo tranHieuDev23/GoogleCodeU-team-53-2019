@@ -34,13 +34,16 @@ public class CreateCommentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         res.setContentType("application/json");
         UserService userService = UserServiceFactory.getUserService();
-        if (!userService.isUserLoggedIn())
-        {
+        if (!userService.isUserLoggedIn()) {
             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
         String userId = userService.getCurrentUser().getUserId();
 
+        if (!req.getParameterMap().containsKey("postId") || !req.getParameterMap().containsKey("commentText")) {
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
         UUID postId = UUID.fromString(req.getParameter("postId"));
         String commentText = req.getParameter("commentText");
         Comment comment = new Comment(userId, postId, commentText);
