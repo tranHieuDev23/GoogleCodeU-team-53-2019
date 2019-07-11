@@ -38,3 +38,7 @@ indexes:
   - name: LocationLongitude
   - name: CreationTime
     direction: desc
+- kind: Comment
+  properties:
+  - name: PostId
+  - name: CreationTime
