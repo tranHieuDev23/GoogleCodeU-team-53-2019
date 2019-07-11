@@ -3,50 +3,46 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import 'css/userPage.css';
-import { HIDDEN } from 'constants/css.js';
-import axios from 'axios'
-import NewsFeed from 'components/ui/NewsFeed.js'
+import axios from 'axios';
+import NewsFeed from 'components/ui/NewsFeed.js';
+import { RETRIEVE_POSTS } from 'constants/links.js';
+import data from 'json/posts.json';
 
 /** Renders the /user-page page. */
 class UserPage extends Component {
   constructor(props) {
     super(props);
+    console.log(this.props);
     this.state = {
       posts: [],
-      userEmailParam: this.props.match.params.email,
-    }
+      userIdParam: this.props.match.params.userId
+    };
+    console.log('User ID');
+    console.log(this.props.match.params.userId);
 
     /** The email of the currently displayed user. */
-    console.log("MAIL:");
-    console.log(this.state.userEmailParam);
   }
   componentDidMount = () => {
     var date = new Date();
     var timestamp = date.getTime(); //current time
-    //axios.post(RETRIEVE_POSTS, {
-    axios.post("/testAPI", {
-      maxCreationTime: { timestamp },
-      limit: 10,
-      postions: null,
-      userId: null,
-      tagId: null,
-    })
-      .then((response) => {
+    axios
+      .post(RETRIEVE_POSTS, {
+        maxCreationTime: timestamp,
+        limit: 10,
+        userId: parseInt(this.state.userIdParam)
+      })
+      .then(response => {
+        console.log(response.data);
         this.setState(response.data);
       })
-      .catch(function (error) {
+      .catch(function(error) {
         console.log(error);
       });
-  }
+  };
 
   render() {
-    const { userEmail } = this.props.userData;
-    console.log("Test--");
-    console.log(userEmail);
-    console.log(this.state.userEmailParam);
-    const hiddenIfViewingOther = userEmail !== this.state.userEmailParam ? HIDDEN : null;
     return (
-      <div className={hiddenIfViewingOther}>
+      <div>
         <h1 className='center'>News feed</h1>
         <NewsFeed posts={this.state.posts} />
       </div>
@@ -60,7 +56,7 @@ UserPage.propTypes = {
 };
 
 /** Maps user data from redux to UserPage. */
-const mapStateToProps = function (state) {
+const mapStateToProps = function(state) {
   return { userData: state.userData };
 };
 

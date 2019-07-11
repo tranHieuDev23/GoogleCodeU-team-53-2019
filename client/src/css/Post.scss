@@ -62,3 +62,12 @@
     }
   }
 }
+
+.Post__LikeBar  {
+  padding: 15px;
+  font-weight: bold;
+  
+  &__hidden  {
+    display:none
+  }
+}
