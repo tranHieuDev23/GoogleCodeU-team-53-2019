@@ -18,10 +18,12 @@ import com.google.appengine.api.datastore.Link;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.controllers.datastore.*;
+import com.google.codeu.utils.*;
 import com.google.codeu.models.*;
 import com.google.codeu.utils.ServletLink;
 import com.google.gson.Gson;
 
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -86,6 +88,9 @@ public class CreatePostServlet extends HttpServlet {
             return null;
 
         String descriptionText = postDetails.getString("descriptionText");
+        descriptionText = StringEscapeUtils.escapeHtml4(descriptionText);
+        descriptionText = UserInput.TransformToHTML(descriptionText);
+        descriptionText = UserInput.sanitizingHtmlInput(descriptionText);
 
         Location location = null;
         if (postDetails.has("location")) {
@@ -109,9 +114,8 @@ public class CreatePostServlet extends HttpServlet {
             imageUrls.add(new Link("/"));
         }
         /**
-         * The abobe code is for testing purpose only.
-         * The servlet would call the helper classes like this: imageUrls =
-         * blobstoreHelper.uploadFiles(imageStreams);
+         * The abobe code is for testing purpose only. The servlet would call the helper
+         * classes like this: imageUrls = blobstoreHelper.uploadFiles(imageStreams);
          */
         List<PostImage> postImages = new ArrayList<>();
         for (int i = 0; i < imageCount; i++) {
