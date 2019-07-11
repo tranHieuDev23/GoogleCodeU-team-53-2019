@@ -22,3 +22,19 @@ indexes:
   properties:
   - name: PostId
   - name: OrderInPost
+- kind: Post
+  properties:
+  - name: UserId
+  - name: CreationTime
+    direction: desc
+- kind: Post
+  properties:
+  - name: TagId
+  - name: CreationTime
+    direction: desc
+- kind: Post
+  properties:
+  - name: LocationLatitude
+  - name: LocationLongitude
+  - name: CreationTime
+    direction: desc

@@ -95,10 +95,10 @@ public class PostDao {
                 FilterOperator.LESS_THAN_OR_EQUAL, southWest.getLatitude());
         Filter neLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE,
                 FilterOperator.LESS_THAN_OR_EQUAL, southWest.getLongitude());
-
         Query query = new Query(ENTITY_KIND).setFilter(
                 CompositeFilterOperator.and(maxCreationTimeFilter, swLatFilter, swLngFilter, neLatFilter, neLngFilter))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+
         PreparedQuery result = datastore.prepare(query);
         FetchOptions options = FetchOptions.Builder.withLimit(limit);
         List<Post> posts = new ArrayList<>();
@@ -117,9 +117,9 @@ public class PostDao {
         Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Filter userIdFiler = new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId);
-
         Query query = new Query(ENTITY_KIND).setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, userIdFiler))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+
         PreparedQuery result = datastore.prepare(query);
         FetchOptions options = FetchOptions.Builder.withLimit(limit);
         List<Post> posts = new ArrayList<>();
@@ -134,7 +134,6 @@ public class PostDao {
     public List<Post> getPosts(UUID tagId, long maxCreationTime, int limit) {
         if (tagId == null)
             return new ArrayList<>();
-
         Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Filter tagFilter = new Query.FilterPredicate(PROPERTY_NAME_TAGS, FilterOperator.IN, tagId);
