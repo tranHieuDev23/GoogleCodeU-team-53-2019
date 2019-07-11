@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 
 import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 @WebServlet(ServletLink.API_CREATE_POST)
@@ -99,7 +100,7 @@ public class CreatePostServlet extends HttpServlet {
             double lat = locationJson.getDouble("lat");
             double lng = locationJson.getDouble("lng");
             location = new Location(placeId, lat, lng);
-        } catch (Exception e) {
+        } catch (JSONException e) {
             System.out.println("Cannot extract Location from request");
             e.printStackTrace();
         }
