@@ -4,6 +4,8 @@ import PostAuthor from 'components/ui/Post/PostAuthor.js'
 import { ReactComponent as LikeIcon } from 'assets/icons/like.svg';
 import { ReactComponent as RedLikeIcon } from 'assets/icons/red_like.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/comment.svg';
+import LikeBar from 'components/ui/Post/LikeBar';
+
 import parse from 'html-react-parser';
 class SinglePost extends React.Component {
   constructor(props)  {
@@ -31,6 +33,7 @@ class SinglePost extends React.Component {
                   <LikeIcon className="Post__Icons__Icon" />
                   <CommentIcon className="Post__Icons__Icon" onClick={this.handleComment}/>
                 </div>
+                <LikeBar {...this.props} />
               </div>
             )
         }

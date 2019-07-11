@@ -16,12 +16,8 @@ class Home extends Component {
     var date = new Date();
     var timestamp = date.getTime(); //current time
     axios.post(RETRIEVE_POSTS, {
-    //axios.post("/testAPI", {
       maxCreationTime: {timestamp}, 
       limit: 10,
-      postions: null,
-      userId: null,
-      tagId: null,
     })
     .then((response) => {
       this.setState(response.data);

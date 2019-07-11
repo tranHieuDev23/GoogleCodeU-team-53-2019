@@ -38,7 +38,7 @@ export const HOME = '/';
 /** Client link to the user's page. */
 
 /** Client link to the upload page. */
-export const CREATE_POST =  servletPrefix + "/create-post";
+export const CREATE_POST = servletPrefix + "/create-post";
 
 /** Client link to retrieve post */
 export const RETRIEVE_POSTS = servletPrefix + "/retrieve-posts";

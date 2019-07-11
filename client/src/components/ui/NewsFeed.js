@@ -12,7 +12,6 @@ class NewsFeed extends React.Component {
     const { posts } = this.props;
 
     if (isArray(posts))  {
-
       for (const [index, post] of posts.entries()) {
         items.push(
           <SinglePost post={post} key={index} />
