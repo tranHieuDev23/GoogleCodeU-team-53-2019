@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { SERVER_OK } from 'constants/webCodes.js';
 import {
   ABOUT_US,
   HOME,
@@ -11,38 +10,32 @@ import {
 } from 'constants/links.js';
 import { HIDDEN } from 'constants/css.js';
 import { Link } from 'react-router-dom';
-
+import { SERVER_OK } from 'constants/webCodes.js';
 
 /** The common navbar ui used throughout the application. */
 class CustomNavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      id: null,
+      userEmail: "",
+      userId: null,
     }
   }
   componentDidMount() {
     this.fetchLoginStatus();
   }
 
-  /** Fetches the login status of the current user. */
   fetchLoginStatus() {
     fetch(LOGIN_STATUS)
       .then(response =>
         response.status === SERVER_OK ? response.json() : null
       )
       .then(status => {
-        if (status) {
-          const userData = JSON.parse(status.userData);
-          this.setState({userEmail: userData.username});
-          this.setState({userId: userData.id});
-        } else {
-          console.log('Error: Server is unavailable.');
-        }
-      })
-      .catch(status => {
-        
+        if (status.isLoggedIn) {
+          let userStatus = JSON.parse(status.userData);
+          this.setState({userEmail: userStatus.username});
+          this.setState({userId: userStatus.id});
+        } 
       });
   }
 
@@ -51,6 +44,7 @@ class CustomNavBar extends Component {
     const hideIfSignedIn = userEmail ? HIDDEN : null;
     const hideIfSignedOut = !userEmail ? HIDDEN : null;
     console.log("TEST CONSOLE");
+    console.log(this.state);
     return (
       <div className="navbar navbar-dark bg-dark">
         <div>

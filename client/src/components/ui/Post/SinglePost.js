@@ -5,8 +5,8 @@ import { ReactComponent as LikeIcon } from 'assets/icons/like.svg';
 import { ReactComponent as RedLikeIcon } from 'assets/icons/red_like.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/comment.svg';
 import LikeBar from 'components/ui/Post/LikeBar';
-
 import parse from 'html-react-parser';
+
 class SinglePost extends React.Component {
   constructor(props)  {
     super(props);

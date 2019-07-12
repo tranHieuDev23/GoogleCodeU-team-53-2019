@@ -6,7 +6,10 @@ import 'css/userPage.css';
 import axios from 'axios';
 import NewsFeed from 'components/ui/NewsFeed.js';
 import { RETRIEVE_POSTS } from 'constants/links.js';
-import data from 'json/posts.json';
+
+function getUrl(maxCreationTime, limit, userid) {
+  return "?" + "maxCreationTime=" + maxCreationTime + "&limit=" + limit + "&userId=" + userid;
+}
 
 /** Renders the /user-page page. */
 class UserPage extends Component {
@@ -17,25 +20,19 @@ class UserPage extends Component {
       posts: [],
       userIdParam: this.props.match.params.userId
     };
-    console.log('User ID');
-    console.log(this.props.match.params.userId);
-
-    /** The email of the currently displayed user. */
+    console.log(this.state);
   }
   componentDidMount = () => {
-    var date = new Date();
-    var timestamp = date.getTime(); //current time
+    let date = new Date();
+    let timestamp = date.getTime(); //current time
+    let url = RETRIEVE_POSTS + getUrl(timestamp, 10, this.state.userIdParam);
     axios
-      .post(RETRIEVE_POSTS, {
-        maxCreationTime: timestamp,
-        limit: 10,
-        userId: parseInt(this.state.userIdParam)
-      })
+      .post(url, {})
       .then(response => {
         console.log(response.data);
         this.setState(response.data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
@@ -44,7 +41,9 @@ class UserPage extends Component {
     return (
       <div>
         <h1 className='center'>News feed</h1>
-        <NewsFeed posts={this.state.posts} />
+        {this.state.posts.length > 0 &&
+          <NewsFeed posts={this.state.posts} />
+        }
       </div>
     );
   }
@@ -56,7 +55,7 @@ UserPage.propTypes = {
 };
 
 /** Maps user data from redux to UserPage. */
-const mapStateToProps = function(state) {
+const mapStateToProps = function (state) {
   return { userData: state.userData };
 };
 

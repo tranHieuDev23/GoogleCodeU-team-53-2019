@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import data from 'json/user.json';
+import { USER_PAGE, RETRIEVE_USER } from 'constants/links.js';
 
 class GetUserById extends React.Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class GetUserById extends React.Component {
     };
   }
   componentDidMount = () => {
-    axios.post("/retrieve-user", {
+    axios.post(RETRIEVE_USER, {
       userId: this.props.userId,
     })
     // Promise.resolve({
@@ -35,7 +35,7 @@ class GetUserById extends React.Component {
       <div
         className='Post__Author'
         onClick={() => {
-          this.props.history.push('/userpage/'+ this.state.id.toString);
+          this.props.history.push(USER_PAGE+ this.state.id.toString);
         }}>
         <img
           src={this.state.avatarUrl.value}

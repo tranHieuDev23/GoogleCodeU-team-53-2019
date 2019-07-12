@@ -43,9 +43,14 @@ export const CREATE_POST = servletPrefix + "/create-post";
 /** Client link to retrieve post */
 export const RETRIEVE_POSTS = servletPrefix + "/retrieve-posts";
 
+export const RETRIEVE_POST = servletPrefix + "/retrieve-post";
 
-export const USER_PAGE = '/userpage';
+export const RETRIEVE_USER = servletPrefix + "/retrieve-user";
+
+export const LOGIN_PAGE = '/login';
+
+export const USER_PAGE = '/user';
 
 export const UPLOAD_PAGE = '/create-post';
 
-export const POST_PAGE = '/postpage'
+export const POST_PAGE = '/post'

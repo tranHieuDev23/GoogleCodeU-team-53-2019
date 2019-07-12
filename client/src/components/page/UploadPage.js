@@ -22,6 +22,9 @@ class UploadPage extends React.Component {
     };
   }
 
+  componentDidMount = () => {
+  }
+
   handleSetState = (name, newState) => {
     this.setState({ [name]: newState });
   };

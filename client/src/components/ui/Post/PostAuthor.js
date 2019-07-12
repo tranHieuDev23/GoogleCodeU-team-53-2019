@@ -6,7 +6,7 @@ class PostAuthor extends React.Component {
 
     return (
       <div className="Post__Author">
-        <img src={author.avatarUrl.value} className="Post__Author__Avatar" alt="avatar"/>
+        <img src={author.avatarUrl.value} className="Post__Author__Avatar" alt="avatar" />
         <div className="Post__Author__Wrapper">
           <div className="Post__Author__Username">{author.username}</div>
           <div className="Post__Author__Time">{creationTime}</div>

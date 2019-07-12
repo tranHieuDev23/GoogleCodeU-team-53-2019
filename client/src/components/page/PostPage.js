@@ -1,15 +1,20 @@
 import React from 'react';
 import axios from 'axios';
 import SinglePost from 'components/ui/Post/SinglePost';
-
-const urlParams = new URLSearchParams(window.location.search);
-const postIdParam = urlParams.get('postid');
+import { RETRIEVE_POST } from 'constants/links.js';
 
 class PostPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      postImages: [],
+      postIdParam: this.props.match.params.postId,
+    };
+  }
+
   componentDidMount = () => {
-    axios.post("/testAPI", {
-      postId: { postIdParam },
-    })
+    const url = RETRIEVE_POST + "?postId=" + this.state.postIdParam;
+    axios.post(url, {})
       .then((response) => {
         console.log(response.data);
         this.setState(response.data);
@@ -24,7 +29,12 @@ class PostPage extends React.Component {
     return (
       <div className='container'>
         <h1 className='center'>Post page</h1>
+        {this.state.postImages.length > 0 &&
           <SinglePost post={this.state} />
+        }
+        {this.state.postImages.length === 0 &&
+          <div>{"This content is unavailable right now"}</div>
+        }
       </div>
     );
   }
