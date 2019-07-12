@@ -17,14 +17,17 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.Channels;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  * A simple servlet that proxies reads and writes to its Google Cloud Storage bucket.
  */
+//@SuppressWarnings("serial")
+//@WebServlet("/upload")
 @SuppressWarnings("serial")
 public class GcsExampleServlet extends HttpServlet {
 
@@ -77,6 +80,13 @@ public class GcsExampleServlet extends HttpServlet {
     GcsOutputChannel outputChannel;
     outputChannel = gcsService.createOrReplace(fileName, instance);
     copy(req.getInputStream(), Channels.newOutputStream(outputChannel));
+   
+    //Output HTML
+    ServletOutputStream out = resp.getOutputStream();
+
+    out.println("<h1> Upload Success </h1>");
+    //out.println("<p>Here's the file that you uploaded:</p>");
+    //out.println(fileName);
   }
 //[END doPost]
 
