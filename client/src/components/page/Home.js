@@ -26,8 +26,8 @@ class Home extends Component {
 
   render() {
     return (
-        <div className='container'>
-          <h1 className='center'>News feed</h1>
+        <div className='container pt-2'>
+          <h1 className='center'>News Feed</h1>
           <NewsFeed posts={this.state.posts} />
         </div>
         );
