@@ -45,8 +45,8 @@ public class DeleteCommentServlet extends HttpServlet {
         }
 
         String userId = userService.getCurrentUser().getUserId();
-        if (comment.getAuthorId().equals(userId)) {
-            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        if (!comment.getAuthorId().equals(userId)) {
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 

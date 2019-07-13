@@ -32,13 +32,18 @@ public class RetrievePostsServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
-        res.setContentType("application/json");
+        if (!req.getParameterMap().containsKey("maxCreationTime") || !req.getParameterMap().containsKey("limit")) {
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
+        res.setContentType("application/json");
+        
         boolean baseOnLocation = req.getParameterMap().containsKey("sw");
         boolean baseOnUser = req.getParameterMap().containsKey("userId");
         boolean baseOnTag = req.getParameterMap().containsKey("tagId");
         boolean baseOnTime = (!baseOnLocation) && (!baseOnUser) && (!baseOnTag);
-        
+
         List<Post> posts = null;
         if (baseOnTime)
             posts = getPostsBasedOnTime(req);

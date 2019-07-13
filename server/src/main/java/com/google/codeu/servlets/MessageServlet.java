@@ -20,7 +20,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
-import com.google.codeu.data.UserInput;
+import com.google.codeu.utils.UserInput;
 import com.google.codeu.utils.ServletLink;
 import com.google.gson.Gson;
 import java.io.IOException;

@@ -12,7 +12,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.Gson;
 import com.google.codeu.data.GeoMessage;
-import com.google.codeu.data.UserInput;
+import com.google.codeu.utils.UserInput;
 
 import org.apache.commons.text.StringEscapeUtils;
 

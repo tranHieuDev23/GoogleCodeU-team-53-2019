@@ -38,9 +38,11 @@ public class PostDao {
 
         Entity entity = new Entity(ENTITY_KIND, post.getId().toString());
         entity.setProperty(PROPERTY_NAME_USER_ID, post.getAuthor().getId());
-        entity.setProperty(PROPERTY_NAME_LOCATION_ID, post.getLocation().getPlaceId());
-        entity.setProperty(PROPERTY_NAME_LOCATION_LATITUDE, post.getLocation().getLatitude());
-        entity.setProperty(PROPERTY_NAME_LOCATION_LONGITUDE, post.getLocation().getLongitude());
+        if (post.getLocation() != null) {
+            entity.setProperty(PROPERTY_NAME_LOCATION_ID, post.getLocation().getPlaceId());
+            entity.setProperty(PROPERTY_NAME_LOCATION_LATITUDE, post.getLocation().getLatitude());
+            entity.setProperty(PROPERTY_NAME_LOCATION_LONGITUDE, post.getLocation().getLongitude());
+        }
         entity.setProperty(PROPERTY_NAME_CREATION_TIME, post.getCreationTime());
         entity.setProperty(PROPERTY_NAME_DESCRIPTION_TEXT, post.getDescriptionText());
         entity.setProperty(PROPERTY_NAME_TAGS, getIdsFromTags(post.getTags()));
@@ -95,10 +97,10 @@ public class PostDao {
                 FilterOperator.LESS_THAN_OR_EQUAL, southWest.getLatitude());
         Filter neLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE,
                 FilterOperator.LESS_THAN_OR_EQUAL, southWest.getLongitude());
-
         Query query = new Query(ENTITY_KIND).setFilter(
                 CompositeFilterOperator.and(maxCreationTimeFilter, swLatFilter, swLngFilter, neLatFilter, neLngFilter))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+
         PreparedQuery result = datastore.prepare(query);
         FetchOptions options = FetchOptions.Builder.withLimit(limit);
         List<Post> posts = new ArrayList<>();
@@ -117,9 +119,9 @@ public class PostDao {
         Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Filter userIdFiler = new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId);
-
         Query query = new Query(ENTITY_KIND).setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, userIdFiler))
                 .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+
         PreparedQuery result = datastore.prepare(query);
         FetchOptions options = FetchOptions.Builder.withLimit(limit);
         List<Post> posts = new ArrayList<>();
@@ -134,7 +136,6 @@ public class PostDao {
     public List<Post> getPosts(UUID tagId, long maxCreationTime, int limit) {
         if (tagId == null)
             return new ArrayList<>();
-
         Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
                 FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
         Filter tagFilter = new Query.FilterPredicate(PROPERTY_NAME_TAGS, FilterOperator.IN, tagId);
@@ -210,10 +211,13 @@ public class PostDao {
             String userId = (String) entity.getProperty(PROPERTY_NAME_USER_ID);
             User author = userDao.getUser(userId);
 
-            String locationId = (String) entity.getProperty(PROPERTY_NAME_LOCATION_ID);
-            double latitude = (double) entity.getProperty(PROPERTY_NAME_LOCATION_LATITUDE);
-            double longitude = (double) entity.getProperty(PROPERTY_NAME_LOCATION_LONGITUDE);
-            Location location = new Location(locationId, latitude, longitude);
+            Location location = null;
+            if (entity.hasProperty(PROPERTY_NAME_LOCATION_ID)) {
+                String locationId = (String) entity.getProperty(PROPERTY_NAME_LOCATION_ID);
+                double latitude = (double) entity.getProperty(PROPERTY_NAME_LOCATION_LATITUDE);
+                double longitude = (double) entity.getProperty(PROPERTY_NAME_LOCATION_LONGITUDE);
+                location = new Location(locationId, latitude, longitude);
+            }
 
             long creationTime = (long) entity.getProperty(PROPERTY_NAME_CREATION_TIME);
             String descriptionText = (String) entity.getProperty(PROPERTY_NAME_DESCRIPTION_TEXT);

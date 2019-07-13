@@ -1,12 +1,12 @@
 package com.google.codeu.controllers.datastore;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.codeu.models.PostImage;
 
 public class PostImageDao {
@@ -44,7 +44,8 @@ public class PostImageDao {
             return new ArrayList<>();
 
         Query query = new Query(ENTITY_KIND)
-                .setFilter(new Query.FilterPredicate(PROPERTY_NAME_POST_ID, FilterOperator.EQUAL, postId.toString()));
+                .setFilter(new Query.FilterPredicate(PROPERTY_NAME_POST_ID, FilterOperator.EQUAL, postId.toString()))
+                .addSort(PROPERTY_NAME_ORDER_IN_POST, SortDirection.ASCENDING);
 
         PreparedQuery results = datastore.prepare(query);
         List<PostImage> images = new ArrayList<>();
@@ -64,13 +65,6 @@ public class PostImageDao {
                 e.printStackTrace();
             }
         }
-
-        images.sort(new Comparator<PostImage>() {
-            @Override
-            public int compare(PostImage o1, PostImage o2) {
-                return Long.compare(o1.getOrderInPost(), o2.getOrderInPost());
-            }
-        });
         return images;
     }
 }

@@ -47,7 +47,7 @@ public class CommentDao {
         }
 
         String userId = (String) entity.getProperty(PROPERTY_NAME_USER_ID);
-        UUID postId = UUID.fromString((String) entity.getProperty(PROPERTY_NAME_USER_ID));
+        UUID postId = UUID.fromString((String) entity.getProperty(PROPERTY_NAME_POST_ID));
         String commentText = (String) entity.getProperty(PROPERTY_NAME_COMMENT_TEXT);
         long creationTime = (long) entity.getProperty(PROPERTY_NAME_CREATION_TIME);
         Comment comment = new Comment(commentId, userId, postId, creationTime, commentText);
