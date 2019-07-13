@@ -70,9 +70,10 @@ public class CreatePostServlet extends HttpServlet {
         } catch (Exception e) {
             System.out.println("Error while creating new Post!");
             e.printStackTrace();
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
-        postDao.storePost(result);
 
+        postDao.storePost(result);
         res.getWriter().println(gson.toJson(result));
     }
 
@@ -92,9 +93,7 @@ public class CreatePostServlet extends HttpServlet {
             return null;
 
         String descriptionText = postDetails.getString("descriptionText");
-        descriptionText = StringEscapeUtils.escapeHtml4(descriptionText);
-        descriptionText = UserInput.TransformToHTML(descriptionText);
-        descriptionText = UserInput.sanitizingHtmlInput(descriptionText);
+        descriptionText = processDescriptionText(descriptionText);
 
         Location location = null;
         try {
@@ -145,5 +144,18 @@ public class CreatePostServlet extends HttpServlet {
 
         Post result = new Post(postId, author, location, creationTime, descriptionText, postImages, tags, likedUserIds);
         return result;
+    }
+
+    private String processDescriptionText(String input) {
+        /** Unescape input unto HTML format. */
+        input = StringEscapeUtils.unescapeHtml4(input);
+        String htmlString = UserInput.TransformToHTML(input);
+        String userText = UserInput.sanitizingHtmlInput(htmlString);
+        /** Create regular expression */
+        String regex = "(https?://\\S+\\.(png|jpg))";
+        /** replace any matches found in text */
+        String replacement = "<img src=\"$1\" />";
+        String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+        return textWithImagesReplaced;
     }
 }
