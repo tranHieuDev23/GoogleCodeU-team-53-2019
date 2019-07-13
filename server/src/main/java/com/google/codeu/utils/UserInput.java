@@ -1,4 +1,4 @@
-package com.google.codeu.data;
+package com.google.codeu.utils;
 
 import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.html.HtmlRenderer;

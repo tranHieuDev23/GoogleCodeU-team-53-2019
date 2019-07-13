@@ -7,6 +7,9 @@ import java.util.UUID;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.EntityNotFoundException;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
@@ -24,6 +27,9 @@ public class TagDao {
     }
 
     public void storeTags(List<Tag> tags) {
+        if (tags == null)
+            return;
+
         List<Entity> entities = new ArrayList<Entity>();
         for (Tag tag : tags) {
             Entity entity = new Entity(ENTITY_KIND, tag.getId().toString());
@@ -34,13 +40,32 @@ public class TagDao {
     }
 
     public Tag getTag(UUID id) {
+        if (id == null)
+            return null;
+        Key key = KeyFactory.createKey(ENTITY_KIND, id.toString());   
+        Entity entity = null;
+        try {
+            entity = datastore.get(key);
+        } catch (EntityNotFoundException e) {
+            return null;
+        }
+        String tagName = (String) entity.getProperty(PROPERTY_NAME_TAG_NAME);
+        Tag tag = new Tag(id, tagName);
+        return tag;
+    }
+
+    public Tag getTag(String tagName) {
+        if (tagName == null)
+            return null;
+            
         Query query = new Query(ENTITY_KIND)
-                .setFilter(new Query.FilterPredicate("__key__", FilterOperator.EQUAL, id.toString()));
+                .setFilter(new Query.FilterPredicate(PROPERTY_NAME_TAG_NAME, FilterOperator.EQUAL, tagName));
         PreparedQuery result = datastore.prepare(query);
         Entity entity = result.asSingleEntity();
         if (entity == null)
             return null;
-        String tagName = (String) entity.getProperty(PROPERTY_NAME_TAG_NAME);
+        String idString = (String) entity.getKey().getName();
+        UUID id = UUID.fromString(idString);
         Tag tag = new Tag(id, tagName);
         return tag;
     }

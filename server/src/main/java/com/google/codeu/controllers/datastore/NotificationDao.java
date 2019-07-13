@@ -24,6 +24,9 @@ public class NotificationDao {
     }
 
     public void storeNotification(Notification notification) {
+        if (notification == null)
+            return;
+
         Entity entity = new Entity(ENTITY_KIND, notification.getId().toString());
         entity.setProperty(PROPERTY_NAME_USER_ID, notification.getUserId());
         entity.setProperty(PROPERTY_NAME_CREATION_TIME, notification.getCreationTime());
@@ -34,6 +37,9 @@ public class NotificationDao {
     }
 
     public List<Notification> getNotifications(String userId, long maxCreationTime, int limit) {
+        if (userId == null)
+            return new ArrayList<>();
+            
         Filter userFilter = new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId);
         Filter timeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME, FilterOperator.LESS_THAN_OR_EQUAL,
                 maxCreationTime);
@@ -49,8 +55,8 @@ public class NotificationDao {
                 UUID id = UUID.fromString(idString);
                 long creationTime = (long) entity.getProperty(PROPERTY_NAME_CREATION_TIME);
                 String notificationText = (String) entity.getProperty(PROPERTY_NAME_NOTIFICATION_TEXT);
-                Link iconUrl = (Link) entity.getProperty(PROPERTY_NAME_ICON_URL);
-                Link targetUrl = (Link) entity.getProperty(PROPERTY_NAME_TARGET_URL);
+                Link iconUrl = new Link((String) entity.getProperty(PROPERTY_NAME_ICON_URL));
+                Link targetUrl = new Link((String) entity.getProperty(PROPERTY_NAME_TARGET_URL));
 
                 Notification notification = new Notification(id, userId, creationTime, notificationText, iconUrl,
                         targetUrl);
