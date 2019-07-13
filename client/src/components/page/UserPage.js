@@ -39,8 +39,8 @@ class UserPage extends Component {
 
   render() {
     return (
-      <div>
-        <h1 className='center'>News feed</h1>
+      <div className='container pt-2'>
+        <h1 className='center'>User Page</h1>
         {this.state.posts.length > 0 &&
           <NewsFeed posts={this.state.posts} />
         }

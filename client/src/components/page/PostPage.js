@@ -27,7 +27,7 @@ class PostPage extends React.Component {
   render() {
     console.log(this.state);
     return (
-      <div className='container'>
+      <div className='container pt-2'>
         <h1 className='center'>Post page</h1>
         {this.state.postImages.length > 0 &&
           <SinglePost post={this.state} />

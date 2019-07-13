@@ -9,7 +9,9 @@ class Login extends React.Component {
   }
   render()  {
     return (
-      <h1>Welcome</h1>
+      <div className='container pt-2'>
+        <h1>Welcome</h1>
+      </div>
     );
   }
 }
