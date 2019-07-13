@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
-  private static final Link DEFAULT_USER_AVATAR = new Link("/images/icons/user.png");
+  private static final Link DEFAULT_USER_AVATAR = new Link("/static/media/user.svg");
 
   private UserDao userDao;
 
