@@ -1,25 +1,18 @@
 package com.google.codeu.controllers.storage;
 
-import com.google.cloud.storage.Acl;
-import com.google.cloud.storage.Acl.Role;
-import com.google.cloud.storage.Acl.User;
-import com.google.cloud.storage.BlobInfo;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
+import com.google.appengine.api.datastore.Link;
+import com.google.cloud.storage.*;
+import com.google.cloud.storage.Acl.*;
 
-import java.io.InputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
 
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -27,12 +20,12 @@ import org.joda.time.format.DateTimeFormatter;
 
 // [START example]
 public class CloudStorageHelper {
-    
+
     private static CloudStorageHelper SINGLETON_INSTANCE;
 
     /**
-     * Retrieve an instance of class <code>StorageHelper</code>. This
-     * implementation follows the Singleton Design Pattern.
+     * Retrieve an instance of class <code>StorageHelper</code>. This implementation
+     * follows the Singleton Design Pattern.
      * 
      * @return An instance of <code>StorageHelper</code>.
      */
@@ -41,78 +34,64 @@ public class CloudStorageHelper {
             SINGLETON_INSTANCE = new CloudStorageHelper();
         return SINGLETON_INSTANCE;
     }
-    public static Storage storage = null;
-    static {
+
+    private Storage storage = null;
+
+    private CloudStorageHelper() {
         storage = StorageOptions.getDefaultInstance().getService();
     }
 
-    private CloudStorageHelper() {
-        // TODO: Implement constructor.
-    }
-
     /**
-     * Upload a list of image file to the Storage.
+     * Uploads a file part to Google Cloud Storage to the bucket specified in the
+     * <code>bucketName</code> variable, appending a timestamp to end of the
+     * uploaded filename.
      * 
-     * @param imageStreams List of byte streams describing the input images.
-     * @return An array of <code>URL</code> to the location of the uploaded images.
+     * @param filePart   The file part extracted from a request.
+     * @param bucketName Name of the bucket to upload to.
+     * @return A <code>Link</code> object representing the URL to the uploaded file.
+     * @throws StorageException
+     * @throws IOException
      */
-    //TODO: Implement Storage upload here
-    /**
-    public URL[] predictTags(List<InputStream> imageStreams) {
-        URL[] result = null;
-        return result;
-    }*/
-    //https://stackoverflow.com/questions/49082384/java-google-cloud-storage-upload-media-link-null-but-image-uploads
-  /**
-   * Uploads a file to Google Cloud Storage to the bucket specified in the BUCKET_NAME
-   * environment variable, appending a timestamp to end of the uploaded filename.
-   */
-  @SuppressWarnings("deprecation")
-    //public String predictTags(List<InputStream> imageStreams, Part filePart, final String bucketName){  
- public String uploadFile(Part filePart, final String bucketName) throws IOException {
-    DateTimeFormatter dtf = DateTimeFormat.forPattern("-YYYY-MM-dd-HHmmssSSS");
-    DateTime dt = DateTime.now(DateTimeZone.UTC);
-    String dtString = dt.toString(dtf);
-    final String fileName = filePart.getSubmittedFileName() + dtString;
+    @SuppressWarnings("deprecation")
+    public Link uploadFile(Part filePart, final String bucketName) throws StorageException, IOException {
+        String extension = FilenameUtils.getExtension(filePart.getSubmittedFileName());
+        final String fileName = generateRandomName(extension);
 
-    // the inputstream is closed by default, so we don't need to close it here
-    BlobInfo blobInfo =
-        storage.create(
-            BlobInfo
-                .newBuilder(bucketName, fileName)
+        BlobInfo blobInfo = BlobInfo.newBuilder(bucketName, fileName)
                 // Modify access list to allow all users with link to read file
-                .setAcl(new ArrayList<>(Arrays.asList(Acl.of(User.ofAllUsers(), Role.READER))))
-                .build(),
-            filePart.getInputStream());
-            //imageStreams
-    // return the public download link
-    return blobInfo.getMediaLink();
-  }
-  // [END uploadFile]
-
-  // [START getImageUrl]
-
-  /**
-   * Extracts the file payload from an HttpServletRequest, checks that the file extension
-   * is supported and uploads the file to Google Cloud Storage.
-   */
-  public String getImageUrl(HttpServletRequest req, HttpServletResponse resp,
-                            final String bucket) throws IOException, ServletException {
-    Part filePart = req.getPart("file");
-    final String fileName = filePart.getSubmittedFileName();
-    String imageUrl = req.getParameter("imageUrl");
-    // Check extension of file
-    if (fileName != null && !fileName.isEmpty() && fileName.contains(".")) {
-      final String extension = fileName.substring(fileName.lastIndexOf('.') + 1);
-      String[] allowedExt = {"jpg", "jpeg", "png", "gif"};
-      for (String s : allowedExt) {
-        if (extension.equals(s)) {
-          return this.uploadFile(filePart, bucket);
-        }
-      }
-      throw new ServletException("file must be an image");
+                .setAcl(new ArrayList<>(Arrays.asList(Acl.of(User.ofAllUsers(), Role.READER)))).build();
+        // the inputstream is closed by default, so we don't need to close it here
+        Blob blob = storage.create(blobInfo, filePart.getInputStream());
+        // return the public download link
+        return new Link(blob.getMediaLink());
     }
-    return imageUrl;
-  }
-  // [END getImageUrl]
+
+    /**
+     * Uploads a <code>List</code> of file parts to Google Cloud Storage to the
+     * bucket specified in the <code>bucketName</code> variable, appending a
+     * timestamp to end of each uploaded filename.
+     * 
+     * @param fileParts  The <code>List</code> of file parts to upload.
+     * @param bucketName Name of the bucket to upload to.
+     * @return A <code>List</code> of <code>Link</code> objects representing the
+     *         URLs to the uploaded files, in the same order in as they were in the
+     *         input.
+     * @throws StorageException
+     * @throws IOException
+     */
+    public List<Link> uploadFiles(List<Part> fileParts, final String bucketName) throws StorageException, IOException {
+        List<Link> results = new ArrayList<>();
+        for (Part part : fileParts) {
+            results.add(uploadFile(part, bucketName));
+        }
+        return results;
+    }
+
+    private String generateRandomName(String extension) {
+        DateTimeFormatter dtf = DateTimeFormat.forPattern("-YYYY-MM-dd-HHmmssSSS");
+        DateTime dt = DateTime.now(DateTimeZone.UTC);
+        String dtString = dt.toString(dtf);
+        final String fileName = RandomStringUtils.randomAlphanumeric(8) + dtString + '.' + extension;
+        return fileName;
+    }
 }

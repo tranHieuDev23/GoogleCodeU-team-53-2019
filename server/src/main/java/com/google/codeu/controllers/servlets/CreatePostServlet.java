@@ -1,7 +1,6 @@
 package com.google.codeu.controllers.servlets;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,6 +17,7 @@ import com.google.appengine.api.datastore.Link;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.controllers.datastore.*;
+import com.google.codeu.controllers.storage.CloudStorageHelper;
 import com.google.codeu.utils.*;
 import com.google.codeu.models.*;
 import com.google.codeu.utils.ServletLink;
@@ -33,12 +33,14 @@ import org.json.JSONObject;
 public class CreatePostServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static final String BUCKET_NAME = "image_file_bucket";
 
     private UserService userService;
     private PostDao postDao;
     private UserDao userDao;
     private PostImageDao imageDao;
     private TagDao tagDao;
+    private CloudStorageHelper storageHelper;
     private Gson gson;
 
     @Override
@@ -48,6 +50,7 @@ public class CreatePostServlet extends HttpServlet {
         userDao = new UserDao();
         imageDao = new PostImageDao();
         tagDao = new TagDao();
+        storageHelper = CloudStorageHelper.getInstance();
         gson = new Gson();
     }
 
@@ -107,25 +110,12 @@ public class CreatePostServlet extends HttpServlet {
 
         JSONArray imageDescriptions = postDetails.getJSONArray("imageDescriptions");
         int imageCount = imageDescriptions.length();
-        List<InputStream> imageStreams = new ArrayList<>();
+        List<Part> fileParts = new ArrayList<>();
         for (int i = 0; i < imageCount; i++) {
-            try {
-                Part filePart = req.getPart("file-" + i);
-                InputStream fileContent = filePart.getInputStream();
-                imageStreams.add(fileContent);
-            } catch (Exception e) {
-                System.out.println("Error happens while handling image files!");
-                e.printStackTrace();
-            }
+            Part filePart = req.getPart("file-" + i);
+            fileParts.add(filePart);
         }
-        List<Link> imageUrls = new ArrayList<>();
-        for (int i = 0; i < imageStreams.size(); i++) {
-            imageUrls.add(new Link("/"));
-        }
-        /**
-         * The abobe code is for testing purpose only. The servlet would call the helper
-         * classes like this: imageUrls = blobstoreHelper.uploadFiles(imageStreams);
-         */
+        List<Link> imageUrls = storageHelper.uploadFiles(fileParts, BUCKET_NAME);
         List<PostImage> postImages = new ArrayList<>();
         for (int i = 0; i < imageCount; i++) {
             String description = imageDescriptions.getString(i);
