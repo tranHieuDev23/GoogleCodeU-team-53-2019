@@ -46,7 +46,7 @@ class AboutUs extends Component {
     );
 
     return (
-      <div className='container'>
+      <div className='container pt-2'>
         <h1 className='center'>About Our Team</h1>
         {createTeammateListUi}
       </div>

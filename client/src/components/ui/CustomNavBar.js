@@ -49,11 +49,11 @@ class CustomNavBar extends Component {
       <div className="navbar navbar-dark bg-dark">
         <div>
         <Link to={HOME} className="navbar-brand">Home</Link>
-        <Link to={ABOUT_US} className="navbar-tog gler">About our team</Link>
+        <Link to={ABOUT_US} className="navbar-toggler">About Our Team</Link>
         </div>
         <div className={hideIfSignedOut}>
           <Link to={USER_PAGE + '/' + userId} className="navbar-toggler">Your Page</Link>
-          <Link to={UPLOAD_PAGE} className="navbar-toggler">Create new post</Link>
+          <Link to={UPLOAD_PAGE} className="navbar-toggler">Create New Post</Link>
           <a href={LOGOUT} className="navbar-toggler">Logout</a>
         </div>
         <div className={hideIfSignedIn}>

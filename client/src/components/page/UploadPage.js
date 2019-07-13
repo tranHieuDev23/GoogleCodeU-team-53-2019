@@ -78,20 +78,22 @@ class UploadPage extends React.Component {
   render() {
     console.log(this.state.images);
     return (
-      <div className='UploadPage'>
-        <h2>Create new post:</h2>
+      <div className='UploadPage container pt-2'>
+        <h1>Create new post:</h1>
         <RichTextEditor
           description='Please enter description here'
           value={this.state.description}
           handleChange={this.handlePostDescription}
         />
         {}
-        <button onClick={this.handleAddPicture} className='btn btn-success'>
-          Add new picture
-        </button>
-        <button onClick={this.handlePost} className='btn btn-primary'>
-          Share this post
-        </button>
+        <div className='mt-2'>
+          <button onClick={this.handleAddPicture} className='btn btn-success'>
+            Add new picture
+          </button>
+          <button onClick={this.handlePost} className='btn btn-primary'>
+            Share this post
+          </button>
+        </div>
         <AddedPicture images={this.state.images} />
         {this.state.popup ? (
           <Popup
