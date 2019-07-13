@@ -16,6 +16,8 @@ import com.google.codeu.models.Comment;
 import com.google.codeu.utils.ServletLink;
 import com.google.gson.Gson;
 
+import org.apache.commons.text.StringEscapeUtils;
+
 @WebServlet(ServletLink.API_CREATE_COMMENT)
 public class CreateCommentServlet extends HttpServlet {
 
@@ -46,6 +48,7 @@ public class CreateCommentServlet extends HttpServlet {
         }
         UUID postId = UUID.fromString(req.getParameter("postId"));
         String commentText = req.getParameter("commentText");
+        commentText = StringEscapeUtils.escapeHtml4(commentText);
         Comment comment = new Comment(userId, postId, commentText);
         commentDao.storeComment(comment);
 
