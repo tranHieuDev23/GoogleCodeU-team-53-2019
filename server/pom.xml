@@ -14,14 +14,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.google.codeu</groupId>
-  <artifactId>codeu-starter-project</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <artifactId>codeu-react-starter-project</artifactId>
+  <!-- [BUILD]: Change dev to prod if building to prod. -->
+  <version>dev</version>
   <packaging>war</packaging>
 
   <name>codeu-starter-project</name>
@@ -33,18 +33,6 @@ limitations under the License.
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <failOnMissingWebXml>false</failOnMissingWebXml>
   </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>com.google.cloud</groupId>
-        <artifactId>google-cloud-bom</artifactId>
-        <version>0.100.0-alpha</version>
-        <type>pom</type>
-        <scope>import</scope>
-       </dependency>
-     </dependencies>
-  </dependencyManagement>
 
   <dependencies>
 
@@ -127,6 +115,7 @@ limitations under the License.
       <version>4.3.7.RELEASE</version>
     </dependency>
 
+
   </dependencies>
 
   <build>
@@ -134,7 +123,30 @@ limitations under the License.
       <plugin>
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-maven-plugin</artifactId>
-        <version>1.9.59</version>
+        <version>1.9.73</version>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <!-- [BUILD]: Change -dev to -prod if launching to prod. -->
+              <outputDirectory>target/codeu-react-starter-project-dev</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>../client/build</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

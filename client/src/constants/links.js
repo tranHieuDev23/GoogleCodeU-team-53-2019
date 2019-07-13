@@ -36,6 +36,21 @@ export const ABOUT_US = servletPrefix + '/aboutus';
 /** Client link to the home page. */
 export const HOME = '/';
 /** Client link to the user's page. */
-export const USER_PAGE = '/userpage';
+
+/** Client link to the upload page. */
+export const CREATE_POST = servletPrefix + "/create-post";
+
+/** Client link to retrieve post */
+export const RETRIEVE_POSTS = servletPrefix + "/retrieve-posts";
+
+export const RETRIEVE_POST = servletPrefix + "/retrieve-post";
+
+export const RETRIEVE_USER = servletPrefix + "/retrieve-user";
+
+export const LOGIN_PAGE = '/login';
+
+export const USER_PAGE = '/user';
 
 export const UPLOAD_PAGE = '/create-post';
+
+export const POST_PAGE = '/post'

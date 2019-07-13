@@ -1,4 +1,7 @@
 target
+bin
+server/target
+server/bin
 .settings
 .classpath
 .project

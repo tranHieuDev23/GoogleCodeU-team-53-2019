@@ -1,6 +1,8 @@
 import React from 'react';
-import {Editor, EditorState, RichUtils} from 'draft-js';
+import {Editor, EditorState, RichUtils } from 'draft-js';
+import {stateToHTML} from 'draft-js-export-html';
 import 'css/RichTextEditor.css';
+
 class RichTextEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -48,6 +50,15 @@ class RichTextEditor extends React.Component {
     );
   }
 
+  componentDidUpdate()  {
+    const {editorState} = this.state;
+    var contentState = editorState.getCurrentContent();
+    let htmlContent = stateToHTML(contentState);
+    if (this.props.value !== htmlContent)
+      this.props.handleChange(htmlContent);
+    console.log(this.props.value);
+  }
+
   render() {
     const {editorState} = this.state;
 
@@ -79,7 +90,7 @@ class RichTextEditor extends React.Component {
             handleKeyCommand={this.handleKeyCommand}
             onChange={this.onChange}
             onTab={this.onTab}
-            placeholder="Enter new Message"
+            placeholder={this.props.description}
             ref="editor"
             spellCheck={true}
           />

@@ -1,53 +1,108 @@
 import React from 'react';
-import UploadImage from 'components/ui/UploadImage';
-import axios from 'axios'
-import { CREATE_POST } from 'constants/serverLink'
+import axios from 'axios';
+import { CREATE_POST } from 'constants/links';
+import Popup from '../ui/Popup/Popup';
+import RichTextEditor from 'components/ui/RichTextEditor';
+import AddedPicture from '../ui/AddedPicture';
+import 'css/UploadPage.scss';
+
 class UploadPage extends React.Component {
   constructor() {
     super();
 
     this.handleSetState = this.handleSetState.bind(this);
     this.handlePost = this.handlePost.bind(this);
+    this.handlePostDescription = this.handlePostDescription.bind(this);
+    this.handleAddPicture = this.handleAddPicture.bind(this);
 
     this.state = {
-      description: "Test",
+      description: '',
       images: [],
-    }
+      popup: false
+    };
+  }
 
-
+  componentDidMount = () => {
   }
 
   handleSetState = (name, newState) => {
     this.setState({ [name]: newState });
-  }
+  };
 
-  handlePost = (event) => {
-    console.log("test");
+  handlePost = event => {
     const data = new FormData();
-    data.append('description', this.state.description);
-    const {images} = this.state;
-    for(let i = 0; i < images.length; i++)  {
-      console.log(images.selectedFile);
+    const { images } = this.state;
+    const obj = {
+      descriptionText: this.state.description,
+      imageDescriptions: [],
+      tags: [],
+      location: null
+    };
+    for (let i = 0; i < images.length; i++) {
       if (images[i].selectedFile != null) {
-        
-        data.append('image', images.selectedFile);
+        obj.imageDescriptions.push(images[i].imageDescription);
       }
     }
-    axios.post(CREATE_POST, data, {
+    data.append('postDetails', JSON.stringify(obj));
+    let cnt = 0;
+    for (let i = 0; i < images.length; i++) {
+      if (images[i].selectedFile != null) {
+        data.append('file-' + cnt, images[i].selectedFile);
+        ++cnt;
+      }
+    }
+    axios.post(CREATE_POST, data, {});
+  };
 
-    })
-  }
+  handlePostDescription = newState => {
+    this.setState({ description: newState });
+  };
+
+  handleClosePopup = () => {
+    console.log('Wrapper');
+    if (this.state.popup) {
+      this.setState({
+        popup: false
+      });
+    }
+  };
+
+  handleAddPicture = event => {
+    event.stopPropagation();
+    if (!this.state.popup)
+      this.setState((oldState, newProps) => {
+        return { popup: !oldState.popup };
+      });
+  };
 
   render() {
+    console.log(this.state.images);
     return (
-      <div>
-        <UploadImage postDetail={this.state} imageId={1} onChange={this.handleSetState} />
-        <button onClick={this.handlePost}>Post</button>
+      <div className='UploadPage'>
+        <h2>Create new post:</h2>
+        <RichTextEditor
+          description='Please enter description here'
+          value={this.state.description}
+          handleChange={this.handlePostDescription}
+        />
+        {}
+        <button onClick={this.handleAddPicture} className='btn btn-success'>
+          Add new picture
+        </button>
+        <button onClick={this.handlePost} className='btn btn-primary'>
+          Share this post
+        </button>
+        <AddedPicture images={this.state.images} />
+        {this.state.popup ? (
+          <Popup
+            handleClose={this.handleClosePopup}
+            postDetail={this.state}
+            onChange={this.handleSetState}
+          />
+        ) : null}
       </div>
     );
   }
-
-
 }
 
 export default UploadPage;
