@@ -97,13 +97,13 @@ public class VisionAPIHelper implements Comparable<VisionAPIHelper> {
                 System.out.println("Error: " + imageResponse.getError().getMessage());
             }
 
-            //store all result labels in form of "score+description"
+            //store result tags as object
             for (EntityAnnotation annotation : imageResponse.getLabelAnnotationsList()) {
                 VisionAPIHelper v = new VisionAPIHelper();
                 v.description = annotation.getDescription();
                 v.score = annotation.getScore();
                 store[j] = v;
-                //allow max 5 tages per one image
+                //allow max 5 tags per one image for efficiency
                 if (j % 5 == 4)
                   break;
                 else
