@@ -15,3 +15,4 @@ client/package-lock.json
 client/node_modules
 client/yarn.lock
 client/build
+client/src/Json/
