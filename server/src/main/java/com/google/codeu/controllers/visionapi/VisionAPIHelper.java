@@ -58,13 +58,13 @@ public class VisionAPIHelper implements Comparable<VisionAPIHelper> {
     }
   
     /**
-     * Predict relevant labels from a list of images, using the Vision API.
+     * Predict relevant tags from a list of images, using the Vision API.
      * 
      * @param imageStreams List of byte streams describing the input images.
      * @param maxResultCount The maximum number of results to return.
-     * @return An array of predicted labels, sorted by relevance.
+     * @return An array of predicted tags, sorted by relevance.
      */
-    public List<String> predictLabels(List<InputStream> imageStreams, int maxResultCount) throws IOException {
+    public List<String> predictTags(List<InputStream> imageStreams, int maxResultCount) throws IOException {
         int length = imageStreams.size();
         int count = 0;
         int index = 0;
