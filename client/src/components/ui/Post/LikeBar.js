@@ -6,7 +6,7 @@ class LikeBar extends React.Component {
     super(props);
 
     this.state = {
-      popup: false
+      popup: this.props.popup,
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -14,19 +14,19 @@ class LikeBar extends React.Component {
     this.handleSetState = this.handleSetState.bind(this);
   }
 
-  handleClick = (event) => {
+  handleClick = async (event) => {
     event.stopPropagation();
-    if (!this.state.popup)
-      this.setState((oldState, newProps) => {
-        return { popup: !oldState.popup };
-      });
+    const { onChangePost, order } = this.props;
+    await onChangePost(order, true);
+    if (!this.state.popup)  {
+      this.setState({popup: true}); 
+    }
   };
 
   handleClosePopup = () => {
-    console.log('Wrapper');
     if (this.state.popup) {
       this.setState({
-        popup: true
+        popup: false,
       });
     }
   };
@@ -36,18 +36,16 @@ class LikeBar extends React.Component {
   };
 
   render() {
-    const { likedUserIds } = this.props.post;
+    const { numberOfLike } = this.props;
     let str = '';
-    if (Array.isArray(likedUserIds)) {
-      if (likedUserIds.length === 1) {
-        str = 'Liked by one person';
-      } else if (likedUserIds.length > 1) {
-        str = 'Liked by ' + likedUserIds.length + ' peoples';
-      }
+    if (numberOfLike === 1) {
+      str = 'Liked by one person';
+    } else if (numberOfLike > 1) {
+      str = 'Liked by ' + numberOfLike + ' peoples';
     }
     let thisClass = 'Post__LikeBar';
     if (str === '') thisClass += '__hidden';
-  
+
     return (
       <div>
         <div className={thisClass} onClick={this.handleClick}>

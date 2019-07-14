@@ -3,9 +3,9 @@
   flex-direction: column;
   border: 1px solid white;
   border-radius: 10px;
-  box-shadow: 3px 3px 7px -1px rgba(184,180,184,1);
+  box-shadow: 3px 3px 7px -1px rgba(184, 180, 184, 1);
   background: white;
-  
+
   &:not(:last-child) {
     margin-bottom: 20px;
   }
@@ -56,19 +56,38 @@
 .Post__Comments {
   padding: 15px;
 
+  &__Author {
+    font-weight: bold;
+  }
+
   &__Comment {
     &:not(:last-child) {
       margin-bottom: 15px;
       border-bottom: 1px solid gray;
     }
   }
+
+  &__ShowMore {
+    margin-bottom: 15px;
+    border-bottom: 1px solid gray;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  &__TextArea {
+    border-bottom: 1px solid gray;
+    margin-bottom: 15px;
+    min-width: 1000;
+    min-height: 1000;
+    text-align: center;
+  }
 }
 
-.Post__LikeBar  {
+.Post__LikeBar {
   padding: 15px;
   font-weight: bold;
-  
-  &__hidden  {
-    display:none
+
+  &__hidden {
+    display: none;
   }
 }

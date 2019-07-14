@@ -48,4 +48,15 @@ nav li {
   body {
     width: 80%;
   }
-} 
+}
+
+.SpinLogin {
+  text-align: center;
+  padding: 25% 25%;
+}
+
+.BigNotification  {
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+}

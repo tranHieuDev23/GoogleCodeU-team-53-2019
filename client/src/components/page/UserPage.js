@@ -1,62 +1,77 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-
-import 'css/userPage.css';
+import { RETRIEVE_POSTS } from 'constants/links.js';
 import axios from 'axios';
 import NewsFeed from 'components/ui/NewsFeed.js';
-import { RETRIEVE_POSTS } from 'constants/links.js';
+import { withRouter } from 'react-router-dom';
+import { addFirstParamToUrl, addParamToUrl } from 'helpers/FetchServer.js';
 
-function getUrl(maxCreationTime, limit, userid) {
-  return "?" + "maxCreationTime=" + maxCreationTime + "&limit=" + limit + "&userId=" + userid;
-}
-
-/** Renders the /user-page page. */
 class UserPage extends Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
+    const { userStatus } = this.props;
     this.state = {
+      userStatus: {
+        userEmail: userStatus.userEmail,
+        userId: userStatus.userId,
+      },
       posts: [],
       userIdParam: this.props.match.params.userId
-    };
-    console.log(this.state);
+    }
+    this.handleChangePosts = this.handleChangePosts.bind(this);
   }
-  componentDidMount = () => {
-    let date = new Date();
-    let timestamp = date.getTime(); //current time
-    let url = RETRIEVE_POSTS + getUrl(timestamp, 10, this.state.userIdParam);
-    axios
+
+  handleChangePosts = (newState) => {
+    this.setState({posts: newState});
+  }
+
+  componentDidMount = async () => {
+    var date = new Date();
+    var timestamp = date.getTime(); //current time
+    let url = RETRIEVE_POSTS;
+    url = addFirstParamToUrl(url, 'maxCreationTime', timestamp);
+    url = addParamToUrl(url, 'limit', 10);
+    url = addParamToUrl(url, 'userId', this.state.userIdParam);
+    await axios
       .post(url, {})
       .then(response => {
-        console.log(response.data);
-        this.setState(response.data);
+        const { data } = response;
+        if (Array.isArray(data.posts))
+          this.setState({ posts: data.posts });
       })
       .catch(function (error) {
         console.log(error);
       });
-  };
+  }
+
+  componentDidUpdate = () => {
+    const { userStatus } = this.props;
+    if (userStatus !== this.state.userStatus) {
+      this.setState({ userStatus: userStatus });
+    }
+  }
 
   render() {
     return (
       <div className='container pt-2'>
-        <h1 className='center'>User Page</h1>
-        {this.state.posts.length > 0 &&
-          <NewsFeed posts={this.state.posts} />
-        }
+        {this.state.userStatus.userEmail ? (
+          <div>
+            <h1 className='center'>{this.state.userStatus.userEmail} Page</h1>
+            <NewsFeed 
+              userStatus={this.state.userStatus} 
+              posts={this.state.posts} 
+              onChangePosts={this.handleChangePosts}
+            />
+          </div>
+        ) : (
+            <div className='container pt-2'>
+              <div className='BigNotification'>
+                Please login to continue!!!
+              </div>
+            </div>
+          )}
       </div>
     );
   }
 }
 
-UserPage.propTypes = {
-  /** A json of the user data. */
-  userData: PropTypes.object
-};
-
-/** Maps user data from redux to UserPage. */
-const mapStateToProps = function (state) {
-  return { userData: state.userData };
-};
-
-export default connect(mapStateToProps)(UserPage);
+export default withRouter(UserPage);

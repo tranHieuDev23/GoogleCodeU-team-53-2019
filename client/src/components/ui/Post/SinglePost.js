@@ -1,20 +1,31 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import SinglePicture from 'components/ui/Post/SinglePicture';
 import PostAuthor from 'components/ui/Post/PostAuthor.js'
-import { ReactComponent as LikeIcon } from 'assets/icons/like.svg';
-import { ReactComponent as RedLikeIcon } from 'assets/icons/red_like.svg';
-import { ReactComponent as CommentIcon } from 'assets/icons/comment.svg';
 import LikeBar from 'components/ui/Post/LikeBar';
 import parse from 'html-react-parser';
+import InteractiveBar from 'components/ui/Post/InteractiveBar'
+import CommentBar from 'components/ui/Post/CommentBar';
 
 class SinglePost extends React.Component {
-  constructor(props)  {
+  constructor(props) {
     super(props);
-    this.handleComment = this.handleComment.bind(this);
+    this.state = {
+      numberOfLike: 0,
+    }
+    this.onChangeLikes = this.onChangeLikes.bind(this);
   }
 
-  handleComment = () => {
+  componentDidMount = () => {
+    const { post } = this.props;
+    if (Array.isArray(post.likedUserIds)) {
+      this.setState({ numberOfLike: post.likedUserIds.length });
+    }
+  }
 
+  onChangeLikes = (newLikes) => {
+    console.log(newLikes);
+    this.setState({ numberOfLike: newLikes })
   }
 
   render() {
@@ -29,11 +40,19 @@ class SinglePost extends React.Component {
                 <PostAuthor {...this.props} />
                 <div className="Post__Description">{parse(post.descriptionText)}</div>
                 <SinglePicture {...this.props} />
-                <div className="Post__Icons">
-                  <LikeIcon className="Post__Icons__Icon" />
-                  <CommentIcon className="Post__Icons__Icon" onClick={this.handleComment}/>
-                </div>
-                <LikeBar {...this.props} />
+              <InteractiveBar
+                  {...this.props}
+                  numberOfLike={this.state.numberOfLike}
+                  onChangeLikes={this.onChangeLikes}
+                />
+                <LikeBar
+                  {...this.props}
+                  numberOfLike={this.state.numberOfLike}
+                  onChangeLikes={this.onChangeLikes}
+                />
+                {this.props.withComment &&
+                  <CommentBar {...this.props} />
+                }
               </div>
             )
         }
@@ -42,17 +61,4 @@ class SinglePost extends React.Component {
   }
 }
 
-export default SinglePost;
-/*
-<div className="Post__Comments">
-  <div className="Post__Comments__Comment">
-    ABC
-  </div>
-  <div className="Post__Comments__Comment">
-    ABC
-  </div>
-  <div className="Post__Comments__Comment">
-    ABC
-  </div>
-</div>
-*/
+export default withRouter(SinglePost);

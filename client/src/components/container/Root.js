@@ -14,23 +14,72 @@ import {
 } from 'constants/links.js';
 import UploadPage from '../page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
-import Login from 'components/page/Login';
+import Loading from 'components/page/Loading';
+import { fetchLoginStatus } from 'helpers/UserStatus.js'
+
+import "antd/dist/antd.css";
 import 'css/Post.scss';
+import 'css/index.css'
 
 /** Renders all components in the <root> element on ../public/index.html. */
 class Root extends Component {
+  constructor() {
+    super();
+    this.state = {
+      isLogin: false,
+      userEmail: '',
+      userId: null,
+    }
+    this.handleSetState = this.handleSetState.bind(this);
+  }
+
+  async componentDidMount() {
+    console.log("Did mount root");
+    const status = await fetchLoginStatus();
+    this.setState({ userEmail: status.userEmail });
+    this.setState({ isLogin: !!status.userEmail });
+    this.setState({ userId: status.userId });
+    console.log(this.state);
+  }
+
+  handleSetState = (name, newState) => {
+    this.setState({ [name]: newState });
+  }
+
   render() {
+    const withStatusHome = (Component, userStatus, handleUserStatus) => (props) => (
+      <Component {...props} userStatus={userStatus} handleUserStatus={this.handleSetState} />
+    );
+
     return (
+
       <BrowserRouter>
         <div className='App'>
-          <CustomNavBar />
+          <CustomNavBar userStatus={this.state} handleUserStatus={this.handleSetState} />
           <Switch>
-            <Route exact path={LOGIN_PAGE} component={Login} />
-            <Route exact path={HOME} component={Home} />
-            <Route exact path={ABOUT_US} component={AboutUs} />
-            <Route exact path={USER_PAGE + '/:userId'} component={UserPage} />
-            <Route exact path={UPLOAD_PAGE} component={UploadPage} />
-            <Route exact path={POST_PAGE+'/:postId'} component={PostPage} />
+            <Route 
+              exact path={LOGIN_PAGE} 
+              component={withStatusHome(Loading, this.state, this.handleSetState)}
+            />
+            <Route 
+              exact path={HOME} 
+              component={withStatusHome(Home, this.state, this.handleSetState)}
+            />
+            <Route 
+              exact path={ABOUT_US} 
+              component={withStatusHome(AboutUs, this.state, this.handleSetState)}
+            />
+            <Route
+              exact path={USER_PAGE + '/:userId'}
+              component={withStatusHome(UserPage, this.state, this.handleSetState)} />
+            <Route 
+              exact path={UPLOAD_PAGE} 
+              component={withStatusHome(UploadPage, this.state, this.handleSetState)}
+            />
+            <Route 
+              exact path={POST_PAGE + '/:postId'} 
+              component={withStatusHome(PostPage, this.state, this.handleSetState)}
+            />
           </Switch>
         </div>
       </BrowserRouter>
