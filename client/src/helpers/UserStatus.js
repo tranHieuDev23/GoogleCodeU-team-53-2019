@@ -24,4 +24,4 @@ export const fetchLoginStatus =  async () => {
       console.log("error when fetch login status");
     })
   return res;
-}
+  }

@@ -2,22 +2,40 @@ import React from 'react';
 import axios from 'axios';
 import SinglePost from 'components/ui/Post/SinglePost';
 import { RETRIEVE_POST } from 'constants/links.js';
+import { addParamToUrl } from 'helpers/FetchServer.js';
 
 class PostPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      post: null,
       postIdParam: this.props.match.params.postId,
+      likePopup: false,
     };
   }
 
-  onChangePost = () => {
-    
+  onChangePost = async (index, oldPopup) => {
+    let url = RETRIEVE_POST;
+    url = addParamToUrl(url, 'postId', this.state.postIdParam);
+    url = addParamToUrl(url, 'withComment', true);
+    await axios.post('/api/TestAPI', {})
+      //await axios.post(url, {})
+      .then((response) => {
+        console.log(response.data);
+        this.setState({ post: response.data });
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    this.setState({ likePopup: oldPopup });
   }
 
   componentDidMount = async () => {
-    const url = RETRIEVE_POST + "?postId=" + this.state.postIdParam;
-    axios.post(url, {})
+    let url = RETRIEVE_POST;
+    url = addParamToUrl(url, 'postId', this.state.postIdParam);
+    url = addParamToUrl(url, 'withComment', true);
+    //await axios.post(url, {})
+    await axios.post('/api/TestAPI', {})
       .then((response) => {
         console.log(response.data);
         this.setState({ post: response.data });
@@ -41,6 +59,7 @@ class PostPage extends React.Component {
               order={1}
               onChangePost={this.onChangePost}
               withComment={true}
+              popup={this.state.likePopup}
             />
           </React.Fragment>
         ) : (

@@ -3,6 +3,7 @@ import { RETRIEVE_POSTS } from 'constants/links.js';
 import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import NewsFeed from 'components/ui/NewsFeed.js';
+import { addParamToUrl } from 'helpers/FetchServer.js';
 
 class Home extends Component {
   constructor(props) {
@@ -25,7 +26,9 @@ class Home extends Component {
   componentDidMount = async () => {
     var date = new Date();
     var timestamp = date.getTime(); //current time
-    const url = RETRIEVE_POSTS + "?maxCreationTime=" + timestamp + "&limit=10";
+    let url = RETRIEVE_POSTS;
+    url = addParamToUrl(url, 'maxCreationTime', timestamp);
+    url = addParamToUrl(url, 'limit', 10);
     await axios
       .post(url, {})
       //.post('/api/TestAPI', {})
