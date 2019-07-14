@@ -47,6 +47,14 @@ export const RETRIEVE_POST = servletPrefix + "/retrieve-post";
 
 export const RETRIEVE_USER = servletPrefix + "/retrieve-user";
 
+export const LIKE = servletPrefix + "/like";
+
+export const UNLIKE = servletPrefix + "/unlike";
+
+export const CREATE_COMMENT = servletPrefix + "/create-comment";
+
+export const DELETE_COMMENT = servletPrefix + "/delete-comment";
+
 export const LOGIN_PAGE = '/login';
 
 export const USER_PAGE = '/user';

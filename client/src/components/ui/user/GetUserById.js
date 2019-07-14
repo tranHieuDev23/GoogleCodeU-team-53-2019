@@ -13,19 +13,15 @@ class GetUserById extends React.Component {
       }
     };
   }
-  componentDidMount = () => {
-    axios.post(RETRIEVE_USER, {
-      userId: this.props.userId,
+  componentDidMount = async () => {
+    const url = RETRIEVE_USER + "?userId=" + this.props.userId;
+    await axios.post(url, {
     })
-    // Promise.resolve({
-    //   data
-    // })
       .then(response => {
-        console.log('Test');
         console.log(response.data);
         this.setState(response.data);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         console.log(error);
       });
   };
@@ -35,7 +31,7 @@ class GetUserById extends React.Component {
       <div
         className='Post__Author'
         onClick={() => {
-          this.props.history.push(USER_PAGE+ this.state.id.toString);
+          this.props.history.push(USER_PAGE + this.state.id.toString);
         }}>
         <img
           src={this.state.avatarUrl.value}

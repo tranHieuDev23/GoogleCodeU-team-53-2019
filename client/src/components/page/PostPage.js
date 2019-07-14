@@ -7,17 +7,20 @@ class PostPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postImages: [],
       postIdParam: this.props.match.params.postId,
     };
   }
 
-  componentDidMount = () => {
+  onChangePost = () => {
+    
+  }
+
+  componentDidMount = async () => {
     const url = RETRIEVE_POST + "?postId=" + this.state.postIdParam;
     axios.post(url, {})
       .then((response) => {
         console.log(response.data);
-        this.setState(response.data);
+        this.setState({ post: response.data });
       })
       .catch(function (error) {
         console.log(error);
@@ -26,14 +29,23 @@ class PostPage extends React.Component {
 
   render() {
     console.log(this.state);
+
     return (
       <div className='container pt-2'>
-        <h1 className='center'>Post page</h1>
-        {this.state.postImages.length > 0 &&
-          <SinglePost post={this.state} />
-        }
-        {this.state.postImages.length === 0 &&
-          <div>{"This content is unavailable right now"}</div>
+        {(this.state.post != null && this.state.post.id) ? (
+          <React.Fragment>
+            <h1 className='center'>{this.state.post.author.username} post</h1>
+            <SinglePost
+              userStatus={this.props.userStatus}
+              post={this.state.post}
+              order={1}
+              onChangePost={this.onChangePost}
+              withComment={true}
+            />
+          </React.Fragment>
+        ) : (
+            <div>{"This content is unavailable right now"}</div>
+          )
         }
       </div>
     );

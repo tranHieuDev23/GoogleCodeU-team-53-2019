@@ -3,6 +3,10 @@ import * as classes from './LikePopup.module.scss';
 import ListUserById from 'components/ui/user/ListUserById.js';
 
 class LikePopup extends React.Component {
+  constructor() {
+    super();
+    console.log("Like popup");
+  }
   render() {
     return (
       <div className={classes.Wrapper}>

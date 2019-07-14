@@ -3,53 +3,50 @@ import {
   ABOUT_US,
   HOME,
   LOGIN,
-  LOGIN_STATUS,
   LOGOUT,
   USER_PAGE,
   UPLOAD_PAGE,
 } from 'constants/links.js';
 import { HIDDEN } from 'constants/css.js';
 import { Link } from 'react-router-dom';
-import { SERVER_OK } from 'constants/webCodes.js';
 
 /** The common navbar ui used throughout the application. */
 class CustomNavBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userEmail: "",
+      userEmail: '',
       userId: null,
     }
   }
-  componentDidMount() {
-    this.fetchLoginStatus();
+
+  componentDidMount = () => {
+    console.log(this.state);
+    console.log("Hello did mount");
+    const { userStatus } = this.props;
+    this.setState({ userEmail: userStatus.userEmail });
+    this.setState({ userId: userStatus.userId });
   }
 
-  fetchLoginStatus() {
-    fetch(LOGIN_STATUS)
-      .then(response =>
-        response.status === SERVER_OK ? response.json() : null
-      )
-      .then(status => {
-        if (status.isLoggedIn) {
-          let userStatus = JSON.parse(status.userData);
-          this.setState({userEmail: userStatus.username});
-          this.setState({userId: userStatus.id});
-        } 
-      });
+  componentDidUpdate = () => {
+    const { userStatus } = this.props;
+    if (userStatus.userEmail !== this.state.userEmail) {
+      this.setState({ userEmail: userStatus.userEmail });
+      this.setState({ userId: userStatus.userId });
+    }
+    if (userStatus.userId !== this.state.userId)
+      this.setState({ userId: userStatus.userId });
   }
 
   render() {
     const { userEmail, userId } = this.state;
     const hideIfSignedIn = userEmail ? HIDDEN : null;
     const hideIfSignedOut = !userEmail ? HIDDEN : null;
-    console.log("TEST CONSOLE");
-    console.log(this.state);
     return (
       <div className="navbar navbar-dark bg-dark">
         <div>
-        <Link to={HOME} className="navbar-brand">Home</Link>
-        <Link to={ABOUT_US} className="navbar-toggler">About Our Team</Link>
+          <Link to={HOME} className="navbar-brand">Home</Link>
+          <Link to={ABOUT_US} className="navbar-toggler">About Our Team</Link>
         </div>
         <div className={hideIfSignedOut}>
           <Link to={USER_PAGE + '/' + userId} className="navbar-toggler">Your Page</Link>
@@ -60,7 +57,7 @@ class CustomNavBar extends Component {
           <a href={LOGIN} className="navbar-toggler">Login</a>
         </div>
       </div>
-     
+
     );
   }
 }

@@ -14,3 +14,4 @@ eclipse-formatter.xml
 client/package-lock.json
 client/node_modules
 client/yarn.lock
+client/build
