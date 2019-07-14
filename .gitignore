@@ -15,6 +15,9 @@ client/package-lock.json
 client/node_modules
 client/yarn.lock
 client/build
+<<<<<<< HEAD
 client/src/Json/
+=======
+>>>>>>> 11221b8719eb554210eb61a7f8a8e9888c5c4d2b
 server/src/main/webapp
 !server/src/main/webapp/WEB-INF

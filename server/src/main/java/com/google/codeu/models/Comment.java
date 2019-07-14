@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Comment {
 
   private UUID id;
-  private String authorId;
+  private User author;
   private UUID postId;
   private long creationTime;
   private String text;
@@ -21,12 +21,12 @@ public class Comment {
    *   <li>The creation time will be the server's current time.
    * </ul>
    *
-   * @param authorId The author's ID.
+   * @param author The author of this comment.
    * @param postId The commented post's ID.
    * @param text The comment's content.
    */
-  public Comment(String authorId, UUID postId, String text) {
-    this(UUID.randomUUID(), authorId, postId, System.currentTimeMillis(), text);
+  public Comment(User author, UUID postId, String text) {
+    this(UUID.randomUUID(), author, postId, System.currentTimeMillis(), text);
   }
 
   /**
@@ -34,14 +34,14 @@ public class Comment {
    * retrieving a comment from the database.
    *
    * @param id The comment's ID.
-   * @param authorId The author's ID.
+   * @param author The author's ID.
    * @param postId The commented post's ID.
    * @param creationTime The comment's creation time.
    * @param text The comment's content.
    */
-  public Comment(UUID id, String authorId, UUID postId, long creationTime, String text) {
+  public Comment(UUID id, User author, UUID postId, long creationTime, String text) {
     this.id = id;
-    this.authorId = authorId;
+    this.author = author;
     this.postId = postId;
     this.creationTime = creationTime;
     this.text = text;
@@ -51,8 +51,8 @@ public class Comment {
     return id;
   }
 
-  public String getAuthorId() {
-    return authorId;
+  public User getAuthor() {
+    return author;
   }
 
   public UUID getPostId() {
