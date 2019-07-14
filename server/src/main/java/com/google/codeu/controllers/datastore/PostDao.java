@@ -94,21 +94,36 @@ public class PostDao {
             PROPERTY_NAME_LOCATION_LATITUDE,
             FilterOperator.GREATER_THAN_OR_EQUAL,
             southWest.getLatitude());
-    Filter swLngFilter =
-        new Query.FilterPredicate(
-            PROPERTY_NAME_LOCATION_LONGITUDE,
-            FilterOperator.GREATER_THAN_OR_EQUAL,
-            southWest.getLongitude());
     Filter neLatFilter =
         new Query.FilterPredicate(
             PROPERTY_NAME_LOCATION_LATITUDE,
             FilterOperator.LESS_THAN_OR_EQUAL,
             southWest.getLatitude());
-    Filter neLngFilter =
-        new Query.FilterPredicate(
-            PROPERTY_NAME_LOCATION_LONGITUDE,
-            FilterOperator.LESS_THAN_OR_EQUAL,
-            southWest.getLongitude());
+    Filter swLngFilter = null, neLngFilter = null;
+    if (northEast.getLongitude() < southWest.getLongitude()) {
+      swLngFilter =
+          new Query.FilterPredicate(
+              PROPERTY_NAME_LOCATION_LONGITUDE,
+              FilterOperator.LESS_THAN_OR_EQUAL,
+              southWest.getLongitude());
+      neLngFilter =
+          new Query.FilterPredicate(
+              PROPERTY_NAME_LOCATION_LONGITUDE,
+              FilterOperator.GREATER_THAN_OR_EQUAL,
+              southWest.getLongitude());
+    } else {
+      swLngFilter =
+          new Query.FilterPredicate(
+              PROPERTY_NAME_LOCATION_LONGITUDE,
+              FilterOperator.GREATER_THAN_OR_EQUAL,
+              southWest.getLongitude());
+      neLngFilter =
+          new Query.FilterPredicate(
+              PROPERTY_NAME_LOCATION_LONGITUDE,
+              FilterOperator.LESS_THAN_OR_EQUAL,
+              southWest.getLongitude());
+    }
+      
     Query query =
         new Query(ENTITY_KIND)
             .setFilter(
