@@ -16,3 +16,5 @@ client/node_modules
 client/yarn.lock
 client/build
 client/src/Json/
+server/src/main/webapp
+!server/src/main/webapp/WEB-INF
