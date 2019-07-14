@@ -3,7 +3,9 @@ package com.google.codeu.controllers.servlets;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.controllers.datastore.CommentDao;
+import com.google.codeu.controllers.datastore.UserDao;
 import com.google.codeu.models.Comment;
+import com.google.codeu.models.User;
 import com.google.codeu.utils.ServletLink;
 import com.google.gson.Gson;
 import java.io.IOException;
@@ -21,12 +23,14 @@ public class CreateCommentServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   private CommentDao commentDao;
+  private UserDao userDao;
   private Gson gson;
 
   @Override
   public void init() throws ServletException {
     commentDao = new CommentDao();
     gson = new Gson();
+    userDao = new UserDao();
   }
 
   @Override
@@ -38,6 +42,7 @@ public class CreateCommentServlet extends HttpServlet {
       return;
     }
     String userId = userService.getCurrentUser().getUserId();
+    User author = userDao.getUser(userId);
 
     if (!req.getParameterMap().containsKey("postId")
         || !req.getParameterMap().containsKey("commentText")) {
@@ -47,7 +52,7 @@ public class CreateCommentServlet extends HttpServlet {
     UUID postId = UUID.fromString(req.getParameter("postId"));
     String commentText = req.getParameter("commentText");
     commentText = StringEscapeUtils.escapeHtml4(commentText);
-    Comment comment = new Comment(userId, postId, commentText);
+    Comment comment = new Comment(author, postId, commentText);
     commentDao.storeComment(comment);
 
     res.getWriter().println(gson.toJson(comment));
