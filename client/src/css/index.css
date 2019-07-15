@@ -19,11 +19,7 @@ body {
   background: #f8f8f8;
   min-height: 100vh;
   max-width: 1000px;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  margin: auto !important;
 }
 
 /** Remove bullet points from navigation bar. */
