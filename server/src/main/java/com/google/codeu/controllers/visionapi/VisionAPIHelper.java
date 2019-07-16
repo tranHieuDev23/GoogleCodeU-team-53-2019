@@ -26,7 +26,7 @@ import java.lang.*;
 /**
  * Helper class to detect tags from images with Vision API.
  */
-public class VisionAPIHelper implements Comparable<VisionAPIHelper> {
+public class VisionAPIHelper {
     private static VisionAPIHelper SINGLETON_INSTANCE;
     /**
      * Retrieve an instance of class <code>VisionAPIHelper</code>. This
@@ -47,16 +47,20 @@ public class VisionAPIHelper implements Comparable<VisionAPIHelper> {
     
     String description;
     float score;
-  
-    @Override
-    public int compareTo(VisionAPIHelper v) { //sorted by score ; descending order
-        if (score < v.score)
-            return 1;
-        else if (score > v.score)
-            return -1;
-        return 0;
+    
+    private class Result implements Comparable<Result> {
+        float s;
+        
+        @Override
+        public int compareTo(VisionAPIHelper v) { //sorted by score ; descending order
+            if (score < v.score)
+                return 1;
+            else if (score > v.score)
+                return -1;
+            return 0;
+        }
     }
-  
+    
     /**
      * Predict relevant tags from a list of images, using the Vision API.
      * 
