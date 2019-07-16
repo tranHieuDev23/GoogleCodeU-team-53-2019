@@ -45,17 +45,15 @@ public class VisionAPIHelper {
         // Auto-generated
     }
     
-    String description;
-    float score;
-    
     private class Result implements Comparable<Result> {
-        float s;
+        String description;
+        float score;
         
         @Override
-        public int compareTo(VisionAPIHelper v) { //sorted by score ; descending order
-            if (score < v.score)
+        public int compareTo(Result r) { //sorted by score ; descending order
+            if (score < r.score)
                 return 1;
-            else if (score > v.score)
+            else if (score > r.score)
                 return -1;
             return 0;
         }
@@ -72,7 +70,8 @@ public class VisionAPIHelper {
         int length = imageStreams.size();
         int count = 0;
         int index = 0;
-        VisionAPIHelper[] store = new VisionAPIHelper[5 * length];
+        List<Result> resultList = new ArrayList<>();
+        //VisionAPIHelper[] store = new VisionAPIHelper[5 * length];
         List<String> result = null;
         /**
          * TODO: Implement label prediction, using Vision API here. There should not be
@@ -81,7 +80,7 @@ public class VisionAPIHelper {
 
         //get api result for each image in the list
         for(int i=0; i<length; i++){
-            int j = 0;
+            //int j = 0;
           
             byte[] imageBytesArray = IOUtils.toByteArray(imageStreams.get(i));
             ByteString imageBytes = ByteString.copyFrom(imageBytesArray);
@@ -103,24 +102,19 @@ public class VisionAPIHelper {
 
             //store result tags as object
             for (EntityAnnotation annotation : imageResponse.getLabelAnnotationsList()) {
-                VisionAPIHelper v = new VisionAPIHelper();
-                v.description = annotation.getDescription();
-                v.score = annotation.getScore();
-                store[j] = v;
-                //allow max 5 tags per one image for efficiency
-                if (j % 5 == 4)
-                  break;
-                else
-                  j++;
+                Result r = new Result();
+                r.description = annotation.getDescription();
+                r.score = annotation.getScore();
+                resultList.add(r)
             }
         }
 
         //sort stored results by relevance order
-        Arrays.sort(store);
+        Collections.sort(resultList);
 
         //get decription(tags) without duplicates until 'count' reach 'maxResultCount'
         while (count != maxResultCount){
-            String data = store[index].description;
+            String data = resultList[index].description;
             if (result.contains(data))
                 index += 1;
             else{
