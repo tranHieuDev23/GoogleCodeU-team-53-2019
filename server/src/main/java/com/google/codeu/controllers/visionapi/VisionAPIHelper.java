@@ -105,7 +105,7 @@ public class VisionAPIHelper {
                 Result r = new Result();
                 r.description = annotation.getDescription();
                 r.score = annotation.getScore();
-                resultList.add(r)
+                resultList.add(r);
             }
         }
 
@@ -114,7 +114,7 @@ public class VisionAPIHelper {
 
         //get decription(tags) without duplicates until 'count' reach 'maxResultCount'
         while (count != maxResultCount){
-            String data = resultList[index].description;
+            String data = resultList.get(index).description;
             if (result.contains(data))
                 index += 1;
             else{
