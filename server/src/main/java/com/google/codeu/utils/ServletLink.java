@@ -39,6 +39,9 @@ public final class ServletLink {
   /** URL handled by {@link RetrieveUserServlet} */
   public static final String API_RETRIEVE_USER = SERVLET_PREFIX + "/retrieve-user";
 
+  /** URL handled by {@link RetrieveUsersServlet} */
+  public static final String API_RETRIEVE_USERS = SERVLET_PREFIX + "/retrieve-users";
+
   /** URL handled by {@link CreateCommentServlet} */
   public static final String API_CREATE_COMMENT = SERVLET_PREFIX + "/create-comment";
 
