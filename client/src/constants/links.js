@@ -55,6 +55,8 @@ export const CREATE_COMMENT = servletPrefix + "/create-comment";
 
 export const DELETE_COMMENT = servletPrefix + "/delete-comment";
 
+export const PREDICT_TAG = servletPrefix + "/predict-tag";
+
 export const LOGIN_PAGE = '/login';
 
 export const USER_PAGE = '/user';

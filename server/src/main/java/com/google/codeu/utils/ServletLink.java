@@ -45,6 +45,9 @@ public final class ServletLink {
   /** URL handled by {@link RetrieveUserServlet} */
   public static final String API_DELETE_COMMENT = SERVLET_PREFIX + "/delete-comment";
 
+  /** URL handled by {@link PredictTagsServlet} */
+  public static final String API_PREDICT_TAG = SERVLET_PREFIX + "/predict-tag";
+
   /** Index url handled by the client. */
   public static final String INDEX = "/";
 
