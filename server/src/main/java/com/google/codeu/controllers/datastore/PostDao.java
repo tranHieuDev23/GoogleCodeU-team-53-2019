@@ -4,6 +4,7 @@ import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.datastore.Query.*;
 import com.google.codeu.models.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +33,8 @@ public class PostDao {
   }
 
   public void storePost(Post post) {
-    if (post == null) return;
+    if (post == null)
+      return;
 
     Entity entity = new Entity(ENTITY_KIND, post.getId().toString());
     entity.setProperty(PROPERTY_NAME_USER_ID, post.getAuthor().getId());
@@ -52,7 +54,8 @@ public class PostDao {
   }
 
   public Post getPost(UUID id) {
-    if (id == null) return null;
+    if (id == null)
+      return null;
     Key key = KeyFactory.createKey(ENTITY_KIND, id.toString());
     Entity entity = null;
     try {
@@ -64,154 +67,138 @@ public class PostDao {
   }
 
   public List<Post> getPosts(long maxCreationTime, int limit) {
-    Filter maxCreationTimeFilter =
-        new Query.FilterPredicate(
-            PROPERTY_NAME_CREATION_TIME, FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
-    Query query =
-        new Query(ENTITY_KIND)
-            .setFilter(maxCreationTimeFilter)
-            .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+    Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
+        FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
+    Query query = new Query(ENTITY_KIND).setFilter(maxCreationTimeFilter).addSort(PROPERTY_NAME_CREATION_TIME,
+        SortDirection.DESCENDING);
 
     PreparedQuery result = datastore.prepare(query);
     FetchOptions options = FetchOptions.Builder.withLimit(limit);
     List<Post> posts = new ArrayList<>();
     for (Entity entity : result.asIterable(options)) {
       Post post = getPostFromEntity(entity);
-      if (post != null) posts.add(post);
+      if (post != null)
+        posts.add(post);
     }
     return posts;
   }
 
-  public List<Post> getPosts(
-      Location southWest, Location northEast, long maxCreationTime, int limit) {
-    if (southWest == null || northEast == null) return new ArrayList<>();
+  public List<Post> getPosts(Location southWest, Location northEast, long maxCreationTime, int limit) {
+    if (southWest == null || northEast == null)
+      return new ArrayList<>();
 
-    Filter maxCreationTimeFilter =
-        new Query.FilterPredicate(
-            PROPERTY_NAME_CREATION_TIME, FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
-    Filter swLatFilter =
-        new Query.FilterPredicate(
-            PROPERTY_NAME_LOCATION_LATITUDE,
-            FilterOperator.GREATER_THAN_OR_EQUAL,
-            southWest.getLatitude());
-    Filter neLatFilter =
-        new Query.FilterPredicate(
-            PROPERTY_NAME_LOCATION_LATITUDE,
-            FilterOperator.LESS_THAN_OR_EQUAL,
-            southWest.getLatitude());
+    Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
+        FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
+    Filter swLatFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LATITUDE,
+        FilterOperator.GREATER_THAN_OR_EQUAL, southWest.getLatitude());
+    Filter neLatFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LATITUDE, FilterOperator.LESS_THAN_OR_EQUAL,
+        southWest.getLatitude());
     Filter swLngFilter = null, neLngFilter = null;
     if (northEast.getLongitude() < southWest.getLongitude()) {
-      swLngFilter =
-          new Query.FilterPredicate(
-              PROPERTY_NAME_LOCATION_LONGITUDE,
-              FilterOperator.LESS_THAN_OR_EQUAL,
-              southWest.getLongitude());
-      neLngFilter =
-          new Query.FilterPredicate(
-              PROPERTY_NAME_LOCATION_LONGITUDE,
-              FilterOperator.GREATER_THAN_OR_EQUAL,
-              southWest.getLongitude());
+      swLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE, FilterOperator.LESS_THAN_OR_EQUAL,
+          southWest.getLongitude());
+      neLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE, FilterOperator.GREATER_THAN_OR_EQUAL,
+          southWest.getLongitude());
     } else {
-      swLngFilter =
-          new Query.FilterPredicate(
-              PROPERTY_NAME_LOCATION_LONGITUDE,
-              FilterOperator.GREATER_THAN_OR_EQUAL,
-              southWest.getLongitude());
-      neLngFilter =
-          new Query.FilterPredicate(
-              PROPERTY_NAME_LOCATION_LONGITUDE,
-              FilterOperator.LESS_THAN_OR_EQUAL,
-              southWest.getLongitude());
+      swLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE, FilterOperator.GREATER_THAN_OR_EQUAL,
+          southWest.getLongitude());
+      neLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE, FilterOperator.LESS_THAN_OR_EQUAL,
+          southWest.getLongitude());
     }
-      
-    Query query =
-        new Query(ENTITY_KIND)
-            .setFilter(
-                CompositeFilterOperator.and(
-                    maxCreationTimeFilter, swLatFilter, swLngFilter, neLatFilter, neLngFilter))
-            .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+
+    Query query = new Query(ENTITY_KIND)
+        .setFilter(
+            CompositeFilterOperator.and(maxCreationTimeFilter, swLatFilter, swLngFilter, neLatFilter, neLngFilter))
+        .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
 
     PreparedQuery result = datastore.prepare(query);
     FetchOptions options = FetchOptions.Builder.withLimit(limit);
     List<Post> posts = new ArrayList<>();
     for (Entity entity : result.asIterable(options)) {
       Post post = getPostFromEntity(entity);
-      if (post != null) posts.add(post);
+      if (post != null)
+        posts.add(post);
     }
     return posts;
   }
 
   public List<Post> getPosts(String userId, long maxCreationTime, int limit) {
-    if (userId == null) return new ArrayList<>();
+    if (userId == null)
+      return new ArrayList<>();
 
-    Filter maxCreationTimeFilter =
-        new Query.FilterPredicate(
-            PROPERTY_NAME_CREATION_TIME, FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
-    Filter userIdFiler =
-        new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId);
-    Query query =
-        new Query(ENTITY_KIND)
-            .setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, userIdFiler))
-            .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+    Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
+        FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
+    Filter userIdFiler = new Query.FilterPredicate(PROPERTY_NAME_USER_ID, FilterOperator.EQUAL, userId);
+    Query query = new Query(ENTITY_KIND).setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, userIdFiler))
+        .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
 
     PreparedQuery result = datastore.prepare(query);
     FetchOptions options = FetchOptions.Builder.withLimit(limit);
     List<Post> posts = new ArrayList<>();
     for (Entity entity : result.asIterable(options)) {
       Post post = getPostFromEntity(entity);
-      if (post != null) posts.add(post);
+      if (post != null)
+        posts.add(post);
     }
     return posts;
   }
 
   public List<Post> getPosts(UUID tagId, long maxCreationTime, int limit) {
-    if (tagId == null) return new ArrayList<>();
-    Filter maxCreationTimeFilter =
-        new Query.FilterPredicate(
-            PROPERTY_NAME_CREATION_TIME, FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
-    Filter tagFilter = new Query.FilterPredicate(PROPERTY_NAME_TAGS, FilterOperator.IN, tagId);
+    if (tagId == null)
+      return new ArrayList<>();
+    List<String> idsToQuery = Arrays.asList(new String[] {tagId.toString()});
+    Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
+        FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
+    Filter tagFilter = new Query.FilterPredicate(PROPERTY_NAME_TAGS, FilterOperator.IN, idsToQuery);
 
-    Query query =
-        new Query(ENTITY_KIND)
-            .setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, tagFilter))
-            .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
+    Query query = new Query(ENTITY_KIND).setFilter(CompositeFilterOperator.and(maxCreationTimeFilter, tagFilter))
+        .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
     PreparedQuery result = datastore.prepare(query);
     FetchOptions options = FetchOptions.Builder.withLimit(limit);
     List<Post> posts = new ArrayList<>();
     for (Entity entity : result.asIterable(options)) {
       Post post = getPostFromEntity(entity);
-      if (post != null) posts.add(post);
+      if (post != null)
+        posts.add(post);
     }
     return posts;
   }
 
   public void deletePost(UUID postId) {
-    if (postId == null) return;
+    if (postId == null)
+      return;
     Key key = KeyFactory.createKey(ENTITY_KIND, postId.toString());
     datastore.delete(key);
   }
 
   public void likePost(UUID id, String userId) {
-    if (userId == null) return;
+    if (userId == null)
+      return;
     Post post = getPost(id);
-    if (post == null) return;
-    if (post.getLikedUserIds().contains(userId)) return;
+    if (post == null)
+      return;
+    if (post.getLikedUserIds().contains(userId))
+      return;
     post.getLikedUserIds().add(userId);
     storePost(post);
   }
 
   public void unlikePost(UUID id, String userId) {
-    if (userId == null) return;
+    if (userId == null)
+      return;
     Post post = getPost(id);
-    if (post == null) return;
-    if (!post.getLikedUserIds().contains(userId)) return;
+    if (post == null)
+      return;
+    if (!post.getLikedUserIds().contains(userId))
+      return;
     post.getLikedUserIds().remove(userId);
     storePost(post);
   }
 
   private List<String> getIdsFromTags(List<Tag> tags) {
     List<String> result = new ArrayList<>();
-    for (Tag t : tags) result.add(t.getId().toString());
+    for (Tag t : tags)
+      result.add(t.getId().toString());
     return result;
   }
 
@@ -219,13 +206,15 @@ public class PostDao {
     List<Tag> result = new ArrayList<>();
     for (String id : ids) {
       Tag tag = tagDao.getTag(UUID.fromString(id));
-      if (tag != null) result.add(tag);
+      if (tag != null)
+        result.add(tag);
     }
     return result;
   }
 
   private Post getPostFromEntity(Entity entity) {
-    if (entity == null) return null;
+    if (entity == null)
+      return null;
     try {
       String idString = entity.getKey().getName();
       UUID id = UUID.fromString(idString);
@@ -248,16 +237,16 @@ public class PostDao {
 
       @SuppressWarnings("unchecked")
       List<String> tagIds = (List<String>) entity.getProperty(PROPERTY_NAME_TAGS);
-      if (tagIds == null) tagIds = new ArrayList<>();
+      if (tagIds == null)
+        tagIds = new ArrayList<>();
       List<Tag> tags = getTagsFromIds(tagIds);
 
       @SuppressWarnings("unchecked")
       List<String> likedUserIds = (List<String>) entity.getProperty(PROPERTY_NAME_LIKED_USER_IDS);
-      if (likedUserIds == null) likedUserIds = new ArrayList<>();
+      if (likedUserIds == null)
+        likedUserIds = new ArrayList<>();
 
-      Post post =
-          new Post(
-              id, author, location, creationTime, descriptionText, postImages, tags, likedUserIds);
+      Post post = new Post(id, author, location, creationTime, descriptionText, postImages, tags, likedUserIds);
       return post;
     } catch (Exception e) {
       e.printStackTrace();
