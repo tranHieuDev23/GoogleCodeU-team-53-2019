@@ -9,6 +9,14 @@ import { POST_PAGE } from 'constants/links';
 import { Button, notification } from 'antd';
 import { withRouter } from 'react-router-dom'
 import TagGroup from '../ui/tag/TagGroup';
+import {
+  SUGGEST_COMPLETED,
+  SUGGEST_NO_IMAGE,
+  UPLOAD_CONNECTION_FAIL,
+  UPLOAD_SUCCESS,
+  UPLOAD_NO_IMAGE
+} from 'constants/Notification.js';
+import { fetchTags } from 'helpers/LoadTags';
 
 class UploadPage extends React.Component {
   constructor() {
@@ -32,7 +40,7 @@ class UploadPage extends React.Component {
   }
 
   handleChangePopup = (newPopup) => {
-    this.setState({popup: newPopup});
+    this.setState({ popup: newPopup });
   }
 
   componentDidMount = () => {
@@ -60,10 +68,7 @@ class UploadPage extends React.Component {
       }
     }
     if (count === 0) {
-      notification.error({
-        message: 'Can not upload',
-        description: 'Please insert your images and upload again',
-      })
+      notification.error(UPLOAD_NO_IMAGE)
       this.setState({ disabled: false });
     }
     else {
@@ -79,41 +84,61 @@ class UploadPage extends React.Component {
         .then(respone => {
           const { data } = respone;
           const id = data.id;
-          notification.success({
-            message: 'Upload completed',
-            description: 'Redirecting to new post page',
-          })
+          notification.success(UPLOAD_SUCCESS)
           this.props.history.push(POST_PAGE + '/' + id);
         })
         .catch(() => {
-          notification.error({
-            message: 'Can not upload',
-            description: 'Please check your connection and upload again!!!',
-          }
-          )
+          notification.error(UPLOAD_CONNECTION_FAIL)
         })
       this.setState({ disabled: false });
     }
   };
 
   getSuggestionTags = async () => {
-    this.setState({sugessting: true});
+    this.setState({ sugessting: true });
     let suggestionTags = null;
+
+    // build form data 
+    const data = new FormData();
+    const { images } = this.state;
+    let count = 0;
+    for (let i = 0; i < images.length; i++)
+      if (images[i].selectedFile != null) count++;
+    if (count === 0) {
+      notification.error(SUGGEST_NO_IMAGE)
+      this.setState({ sugessting: false });
+    }
+    else {
+      data.append('numberOfImages', count);
+      let cnt = 0;
+      for (let i = 0; i < images.length; i++) {
+        if (images[i].selectedFile != null) {
+          data.append('file-' + cnt, images[i].selectedFile);
+          ++cnt;
+        }
+      }
+    }
+    // end of make form data 
+
     // fetch tag here
+    suggestionTags = fetchTags(data);
+
     if (Array.isArray(suggestionTags)) {
       let newTags = this.state.tags;
-      for(let i = 0; i < suggestionTags.length; i++) {
+      for (let i = 0; i < suggestionTags.length; i++) {
         const item = suggestionTags[i];
         if (!newTags.includes(item))
-          newTags.push(item); 
+          newTags.push(item);
       }
-      this.setState({tag : newTags});
+      this.setState({ tag: newTags });
+
+      notification.success(SUGGEST_COMPLETED)
     }
-    this.setState({sugessting: false});
+    this.setState({ sugessting: false });
   }
 
   onChangeTags = (newTags) => {
-    this.setState({tags: newTags});
+    this.setState({ tags: newTags });
   }
 
   handlePostDescription = newState => {
@@ -176,7 +201,7 @@ class UploadPage extends React.Component {
           </Button>
 
           <Button
-            onClick={() => {this.props.history.push('/')}}
+            onClick={() => { this.props.history.push('/') }}
             type='danger'
             icon='close'
             size='large'
@@ -185,8 +210,8 @@ class UploadPage extends React.Component {
             Close this post
           </Button>
         </div>
-        <AddedPicture 
-          images={this.state.images} 
+        <AddedPicture
+          images={this.state.images}
         />
         {this.state.popup ? (
           <Popup

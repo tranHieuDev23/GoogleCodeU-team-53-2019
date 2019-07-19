@@ -21,7 +21,7 @@ export const fetchPost = async (postId, withComment = false) => {
   return post;
 }
 
-export const fetchPosts = async (maxCreationTime, limit, position, userId, tagId) => {
+export const fetchPosts = async (maxCreationTime, limit, position, userId, tagName) => {
   let url = RETRIEVE_POSTS;
   url = addFirstParamToUrl(url, 'maxCreationTime', maxCreationTime);
   url = addParamToUrl(url, 'limit', limit);
@@ -29,8 +29,8 @@ export const fetchPosts = async (maxCreationTime, limit, position, userId, tagId
     url = addParamToUrl(url, 'position', position);
   if (userId !== '')
     url = addParamToUrl(url, 'userId', userId);
-  if (tagId !== '')
-    url = addParamToUrl(url, 'tagId', tagId);
+  if (tagName !== '')
+    url = addParamToUrl(url, 'tagName', tagName);
   let posts = null;
   await axios
     .post(url, {})

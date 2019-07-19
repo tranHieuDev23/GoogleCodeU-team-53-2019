@@ -6,9 +6,6 @@ import { TAG_PAGE } from 'constants/links';
 const { CheckableTag } = Tag;
 
 class DisplayTags extends React.Component {
-  state = {
-    selectedTags: [],
-  };
 
   handleChange(tag, checked) {
     const { selectedTags } = this.state;
@@ -17,7 +14,6 @@ class DisplayTags extends React.Component {
   }
 
   render() {
-    const { selectedTags } = this.state;
     let serverTags = [];
     const { tags } = this.props;
     for(let i = 0; i < tags.length; i++) {
