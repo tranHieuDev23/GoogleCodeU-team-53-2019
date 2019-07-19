@@ -17,6 +17,7 @@ import {
   UPLOAD_NO_IMAGE
 } from 'constants/Notification.js';
 import { fetchTags } from 'helpers/LoadTags';
+import { tagSanitization } from 'helpers/TagValidate';
 
 class UploadPage extends React.Component {
   constructor() {
@@ -58,7 +59,7 @@ class UploadPage extends React.Component {
     const obj = {
       descriptionText: this.state.description,
       imageDescriptions: [],
-      tags: this.state.tags,
+      tags: tagSanitization(this.state.tags),
       location: null
     };
     for (let i = 0; i < images.length; i++) {
@@ -120,8 +121,8 @@ class UploadPage extends React.Component {
       // end of make form data 
 
       // fetch tag here
-      suggestionTags = fetchTags(data);
-
+      suggestionTags = await fetchTags(data);
+      console.log(suggestionTags);
       if (Array.isArray(suggestionTags)) {
         let newTags = [...this.state.tags];
         for (let i = 0; i < suggestionTags.length; i++) {
@@ -129,6 +130,7 @@ class UploadPage extends React.Component {
           if (!newTags.includes(item))
             newTags.push(item);
         }
+        console.log(newTags);
         this.setState({ tags: newTags });
         notification.success(SUGGEST_COMPLETED)
       }
