@@ -1,12 +1,13 @@
 package com.google.codeu.controllers.servlets;
 
 import com.google.codeu.controllers.datastore.PostDao;
+import com.google.codeu.controllers.datastore.TagDao;
 import com.google.codeu.models.Location;
 import com.google.codeu.models.Post;
+import com.google.codeu.models.Tag;
 import com.google.codeu.utils.ServletLink;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,10 +22,12 @@ public class RetrievePostsServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   private PostDao postDao;
+  private TagDao tagDao;
 
   @Override
   public void init() throws ServletException {
     postDao = new PostDao();
+    tagDao = new TagDao();
   }
 
   @Override
@@ -86,9 +89,12 @@ public class RetrievePostsServlet extends HttpServlet {
   private List<Post> getPostsBasedOnTag(HttpServletRequest req) {
     long maxCreationTime = Long.parseLong(req.getParameter("maxCreationTime"));
     int limit = Integer.parseInt(req.getParameter("limit"));
-    UUID tagId = UUID.fromString(req.getParameter("tagId"));
+    String tagName = req.getParameter("tagName");
+    Tag tag = tagDao.getTag(tagName);
+    if (tag == null)
+      return null;
 
-    List<Post> result = postDao.getPosts(tagId, maxCreationTime, limit);
+    List<Post> result = postDao.getPosts(tag.getId(), maxCreationTime, limit);
     return result;
   }
 }
