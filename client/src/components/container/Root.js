@@ -56,6 +56,10 @@ class Root extends Component {
           <CustomNavBar userStatus={this.state} handleUserStatus={this.handleSetState} />
           <Suspense fallback="Loading...">
             <Switch>
+            <Route
+                exact path={'/login'}
+                component={withStatusHome(Home, this.state, this.handleSetState)}
+              />
               <Route
                 exact path={HOME}
                 component={withStatusHome(Home, this.state, this.handleSetState)}
