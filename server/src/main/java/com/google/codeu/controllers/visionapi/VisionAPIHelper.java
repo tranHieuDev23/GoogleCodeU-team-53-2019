@@ -1,10 +1,8 @@
 package com.google.codeu.controllers.visionapi;
 
 import java.io.InputStream;
-//import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Collections;
 
@@ -12,7 +10,6 @@ import com.google.cloud.vision.v1.AnnotateImageRequest;
 import com.google.cloud.vision.v1.AnnotateImageResponse;
 import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
 import com.google.cloud.vision.v1.EntityAnnotation;
-import com.google.cloud.vision.v1.LocationInfo;
 import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Feature.Type;
 import com.google.cloud.vision.v1.Image;
@@ -20,7 +17,6 @@ import com.google.cloud.vision.v1.ImageAnnotatorClient;
 
 import com.google.protobuf.ByteString;
 import org.apache.commons.io.IOUtils;
-import java.lang.*;
 
 
 /**
@@ -41,7 +37,6 @@ public class VisionAPIHelper {
     }
 
     private VisionAPIHelper() {
-        // TODO: Implement constructor.
         // Auto-generated
     }
     
@@ -73,10 +68,6 @@ public class VisionAPIHelper {
         List<Result> resultList = new ArrayList<>();
         //VisionAPIHelper[] store = new VisionAPIHelper[5 * length];
         List<String> result = new ArrayList<>();
-        /**
-         * TODO: Implement label prediction, using Vision API here. There should not be
-         * any duplicate in the result.
-         */
 
         //get api result for each image in the list
         for(int i=0; i<length; i++){
