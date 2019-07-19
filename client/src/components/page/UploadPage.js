@@ -43,7 +43,6 @@ class UploadPage extends React.Component {
   };
 
   handlePost = async (event) => {
-    console.log(this.state.tags);
     this.setState({ disabled: true });
     const data = new FormData();
     const { images } = this.state;
@@ -51,7 +50,7 @@ class UploadPage extends React.Component {
     const obj = {
       descriptionText: this.state.description,
       imageDescriptions: [],
-      tags: [],
+      tags: this.state.tags,
       location: null
     };
     for (let i = 0; i < images.length; i++) {
