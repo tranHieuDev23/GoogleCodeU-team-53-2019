@@ -20,7 +20,7 @@ class DisplayTags extends React.Component {
   }
 
   componentDidUpdate = () => {
-    if (this.state.tags != this.props.tags) 
+    if (this.state.tags !== this.props.tags) 
       this.setState({tags: this.props.tags});
   }
 
