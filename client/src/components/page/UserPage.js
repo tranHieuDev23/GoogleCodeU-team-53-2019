@@ -3,7 +3,7 @@ import { RETRIEVE_POSTS } from 'constants/links.js';
 import axios from 'axios';
 import NewsFeed from 'components/ui/NewsFeed.js';
 import { withRouter } from 'react-router-dom';
-import { addParamToUrl } from 'helpers/FetchServer.js';
+import { addFirstParamToUrl, addParamToUrl } from 'helpers/FetchServer.js';
 
 class UserPage extends Component {
   constructor(props) {
@@ -28,7 +28,7 @@ class UserPage extends Component {
     var date = new Date();
     var timestamp = date.getTime(); //current time
     let url = RETRIEVE_POSTS;
-    url = addParamToUrl(url, 'maxCreationTime', timestamp);
+    url = addFirstParamToUrl(url, 'maxCreationTime', timestamp);
     url = addParamToUrl(url, 'limit', 10);
     url = addParamToUrl(url, 'userId', this.state.userIdParam);
     await axios

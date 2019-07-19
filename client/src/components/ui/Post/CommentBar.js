@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input } from 'antd';
 import { CREATE_COMMENT } from 'constants/links.js';
-import { addParamToUrl } from 'helpers/FetchServer.js';
+import { addFirstParamToUrl, addParamToUrl } from 'helpers/FetchServer.js';
 import axios from 'axios';
 
 const { Search } = Input;
@@ -35,7 +35,7 @@ class CommentBar extends React.Component {
     const { post } = this.props;
     if (!(value == null || value === '')) {
       let url = CREATE_COMMENT;
-      url = addParamToUrl(url, 'postId', post.id);
+      url = addFirstParamToUrl(url, 'postId', post.id);
       url = addParamToUrl(url, 'commentText', value);
       axios
         .post(url, {})
