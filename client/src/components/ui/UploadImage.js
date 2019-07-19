@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button } from 'antd';
+import { Button, notification } from 'antd';
+import { isImage } from 'is-image';
 
 class UploadImage extends React.Component {
   constructor(props) {
@@ -30,16 +31,46 @@ class UploadImage extends React.Component {
   }
 
   handleAddPicure = () => {
-    let arr = [...this.props.postDetail.images];
-    arr.push(this.state);
-    this.props.onChange("images", arr);
+    if (this.state.selectedFile == null) {
+      notification.error({
+        message: 'Error when upload',
+        description: 'You must choose an picture to upload'
+      })
+      this.props.handleClose();
+    }
+    else {
+      const { type } = this.state.selectedFile;
+      if (String(type).indexOf('image') !== 0) {
+        notification.error({
+          message: 'Error when upload',
+          description: 'You may upload only images file',
+        })
+        this.props.handleClose();
+      }
+      else {
+        console.log(this.state.selectedFile);
+        let arr = [...this.props.postDetail.images];
+        arr.push(this.state);
+        this.props.onChange("images", arr);
+        this.props.handleClose();
+      }
+    }
+  }
+
+  closePopup = () => {
     this.props.handleClose();
   }
 
   render() {
     return (
       <div className="UploadImage">
-        <input ref={this.upload} style={{ 'display': 'none' }} type="file" name="file" onChange={this.fileHandleChange} />
+        <input
+          ref={this.upload}
+          style={{ 'display': 'none' }}
+          type="file"
+          name="file"
+          onChange={this.fileHandleChange}
+        />
         <input
           type="text"
           className="form-control form-control-lg"
@@ -51,9 +82,18 @@ class UploadImage extends React.Component {
             onClick={this.handleAddPicure}
             size="large"
             type="dashed"
-            icon="upload"
+            icon="cloud-upload"
           >
             Add this picture
+          </Button>
+
+          <Button
+            onClick={this.closePopup}
+            size='large'
+            icon='close-square'
+            type='danger'
+          >
+            Cancel upload
           </Button>
         </div>
       </div>

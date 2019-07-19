@@ -8,7 +8,6 @@ class AddedPicture extends React.Component  {
 
     for(const [index, image] of images.entries()) {
       let file = image.selectedFile;
-      console.log(file);
       
       if (file != null) {
         let url = file && URL.createObjectURL(file);

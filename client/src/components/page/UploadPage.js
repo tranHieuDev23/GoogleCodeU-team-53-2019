@@ -7,6 +7,7 @@ import AddedPicture from '../ui/AddedPicture';
 import 'css/UploadPage.scss';
 import { POST_PAGE } from 'constants/links';
 import { Button, notification } from 'antd';
+import { withRouter } from 'react-router-dom'
 
 class UploadPage extends React.Component {
   constructor() {
@@ -16,6 +17,7 @@ class UploadPage extends React.Component {
     this.handlePost = this.handlePost.bind(this);
     this.handlePostDescription = this.handlePostDescription.bind(this);
     this.handleAddPicture = this.handleAddPicture.bind(this);
+    this.handleClosePopup = this.handleClosePopup.bind(this);
 
     this.state = {
       description: '',
@@ -23,6 +25,10 @@ class UploadPage extends React.Component {
       popup: false,
       disabled: false,
     };
+  }
+
+  handleChangePopup = (newPopup) => {
+    this.setState({popup: newPopup});
   }
 
   componentDidMount = () => {
@@ -91,7 +97,6 @@ class UploadPage extends React.Component {
   };
 
   handleClosePopup = () => {
-    console.log('Wrapper');
     if (this.state.popup) {
       this.setState({
         popup: false
@@ -108,7 +113,6 @@ class UploadPage extends React.Component {
   };
 
   render() {
-    console.log(this.state.images);
     return (
       <div className='UploadPage container pt-2'>
         <h1>Create new post:</h1>
@@ -119,6 +123,7 @@ class UploadPage extends React.Component {
         />
         {}
         <div className='mt-2'>
+
           <Button
             onClick={this.handleAddPicture}
             size='large'
@@ -126,6 +131,15 @@ class UploadPage extends React.Component {
           >
             Add new picture
           </Button>
+
+          <Button
+            type='dashed'
+            size='large'
+            icon='tags'
+          >
+            Get suggestion tag
+          </Button>
+
           <Button
             onClick={this.handlePost}
             type='primary'
@@ -135,8 +149,20 @@ class UploadPage extends React.Component {
           >
             Share this post
           </Button>
+
+          <Button
+            onClick={() => {this.props.history.push('/')}}
+            type='danger'
+            icon='close'
+            size='large'
+            disabled={this.state.disabled}
+          >
+            Close this post
+          </Button>
         </div>
-        <AddedPicture images={this.state.images} />
+        <AddedPicture 
+          images={this.state.images} 
+        />
         {this.state.popup ? (
           <Popup
             handleClose={this.handleClosePopup}
@@ -149,4 +175,4 @@ class UploadPage extends React.Component {
   }
 }
 
-export default UploadPage;
+export default withRouter(UploadPage);
