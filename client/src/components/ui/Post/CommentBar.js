@@ -61,6 +61,7 @@ class CommentBar extends React.Component {
           }
           this.setState({ value: '' })
           const { onChangePost, order } = this.props;
+          console.log(order);
           await onChangePost(order, true);
         })
         .catch(function (error) {
@@ -78,7 +79,7 @@ class CommentBar extends React.Component {
     if (Array.isArray(comments)) {
       let newItems = []
       const { curIndex } = this.state;
-      if (curIndex > 0) {
+      if (curIndex > 0 || numOfComment === 0) {
         const firstIndex = Math.max(0, curIndex - numOfComment);
         for (let index = firstIndex; index < comments.length; index++) {
           let comment = comments[index];

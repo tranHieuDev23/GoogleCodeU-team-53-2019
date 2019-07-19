@@ -16,6 +16,7 @@ class NewsFeed extends React.Component {
   }
 
   onChangePost = async (index, oldPopup) => {
+    console.log("On change post");
     let newItems = [...this.state.items];
     const { posts } = this.props;
     let newPost = await fetchPost(posts[index].id);
