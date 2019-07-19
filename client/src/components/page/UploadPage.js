@@ -8,6 +8,7 @@ import 'css/UploadPage.scss';
 import { POST_PAGE } from 'constants/links';
 import { Button, notification } from 'antd';
 import { withRouter } from 'react-router-dom'
+import TagGroup from '../ui/tag/TagGroup';
 
 class UploadPage extends React.Component {
   constructor() {
@@ -18,12 +19,15 @@ class UploadPage extends React.Component {
     this.handlePostDescription = this.handlePostDescription.bind(this);
     this.handleAddPicture = this.handleAddPicture.bind(this);
     this.handleClosePopup = this.handleClosePopup.bind(this);
+    this.getSuggestionTags = this.getSuggestionTags.bind(this);
 
     this.state = {
       description: '',
       images: [],
+      tags: [],
       popup: false,
       disabled: false,
+      sugessting: false,
     };
   }
 
@@ -39,6 +43,7 @@ class UploadPage extends React.Component {
   };
 
   handlePost = async (event) => {
+    console.log(this.state.tags);
     this.setState({ disabled: true });
     const data = new FormData();
     const { images } = this.state;
@@ -92,6 +97,26 @@ class UploadPage extends React.Component {
     }
   };
 
+  getSuggestionTags = async () => {
+    this.setState({sugessting: true});
+    let suggestionTags = null;
+    // fetch tag here
+    if (Array.isArray(suggestionTags)) {
+      let newTags = this.state.tags;
+      for(let i = 0; i < suggestionTags.length; i++) {
+        const item = suggestionTags[i];
+        if (!newTags.includes(item))
+          newTags.push(item); 
+      }
+      this.setState({tag : newTags});
+    }
+    this.setState({sugessting: false});
+  }
+
+  onChangeTags = (newTags) => {
+    this.setState({tags: newTags});
+  }
+
   handlePostDescription = newState => {
     this.setState({ description: newState });
   };
@@ -121,9 +146,8 @@ class UploadPage extends React.Component {
           value={this.state.description}
           handleChange={this.handlePostDescription}
         />
-        {}
+        <TagGroup tags={this.state.tags} onChangeTags={this.onChangeTags} />
         <div className='mt-2'>
-
           <Button
             onClick={this.handleAddPicture}
             size='large'
@@ -133,9 +157,11 @@ class UploadPage extends React.Component {
           </Button>
 
           <Button
+            onClick={this.getSuggestionTags}
             type='dashed'
             size='large'
             icon='tags'
+            loading={this.state.sugessting}
           >
             Get suggestion tag
           </Button>

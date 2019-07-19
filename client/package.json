@@ -13,6 +13,7 @@
     "html-react-parser": "^0.9.1",
     "is-image": "^3.0.0",
     "node-sass": "^4.12.0",
+    "rc-tween-one": "^2.4.1",
     "react": "^16.8.6",
     "react-bootstrap": "^1.0.0-beta.9",
     "react-dom": "^16.8.6",

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, notification } from 'antd';
-import { isImage } from 'is-image';
 
 class UploadImage extends React.Component {
   constructor(props) {
