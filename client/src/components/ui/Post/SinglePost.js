@@ -40,7 +40,7 @@ class SinglePost extends React.Component {
                 <PostAuthor {...this.props} />
                 <div className="Post__Description">{parse(post.descriptionText)}</div>
                 <SinglePicture {...this.props} />
-              <InteractiveBar
+                <InteractiveBar
                   {...this.props}
                   numberOfLike={this.state.numberOfLike}
                   onChangeLikes={this.onChangeLikes}

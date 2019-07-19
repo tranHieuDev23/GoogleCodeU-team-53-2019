@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from 'antd';
 
 class UploadImage extends React.Component {
   constructor(props) {
@@ -38,15 +39,22 @@ class UploadImage extends React.Component {
   render() {
     return (
       <div className="UploadImage">
-        <input ref={this.upload} style={{'display': 'none'}} type="file" name="file" onChange={this.fileHandleChange}/>
+        <input ref={this.upload} style={{ 'display': 'none' }} type="file" name="file" onChange={this.fileHandleChange} />
         <input
           type="text"
           className="form-control form-control-lg"
           placeholder="Enter image description here"
           onChange={this.textHandleChange}
         />
-       <div style={{display: 'flex', justifyContent: 'center'}}>
-          <button onClick={this.handleAddPicure} className="btn btn-primary">Add this picture</button>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            onClick={this.handleAddPicure}
+            size="large"
+            type="dashed"
+            icon="upload"
+          >
+            Add this picture
+          </Button>
         </div>
       </div>
     );

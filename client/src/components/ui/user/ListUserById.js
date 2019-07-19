@@ -1,13 +1,26 @@
 import React from 'react'
-import GetUserById from 'components/ui/user/GetUserById.js';
-
+import SingleUser from './SingleUser';
+import { fetchUsers } from 'helpers/LoadUser'
 class ListUserById  extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users : [],
+    }
+  }
+  componentWillMount = async () => {
+    const { ids } = this.props;
+    const users = await fetchUsers(ids);
+    if (Array.isArray(users))
+      this.setState({users : users});
+  }
+
   render()  {
     const items = [];
-    const { ids } = this.props;
-    if (Array.isArray(ids)) {
-      for(const [index, userId] of ids.entries()) {
-        items.push(<GetUserById key={index} userId={userId}/>)
+    const { users } = this.state;
+    if (Array.isArray(users)) {
+      for(const [index, user] of users.entries()) {
+        items.push(<SingleUser key={index} user={user}/>)
       }
     }
     return (

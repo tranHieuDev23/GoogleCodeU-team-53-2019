@@ -56,3 +56,8 @@ nav li {
   font-size: 40px;
   font-weight: bold;
 }
+
+.LoadMorePost {
+  margin-top: 20px;
+  text-align: center;
+}

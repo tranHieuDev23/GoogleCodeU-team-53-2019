@@ -1,8 +1,6 @@
 import React from 'react';
-import axios from 'axios';
 import SinglePost from 'components/ui/Post/SinglePost';
-import { RETRIEVE_POST } from 'constants/links.js';
-import { addFirstParamToUrl, addParamToUrl } from 'helpers/FetchServer.js';
+import { fetchPost } from 'helpers/LoadPost';
 
 class PostPage extends React.Component {
   constructor(props) {
@@ -15,34 +13,16 @@ class PostPage extends React.Component {
   }
 
   onChangePost = async (index, oldPopup) => {
-    let url = RETRIEVE_POST;
-    url = addFirstParamToUrl(url, 'postId', this.state.postIdParam);
-    url = addParamToUrl(url, 'withComment', true);
-    //await axios.post('/api/TestAPI', {})
-    await axios.post(url, {})
-      .then((response) => {
-        console.log(response.data);
-        this.setState({ post: response.data });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    const post = await fetchPost(this.state.postIdParam, true);
+    if (post != null)
+      this.setState({post: post});
     this.setState({ likePopup: oldPopup });
   }
 
   componentDidMount = async () => {
-    let url = RETRIEVE_POST;
-    url = addFirstParamToUrl(url, 'postId', this.state.postIdParam);
-    url = addParamToUrl(url, 'withComment', true);
-    await axios.post(url, {})
-      //await axios.post('/api/TestAPI', {})
-      .then((response) => {
-        console.log(response.data);
-        this.setState({ post: response.data });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    const post = await fetchPost(this.state.postIdParam, true);
+    if (post != null)
+      this.setState({post: post});
   }
 
   render() {

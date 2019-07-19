@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { RETRIEVE_POSTS } from 'constants/links.js';
-import axios from 'axios';
 import { withRouter } from 'react-router-dom';
-import NewsFeed from 'components/ui/NewsFeed.js';
-import { addFirstParamToUrl, addParamToUrl } from 'helpers/FetchServer.js';
+import NewFeedWrapper from 'components/NewFeedWrapper'
+import { fetchPosts } from 'helpers/LoadPost'
 
 class Home extends Component {
   constructor(props) {
     super(props);
+    const date = new Date();
+    const timestamp = date.getTime(); //current time
     const { userStatus } = this.props;
     this.state = {
       userStatus: {
@@ -15,37 +15,41 @@ class Home extends Component {
         userId: userStatus.userId,
       },
       posts: [],
+      minTimestamp: timestamp,
     }
-    this.handleChangePosts = this.handleChangePosts.bind(this);
-  }
-
-  handleChangePosts = (newState) => {
-    this.setState({posts: newState});
+    this.loadMorePost = this.loadMorePost.bind(this);
   }
 
   componentDidMount = async () => {
-    var date = new Date();
-    var timestamp = date.getTime(); //current time
-    let url = RETRIEVE_POSTS;
-    url = addFirstParamToUrl(url, 'maxCreationTime', timestamp);
-    url = addParamToUrl(url, 'limit', 10);
-    await axios
-      .post(url, {})
-      //.post('/api/TestAPI', {})
-      .then(response => {
-        const { data } = response;
-        if (Array.isArray(data.posts))
-          this.setState({ posts: data.posts });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    const date = new Date();
+    const timestamp = date.getTime(); //current time
+    const newPosts = await fetchPosts(timestamp, 10, '', '', '');
+    if (newPosts != null) {
+      let newMinTimestamp = this.state.minTimestamp;
+      this.setState({ posts: newPosts });
+      for (const [index, post] of newPosts.entries()) 
+        newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+      this.setState({minTimestamp: newMinTimestamp - 1});
+    }
   }
 
   componentDidUpdate = () => {
     const { userStatus } = this.props;
     if (userStatus !== this.state.userStatus) {
       this.setState({ userStatus: userStatus });
+    }
+  }
+
+  loadMorePost = async () => {
+    const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', '');
+    if (morePosts != null) {
+      let newMinTimestamp = this.state.minTimestamp;
+      for (const [index, post] of morePosts.entries()) 
+        newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+      this.setState({minTimestamp: newMinTimestamp - 1});
+      let newPosts = [...this.state.posts];
+      newPosts.push(...morePosts);
+      this.setState({posts: newPosts});
     }
   }
 
@@ -56,10 +60,10 @@ class Home extends Component {
         {this.state.userStatus.userEmail ? (
           <div>
             <h1 className='center'>News Feed</h1>
-            <NewsFeed 
-              userStatus={this.state.userStatus} 
-              posts={this.state.posts} 
-              onChangePosts={this.handleChangePosts}
+            <NewFeedWrapper
+              userStatus={this.state.userStatus}
+              posts={this.state.posts}
+              handleLoadMorePost={this.loadMorePost}
             />
           </div>
         ) : (

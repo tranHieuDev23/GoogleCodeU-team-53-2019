@@ -5,6 +5,8 @@ import Popup from '../ui/Popup/Popup';
 import RichTextEditor from 'components/ui/RichTextEditor';
 import AddedPicture from '../ui/AddedPicture';
 import 'css/UploadPage.scss';
+import { POST_PAGE } from 'constants/links';
+import { Button, notification } from 'antd';
 
 class UploadPage extends React.Component {
   constructor() {
@@ -18,7 +20,8 @@ class UploadPage extends React.Component {
     this.state = {
       description: '',
       images: [],
-      popup: false
+      popup: false,
+      disabled: false,
     };
   }
 
@@ -29,9 +32,11 @@ class UploadPage extends React.Component {
     this.setState({ [name]: newState });
   };
 
-  handlePost = event => {
+  handlePost = async (event) => {
+    this.setState({ disabled: true });
     const data = new FormData();
     const { images } = this.state;
+    let count = 0;
     const obj = {
       descriptionText: this.state.description,
       imageDescriptions: [],
@@ -40,18 +45,45 @@ class UploadPage extends React.Component {
     };
     for (let i = 0; i < images.length; i++) {
       if (images[i].selectedFile != null) {
+        count++;
         obj.imageDescriptions.push(images[i].imageDescription);
       }
     }
-    data.append('postDetails', JSON.stringify(obj));
-    let cnt = 0;
-    for (let i = 0; i < images.length; i++) {
-      if (images[i].selectedFile != null) {
-        data.append('file-' + cnt, images[i].selectedFile);
-        ++cnt;
-      }
+    if (count === 0) {
+      notification.error({
+        message: 'Can not upload',
+        description: 'Please insert your images and upload again',
+      })
+      this.setState({ disabled: false });
     }
-    axios.post(CREATE_POST, data, {});
+    else {
+      data.append('postDetails', JSON.stringify(obj));
+      let cnt = 0;
+      for (let i = 0; i < images.length; i++) {
+        if (images[i].selectedFile != null) {
+          data.append('file-' + cnt, images[i].selectedFile);
+          ++cnt;
+        }
+      }
+      await axios.post(CREATE_POST, data, {})
+        .then(respone => {
+          const { data } = respone;
+          const id = data.id;
+          notification.success({
+            message: 'Upload completed',
+            description: 'Redirecting to new post page',
+          })
+          this.props.history.push(POST_PAGE + '/' + id);
+        })
+        .catch(() => {
+          notification.error({
+            message: 'Can not upload',
+            description: 'Please check your connection and upload again!!!',
+          }
+          )
+        })
+      this.setState({ disabled: false });
+    }
   };
 
   handlePostDescription = newState => {
@@ -87,12 +119,22 @@ class UploadPage extends React.Component {
         />
         {}
         <div className='mt-2'>
-          <button onClick={this.handleAddPicture} className='btn btn-success'>
+          <Button
+            onClick={this.handleAddPicture}
+            size='large'
+            icon='upload'
+          >
             Add new picture
-          </button>
-          <button onClick={this.handlePost} className='btn btn-primary'>
+          </Button>
+          <Button
+            onClick={this.handlePost}
+            type='primary'
+            icon='share-alt'
+            size='large'
+            disabled={this.state.disabled}
+          >
             Share this post
-          </button>
+          </Button>
         </div>
         <AddedPicture images={this.state.images} />
         {this.state.popup ? (
