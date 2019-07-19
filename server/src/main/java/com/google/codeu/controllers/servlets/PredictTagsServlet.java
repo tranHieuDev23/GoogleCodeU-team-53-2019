@@ -6,6 +6,7 @@ import com.google.codeu.utils.ServletLink;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -55,13 +56,19 @@ public class PredictTagsServlet extends HttpServlet {
         int limit = 5; // maximum number of tags to return
         //UUID postId = imageDao.getPostId;
        
-        String postDetailsJson = req.getParameter("postDetails");
+        /**String postDetailsJson = req.getParameter("postDetails");
         if (postDetailsJson == null)
             return null;
         JSONObject postDetails = new JSONObject(postDetailsJson);
 
         JSONArray numberOfImages = postDetails.getJSONArray("numberOfImages");
         int imageCount = numberOfImages.length();
+        */        
+        JSONObject numberOfImages = new JSONObject();
+        int imageCount = numberOfImages.getInt("numberOfImages");
+
+        if (imageCount == 0)
+            return null;
         //numberOfImages
         List<InputStream> imageStreams = new ArrayList<>();
         
@@ -79,6 +86,7 @@ public class PredictTagsServlet extends HttpServlet {
 
         /** Call vision API Helper to predict tags on images */
         List<String> PredictedTags = visionHelper.predictTags(imageStreams, limit);
+        
         //PostTags result = new PostTags(PredictedTags);
         return PredictedTags;
         //res.getWriter().println(gson.toJson(PredictedTags));
