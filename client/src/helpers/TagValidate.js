@@ -10,7 +10,7 @@ export const santinization = (input) => {
   return result;
 }
 
-export const tagSanitization = (tags) {
+export const tagSanitization = (tags) => {
   if (Array.isArray(tags)) {
     for (let i = 0; i < tags.length; i++)
       tags[i] = santinization(tags[i]);
