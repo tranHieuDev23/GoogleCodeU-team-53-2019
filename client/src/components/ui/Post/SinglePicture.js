@@ -12,7 +12,6 @@ class SinglePicture extends React.Component {
       promises.push(getImageItem(picture.imageUrl.value, picture.imageDescription));
 
     Promise.all(promises).then((results) => {
-      console.log(results);
       this.setState({
         items: results
       })

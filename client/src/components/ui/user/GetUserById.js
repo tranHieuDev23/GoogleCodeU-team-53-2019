@@ -20,7 +20,6 @@ class GetUserById extends React.Component {
     //await axios.post(url, {
     })
       .then(response => {
-        console.log(response.data);
         this.setState(response.data);
       })
       .catch(function (error) {

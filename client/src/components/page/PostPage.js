@@ -26,8 +26,6 @@ class PostPage extends React.Component {
   }
 
   render() {
-    console.log(this.state);
-
     return (
       <div className='container pt-2'>
         {(this.state.post != null && this.state.post.id) ? (

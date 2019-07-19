@@ -18,7 +18,6 @@ export const fetchLoginStatus =  async () => {
         let userStatus = JSON.parse(status.userData);
         res.userEmail = userStatus.username;
         res.userId = userStatus.id;
-        console.log(res);
       }
     }).catch(function () {
       console.log("error when fetch login status");

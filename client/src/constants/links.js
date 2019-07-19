@@ -64,3 +64,5 @@ export const USER_PAGE = '/user';
 export const UPLOAD_PAGE = '/create-post';
 
 export const POST_PAGE = '/post'
+
+export const TAG_PAGE = '/tag'

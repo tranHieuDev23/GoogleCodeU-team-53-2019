@@ -6,6 +6,7 @@ import LikeBar from 'components/ui/Post/LikeBar';
 import parse from 'html-react-parser';
 import InteractiveBar from 'components/ui/Post/InteractiveBar'
 import CommentBar from 'components/ui/Post/CommentBar';
+import DisplayTags from 'components/ui/tag/DisplayTags'
 
 class SinglePost extends React.Component {
   constructor(props) {
@@ -38,6 +39,7 @@ class SinglePost extends React.Component {
               <div className="Post">
                 <PostAuthor {...this.props} />
                 <div className="Post__Description">{parse(post.descriptionText)}</div>
+                <DisplayTags tags={post.tags} />
                 <SinglePicture {...this.props} />
                 <InteractiveBar
                   {...this.props}

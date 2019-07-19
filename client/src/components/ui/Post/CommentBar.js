@@ -61,11 +61,9 @@ class CommentBar extends React.Component {
           }
           this.setState({ value: '' })
           const { onChangePost, order } = this.props;
-          console.log(order);
           await onChangePost(order, true);
         })
         .catch(function (error) {
-          console.log(error);
           notification.error({
             message: 'Can upload comment',
             description: 'Please check your connection and post it again!!!',
