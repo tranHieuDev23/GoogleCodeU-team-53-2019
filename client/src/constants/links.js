@@ -47,6 +47,10 @@ export const RETRIEVE_POST = servletPrefix + "/retrieve-post";
 
 export const RETRIEVE_USER = servletPrefix + "/retrieve-user";
 
+export const RETRIEVE_USERS = servletPrefix + "/retrieve-users";
+
+export const RETRIEVE_TAG = servletPrefix + "/predict-tag";
+
 export const LIKE = servletPrefix + "/like";
 
 export const UNLIKE = servletPrefix + "/unlike";
@@ -64,3 +68,5 @@ export const USER_PAGE = '/user';
 export const UPLOAD_PAGE = '/create-post';
 
 export const POST_PAGE = '/post'
+
+export const TAG_PAGE = '/tag'

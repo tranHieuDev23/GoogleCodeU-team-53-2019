@@ -6,6 +6,7 @@ import LikeBar from 'components/ui/Post/LikeBar';
 import parse from 'html-react-parser';
 import InteractiveBar from 'components/ui/Post/InteractiveBar'
 import CommentBar from 'components/ui/Post/CommentBar';
+import DisplayTags from 'components/ui/tag/DisplayTags'
 
 class SinglePost extends React.Component {
   constructor(props) {
@@ -24,7 +25,6 @@ class SinglePost extends React.Component {
   }
 
   onChangeLikes = (newLikes) => {
-    console.log(newLikes);
     this.setState({ numberOfLike: newLikes })
   }
 
@@ -39,8 +39,9 @@ class SinglePost extends React.Component {
               <div className="Post">
                 <PostAuthor {...this.props} />
                 <div className="Post__Description">{parse(post.descriptionText)}</div>
+                <DisplayTags tags={post.tags} />
                 <SinglePicture {...this.props} />
-              <InteractiveBar
+                <InteractiveBar
                   {...this.props}
                   numberOfLike={this.state.numberOfLike}
                   onChangeLikes={this.onChangeLikes}
@@ -51,7 +52,9 @@ class SinglePost extends React.Component {
                   onChangeLikes={this.onChangeLikes}
                 />
                 {this.props.withComment &&
-                  <CommentBar {...this.props} />
+                  <CommentBar
+                    {...this.props}
+                  />
                 }
               </div>
             )

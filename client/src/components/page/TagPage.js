@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import NewFeedWrapper from 'components/NewFeedWrapper';
 import { withRouter } from 'react-router-dom';
-import NewFeedWrapper from 'components/NewFeedWrapper'
-import { fetchPosts } from 'helpers/LoadPost'
+import { fetchPosts } from 'helpers/LoadPost';
 
-class Home extends Component {
+class TagPage extends Component {
   constructor(props) {
     super(props);
     const date = new Date();
@@ -15,41 +15,56 @@ class Home extends Component {
         userId: userStatus.userId,
       },
       posts: [],
+      tagName: this.props.match.params.tagName,
       minTimestamp: timestamp,
     }
     this.loadMorePost = this.loadMorePost.bind(this);
   }
 
   componentDidMount = async () => {
+    // get Posts
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const newPosts = await fetchPosts(timestamp, 10, '', '', '');
+    const newPosts = await fetchPosts(timestamp, 10, '', '', this.state.tagName);
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
-      for (const [index, post] of newPosts.entries()) 
+      for (const [index, post] of newPosts.entries())
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
-      this.setState({minTimestamp: newMinTimestamp - 1});
+      this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = async () => {
     const { userStatus } = this.props;
     if (userStatus !== this.state.userStatus) {
       this.setState({ userStatus: userStatus });
     }
+    if (this.state.tagName !== this.props.match.params.tagName) {
+      this.setState({ tagName: this.props.match.params.tagName });
+      const date = new Date();
+      const timestamp = date.getTime(); //current time
+      const newPosts = await fetchPosts(timestamp, 10, '', '', this.props.match.params.tagName);
+      if (newPosts != null) {
+        let newMinTimestamp = timestamp;
+        this.setState({ posts: newPosts });
+        for (const [index, post] of newPosts.entries())
+          newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        this.setState({ minTimestamp: newMinTimestamp - 1 });
+      }
+    }
   }
 
   loadMorePost = async () => {
-    const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', '');
+    const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', this.state.tagName);
     if (morePosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
-      for (const [index, post] of morePosts.entries()) 
+      for (const [index, post] of morePosts.entries())
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
-      this.setState({minTimestamp: newMinTimestamp - 1});
+      this.setState({ minTimestamp: newMinTimestamp - 1 });
       let newPosts = [...this.state.posts];
       newPosts.push(...morePosts);
-      this.setState({posts: newPosts});
+      this.setState({ posts: newPosts });
     }
   }
 
@@ -58,7 +73,7 @@ class Home extends Component {
       <div className='container pt-2'>
         {this.state.userStatus.userEmail ? (
           <div>
-            <h1 className='center'>News Feed</h1>
+            <h1 className='center'>#{this.state.tagName} Page</h1>
             <NewFeedWrapper
               userStatus={this.state.userStatus}
               posts={this.state.posts}
@@ -77,4 +92,4 @@ class Home extends Component {
   }
 }
 
-export default withRouter(Home);
+export default withRouter(TagPage);

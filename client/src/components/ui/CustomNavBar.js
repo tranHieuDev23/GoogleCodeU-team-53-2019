@@ -21,8 +21,6 @@ class CustomNavBar extends Component {
   }
 
   componentDidMount = () => {
-    console.log(this.state);
-    console.log("Hello did mount");
     const { userStatus } = this.props;
     this.setState({ userEmail: userStatus.userEmail });
     this.setState({ userId: userStatus.userId });

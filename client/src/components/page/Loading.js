@@ -4,11 +4,6 @@ import { Spin } from 'antd';
 import 'css/index.css';
 
 class Loading extends React.Component {
-  componentDidMount = () => {
-    setTimeout(() => {
-      this.props.history.push("/");
-    }, 2000);
-  }
   render() {
     return (
       <div className='container pt-2'>
@@ -20,4 +15,4 @@ class Loading extends React.Component {
   }
 }
 
-export default withRouter(Loading);
+export default Loading;

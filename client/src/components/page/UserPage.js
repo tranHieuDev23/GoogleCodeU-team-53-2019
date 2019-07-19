@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { RETRIEVE_POSTS } from 'constants/links.js';
-import axios from 'axios';
-import NewsFeed from 'components/ui/NewsFeed.js';
+import NewFeedWrapper from 'components/NewFeedWrapper';
 import { withRouter } from 'react-router-dom';
-import { addFirstParamToUrl, addParamToUrl } from 'helpers/FetchServer.js';
+import { fetchPosts } from 'helpers/LoadPost';
+import { fetchUser } from 'helpers/LoadUser';
 
 class UserPage extends Component {
   constructor(props) {
     super(props);
+    const date = new Date();
+    const timestamp = date.getTime(); //current time
     const { userStatus } = this.props;
     this.state = {
       userStatus: {
@@ -15,38 +16,60 @@ class UserPage extends Component {
         userId: userStatus.userId,
       },
       posts: [],
-      userIdParam: this.props.match.params.userId
+      userIdParam: this.props.match.params.userId,
+      thisUserEmail: '',
+      minTimestamp: timestamp,
     }
-    this.handleChangePosts = this.handleChangePosts.bind(this);
-  }
-
-  handleChangePosts = (newState) => {
-    this.setState({posts: newState});
+    this.loadMorePost = this.loadMorePost.bind(this);
   }
 
   componentDidMount = async () => {
-    var date = new Date();
-    var timestamp = date.getTime(); //current time
-    let url = RETRIEVE_POSTS;
-    url = addFirstParamToUrl(url, 'maxCreationTime', timestamp);
-    url = addParamToUrl(url, 'limit', 10);
-    url = addParamToUrl(url, 'userId', this.state.userIdParam);
-    await axios
-      .post(url, {})
-      .then(response => {
-        const { data } = response;
-        if (Array.isArray(data.posts))
-          this.setState({ posts: data.posts });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // get user email
+    const user = await fetchUser(this.state.userIdParam);
+    this.setState({ thisUserEmail: user.username });
+    // get Posts
+    const date = new Date();
+    const timestamp = date.getTime(); //current time
+    const newPosts = await fetchPosts(timestamp, 10, '', this.state.userIdParam, '')
+    if (newPosts != null) {
+      let newMinTimestamp = this.state.minTimestamp;
+      this.setState({ posts: newPosts });
+      for (const [index, post] of newPosts.entries())
+        newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+      this.setState({ minTimestamp: newMinTimestamp - 1 });
+    }
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = async () => {
     const { userStatus } = this.props;
     if (userStatus !== this.state.userStatus) {
       this.setState({ userStatus: userStatus });
+    }
+    if (this.state.userIdParam !== this.props.match.params.userId) {
+      this.setState({ userIdParam: this.props.match.params.userId });
+      const date = new Date();
+      const timestamp = date.getTime(); //current time
+      const newPosts = await fetchPosts(timestamp, 10, '', this.props.match.params.userId, '')
+      if (newPosts != null) {
+        let newMinTimestamp = timestamp;
+        this.setState({ posts: newPosts });
+        for (const [index, post] of newPosts.entries())
+          newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        this.setState({ minTimestamp: newMinTimestamp - 1 });
+      }
+    }
+  }
+
+  loadMorePost = async () => {
+    const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', this.state.userIdParam, '');
+    if (morePosts != null) {
+      let newMinTimestamp = this.state.minTimestamp;
+      for (const [index, post] of morePosts.entries())
+        newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+      this.setState({ minTimestamp: newMinTimestamp - 1 });
+      let newPosts = [...this.state.posts];
+      newPosts.push(...morePosts);
+      this.setState({ posts: newPosts });
     }
   }
 
@@ -55,11 +78,11 @@ class UserPage extends Component {
       <div className='container pt-2'>
         {this.state.userStatus.userEmail ? (
           <div>
-            <h1 className='center'>{this.state.userStatus.userEmail} Page</h1>
-            <NewsFeed 
-              userStatus={this.state.userStatus} 
-              posts={this.state.posts} 
-              onChangePosts={this.handleChangePosts}
+            <h1 className='center'>{this.state.thisUserEmail} Page</h1>
+            <NewFeedWrapper
+              userStatus={this.state.userStatus}
+              posts={this.state.posts}
+              handleLoadMorePost={this.loadMorePost}
             />
           </div>
         ) : (

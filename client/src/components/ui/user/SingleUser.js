@@ -1,9 +1,8 @@
 import React from 'react';
-import axios from 'axios';
-import { USER_PAGE, RETRIEVE_USER } from 'constants/links.js';
+import { USER_PAGE } from 'constants/links.js';
 import { withRouter } from 'react-router-dom';
 
-class GetUserById extends React.Component {
+class SingleUser extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,18 +13,13 @@ class GetUserById extends React.Component {
       }
     };
   }
-  componentDidMount = async () => {
-    const url = RETRIEVE_USER + "?userId=" + this.props.userId;
-    await axios.post('/api/TestUser', {
-    //await axios.post(url, {
-    })
-      .then(response => {
-        this.setState(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+
+  componentDidMount = () => {
+    const { id, username, avatarUrl } = this.props.user;
+    this.setState({ id });
+    this.setState({ username });
+    this.setState({ avatarUrl });
+  }
 
   render() {
     return (
@@ -47,4 +41,4 @@ class GetUserById extends React.Component {
   }
 }
 
-export default withRouter(GetUserById);
+export default withRouter(SingleUser);
