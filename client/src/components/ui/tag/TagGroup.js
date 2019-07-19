@@ -14,7 +14,7 @@ class TagGroup extends React.Component {
 
   componentDidUpdate = () => {
     const { tags } = this.props;
-    if (tags != this.state.tags) {
+    if (tags !== this.state.tags) {
       this.setState({tags: tags});
     }
   }
