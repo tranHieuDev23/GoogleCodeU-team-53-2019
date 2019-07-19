@@ -42,7 +42,7 @@ public class RetrievePostsServlet extends HttpServlet {
 
     boolean baseOnLocation = req.getParameterMap().containsKey("sw");
     boolean baseOnUser = req.getParameterMap().containsKey("userId");
-    boolean baseOnTag = req.getParameterMap().containsKey("tagId");
+    boolean baseOnTag = req.getParameterMap().containsKey("tagName");
     boolean baseOnTime = (!baseOnLocation) && (!baseOnUser) && (!baseOnTag);
 
     List<Post> posts = null;
@@ -90,9 +90,11 @@ public class RetrievePostsServlet extends HttpServlet {
     long maxCreationTime = Long.parseLong(req.getParameter("maxCreationTime"));
     int limit = Integer.parseInt(req.getParameter("limit"));
     String tagName = req.getParameter("tagName");
+    System.out.println(tagName);
     Tag tag = tagDao.getTag(tagName);
     if (tag == null)
       return null;
+    System.out.println(tag.getId().toString());
 
     List<Post> result = postDao.getPosts(tag.getId(), maxCreationTime, limit);
     return result;
