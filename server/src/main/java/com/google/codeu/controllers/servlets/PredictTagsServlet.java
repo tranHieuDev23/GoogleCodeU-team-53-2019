@@ -35,35 +35,52 @@ public class PredictTagsServlet extends HttpServlet {
         visionHelper = VisionAPIHelper.getInstance();
         gson = new Gson();
     }
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         res.setContentType("application/json");
+        
+        List<String> result = null; 
+        try {
+            result = getPredTagsFromReq(req);
+        } catch (Exception e) {
+            System.out.println("Error while creating new Tags!");
+            //e.printStackTrace();
+            //res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }
+        res.getWriter().println(gson.toJson(result));
+    }
+
+    private List<String> getPredTagsFromReq(HttpServletRequest req) throws IOException, ServletException {
+        /** want to change for the client to change the limit */
         int limit = 5; // maximum number of tags to return
         //UUID postId = imageDao.getPostId;
-       /**
+       
         String postDetailsJson = req.getParameter("postDetails");
         if (postDetailsJson == null)
             return null;
         JSONObject postDetails = new JSONObject(postDetailsJson);
 
-        JSONArray imageDescriptions = postDetails.getJSONArray("imageDescriptions");
-        int imageCount = imageDescriptions.length();
-        */
+        JSONArray numberOfImages = postDetails.getJSONArray("numberOfImages");
+        int imageCount = numberOfImages.length();
+        //numberOfImages
         List<InputStream> imageStreams = new ArrayList<>();
         
-        //for (int i = 0; i < imageCount; i++) {}
+        //file-0, file-1 etc format from client request
+        for (int i = 0; i < imageCount; i++) {
             try {
-                Part filePart = req.getPart("file-");
+                Part filePart = req.getPart("file-"+i);
                 InputStream fileContent = filePart.getInputStream();
                 imageStreams.add(fileContent);
             } catch (Exception e) {
                 System.out.println("Error happens while handling image files!");
                 e.printStackTrace();
             }
-        
+        }
+
         /** Call vision API Helper to predict tags on images */
         List<String> PredictedTags = visionHelper.predictTags(imageStreams, limit);
-        res.getWriter().println(gson.toJson(PredictedTags));
+        //PostTags result = new PostTags(PredictedTags);
+        return PredictedTags;
+        //res.getWriter().println(gson.toJson(PredictedTags));
     }
 }
