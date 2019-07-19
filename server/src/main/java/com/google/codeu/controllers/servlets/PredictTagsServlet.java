@@ -58,11 +58,7 @@ public class PredictTagsServlet extends HttpServlet {
         int limit = 5; // maximum number of tags to return
         // UUID postId = imageDao.getPostId;
 
-        String postDetailsJson = req.getParameter("postDetails");
-        if (postDetailsJson == null)
-            throw new RuntimeException("There is no postDetails param!");
-        JSONObject postDetails = new JSONObject(postDetailsJson);
-        int imageCount = postDetails.getInt("numberOfImages");
+        int imageCount = Integer.parseInt(req.getParameter("numberOfImages"));
 
         // numberOfImages
         List<InputStream> imageStreams = new ArrayList<>();
