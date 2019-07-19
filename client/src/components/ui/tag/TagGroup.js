@@ -11,6 +11,13 @@ class TagGroup extends React.Component {
       inputValue: '',
     };
   }
+
+  componentDidUpdate = () => {
+    const { tags } = this.props;
+    if (tags != this.state.tags) {
+      this.setState({tags: tags});
+    }
+  }
   
 
   handleClose = removedTag => {

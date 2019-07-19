@@ -117,24 +117,23 @@ class UploadPage extends React.Component {
           ++cnt;
         }
       }
-    }
-    // end of make form data 
+      // end of make form data 
 
-    // fetch tag here
-    suggestionTags = fetchTags(data);
+      // fetch tag here
+      suggestionTags = fetchTags(data);
 
-    if (Array.isArray(suggestionTags)) {
-      let newTags = this.state.tags;
-      for (let i = 0; i < suggestionTags.length; i++) {
-        const item = suggestionTags[i];
-        if (!newTags.includes(item))
-          newTags.push(item);
+      if (Array.isArray(suggestionTags)) {
+        let newTags = [...this.state.tags];
+        for (let i = 0; i < suggestionTags.length; i++) {
+          const item = suggestionTags[i];
+          if (!newTags.includes(item))
+            newTags.push(item);
+        }
+        this.setState({ tags: newTags });
+        notification.success(SUGGEST_COMPLETED)
       }
-      this.setState({ tag: newTags });
-
-      notification.success(SUGGEST_COMPLETED)
+      this.setState({ sugessting: false });
     }
-    this.setState({ sugessting: false });
   }
 
   onChangeTags = (newTags) => {
