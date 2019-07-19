@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 @WebServlet(ServletLink.API_PREDICT_TAG)
+@MultipartConfig
 public class PredictTagsServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -44,8 +46,8 @@ public class PredictTagsServlet extends HttpServlet {
             result = getPredTagsFromReq(req);
         } catch (Exception e) {
             System.out.println("Error while creating new Tags!");
-            //e.printStackTrace();
-            //res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            e.printStackTrace();
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
         }
         res.getWriter().println(gson.toJson(result));
     }
@@ -60,8 +62,8 @@ public class PredictTagsServlet extends HttpServlet {
             return null;
         JSONObject postDetails = new JSONObject(postDetailsJson);
 
-        JSONArray numberOfImages = postDetails.getJSONArray("numberOfImages");
-        int imageCount = numberOfImages.length();
+        int imageCount = postDetails.getInt("numberOfImages");
+
         //numberOfImages
         List<InputStream> imageStreams = new ArrayList<>();
         
