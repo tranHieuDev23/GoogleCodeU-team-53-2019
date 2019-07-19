@@ -5,7 +5,6 @@ import com.google.codeu.controllers.visionapi.VisionAPIHelper;
 import com.google.codeu.utils.ServletLink;
 import com.google.gson.Gson;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -81,6 +80,7 @@ public class PredictTagsServlet extends HttpServlet {
 
         /** Call vision API Helper to predict tags on images */
         List<String> PredictedTags = visionHelper.predictTags(imageStreams, limit);
+        
         //PostTags result = new PostTags(PredictedTags);
         return PredictedTags;
         //res.getWriter().println(gson.toJson(PredictedTags));

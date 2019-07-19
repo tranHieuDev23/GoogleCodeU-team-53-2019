@@ -72,7 +72,7 @@ public class VisionAPIHelper {
         int index = 0;
         List<Result> resultList = new ArrayList<>();
         //VisionAPIHelper[] store = new VisionAPIHelper[5 * length];
-        List<String> result = null;
+        List<String> result = new ArrayList<>();
         /**
          * TODO: Implement label prediction, using Vision API here. There should not be
          * any duplicate in the result.
