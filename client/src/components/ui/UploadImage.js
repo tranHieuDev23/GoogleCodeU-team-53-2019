@@ -47,7 +47,6 @@ class UploadImage extends React.Component {
         this.props.handleClose();
       }
       else {
-        console.log(this.state.selectedFile);
         let arr = [...this.props.postDetail.images];
         arr.push(this.state);
         this.props.onChange("images", arr);

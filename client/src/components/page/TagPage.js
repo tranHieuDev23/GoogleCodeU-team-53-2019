@@ -35,13 +35,24 @@ class TagPage extends Component {
     }
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = async () => {
     const { userStatus } = this.props;
     if (userStatus !== this.state.userStatus) {
       this.setState({ userStatus: userStatus });
     }
-    if (this.state.tagName !== this.props.match.params.tagName)
-      this.setState({tagName : this.props.match.params.tagName});
+    if (this.state.tagName !== this.props.match.params.tagName) {
+      this.setState({ tagName: this.props.match.params.tagName });
+      const date = new Date();
+      const timestamp = date.getTime(); //current time
+      const newPosts = await fetchPosts(timestamp, 10, '', '', this.props.match.params.tagName);
+      if (newPosts != null) {
+        let newMinTimestamp = timestamp;
+        this.setState({ posts: newPosts });
+        for (const [index, post] of newPosts.entries())
+          newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        this.setState({ minTimestamp: newMinTimestamp - 1 });
+      }
+    }
   }
 
   loadMorePost = async () => {

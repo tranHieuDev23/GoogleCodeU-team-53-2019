@@ -40,13 +40,24 @@ class UserPage extends Component {
     }
   }
 
-  componentDidUpdate = () => {
+  componentDidUpdate = async () => {
     const { userStatus } = this.props;
     if (userStatus !== this.state.userStatus) {
       this.setState({ userStatus: userStatus });
     }
-    if (this.state.userIdParam !== this.props.match.params.userId)
-      this.setState({userIdParam: this.props.match.params.userId});
+    if (this.state.userIdParam !== this.props.match.params.userId) {
+      this.setState({ userIdParam: this.props.match.params.userId });
+      const date = new Date();
+      const timestamp = date.getTime(); //current time
+      const newPosts = await fetchPosts(timestamp, 10, '', this.props.match.params.userId, '')
+      if (newPosts != null) {
+        let newMinTimestamp = timestamp;
+        this.setState({ posts: newPosts });
+        for (const [index, post] of newPosts.entries())
+          newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        this.setState({ minTimestamp: newMinTimestamp - 1 });
+      }
+    }
   }
 
   loadMorePost = async () => {

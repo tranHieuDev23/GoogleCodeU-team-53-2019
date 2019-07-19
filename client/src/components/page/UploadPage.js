@@ -122,7 +122,6 @@ class UploadPage extends React.Component {
 
       // fetch tag here
       suggestionTags = await fetchTags(data);
-      console.log(suggestionTags);
       if (Array.isArray(suggestionTags)) {
         let newTags = [...this.state.tags];
         for (let i = 0; i < suggestionTags.length; i++) {
@@ -130,7 +129,6 @@ class UploadPage extends React.Component {
           if (!newTags.includes(item))
             newTags.push(item);
         }
-        console.log(newTags);
         this.setState({ tags: newTags });
         notification.success(SUGGEST_COMPLETED)
       }
