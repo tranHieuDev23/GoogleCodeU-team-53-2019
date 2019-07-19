@@ -47,7 +47,7 @@ export const RETRIEVE_POST = servletPrefix + "/retrieve-post";
 
 export const RETRIEVE_USER = servletPrefix + "/retrieve-user";
 
-export const RETRIEVE_USERS = servletPrefix + "retrieve-users";
+export const RETRIEVE_USERS = servletPrefix + "/retrieve-users";
 
 export const LIKE = servletPrefix + "/like";
 

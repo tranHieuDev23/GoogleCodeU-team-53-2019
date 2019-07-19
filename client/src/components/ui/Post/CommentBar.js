@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input } from 'antd';
+import { Input, notification } from 'antd';
 import { CREATE_COMMENT } from 'constants/links.js';
 import { addFirstParamToUrl, addParamToUrl } from 'helpers/FetchServer.js';
 import axios from 'axios';
@@ -33,7 +33,7 @@ class CommentBar extends React.Component {
     const { curLength } = this.state;
     if (Array.isArray(comments))
       if (curLength !== comments.length) {
-        this.setState({curLength: comments.length});
+        this.setState({ curLength: comments.length });
         this.loadMoreComment(0);
       }
   }
@@ -46,25 +46,31 @@ class CommentBar extends React.Component {
     this.setState({ value: event.target.value });
   }
 
-  writeNewComment = (value) => {
+  writeNewComment = async (value) => {
     const { post } = this.props;
     if (!(value == null || value === '')) {
       let url = CREATE_COMMENT;
       url = addFirstParamToUrl(url, 'postId', post.id);
       url = addParamToUrl(url, 'commentText', value);
-      axios
+      await axios
         .post(url, {})
-        .then(response => {
+        .then(async (response) => {
           const { data } = response;
           if (data.id != null) {
             this.props.onChangePost(1, false);
           }
+          this.setState({ value: '' })
+          const { onChangePost, order } = this.props;
+          await onChangePost(order, true);
         })
         .catch(function (error) {
           console.log(error);
+          notification.error({
+            message: 'Can upload comment',
+            description: 'Please check your connection and post it again!!!',
+          })
         });
     }
-    this.setState({ value: '' })
   }
 
   loadMoreComment = (numOfComment) => {

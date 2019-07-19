@@ -24,7 +24,6 @@ class SinglePost extends React.Component {
   }
 
   onChangeLikes = (newLikes) => {
-    console.log(newLikes);
     this.setState({ numberOfLike: newLikes })
   }
 
@@ -51,7 +50,9 @@ class SinglePost extends React.Component {
                   onChangeLikes={this.onChangeLikes}
                 />
                 {this.props.withComment &&
-                  <CommentBar {...this.props} />
+                  <CommentBar
+                    {...this.props}
+                  />
                 }
               </div>
             )

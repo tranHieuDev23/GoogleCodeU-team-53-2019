@@ -25,7 +25,7 @@ class UserPage extends Component {
 
   componentDidMount = async () => {
     // get user email
-    const user = await fetchUser(this.props.userId);
+    const user = await fetchUser(this.state.userIdParam);
     this.setState({ thisUserEmail: user.username });
     // get Posts
     const date = new Date();
