@@ -1,6 +1,5 @@
 package com.google.codeu.controllers.servlets;
 
-//import com.google.codeu.controllers.datastore.TagDao;
 import com.google.codeu.controllers.visionapi.VisionAPIHelper;
 import com.google.codeu.utils.ServletLink;
 
@@ -26,12 +25,10 @@ public class PredictTagsServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    // private TagDao tagDao;
     private VisionAPIHelper visionHelper;
 
     @Override
     public void init() throws ServletException {
-        // tagDao = new TagDao();
         visionHelper = VisionAPIHelper.getInstance();
     }
 
@@ -54,9 +51,7 @@ public class PredictTagsServlet extends HttpServlet {
     }
 
     private List<String> getPredTagsFromReq(HttpServletRequest req) throws Exception {
-        /** want to change for the client to change the limit */
         int limit = 5; // maximum number of tags to return
-        // UUID postId = imageDao.getPostId;
 
         int imageCount = Integer.parseInt(req.getParameter("numberOfImages"));
 
@@ -78,8 +73,6 @@ public class PredictTagsServlet extends HttpServlet {
         /** Call vision API Helper to predict tags on images */
         List<String> PredictedTags = visionHelper.predictTags(imageStreams, limit);
 
-        // PostTags result = new PostTags(PredictedTags);
         return PredictedTags;
-        // res.getWriter().println(gson.toJson(PredictedTags));
     }
 }
