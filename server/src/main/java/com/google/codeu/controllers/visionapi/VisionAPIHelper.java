@@ -12,6 +12,7 @@ import com.google.cloud.vision.v1.BatchAnnotateImagesResponse;
 import com.google.cloud.vision.v1.EntityAnnotation;
 import com.google.cloud.vision.v1.Feature;
 import com.google.cloud.vision.v1.Feature.Type;
+import com.google.codeu.utils.TagUtils;
 import com.google.cloud.vision.v1.Image;
 import com.google.cloud.vision.v1.ImageAnnotatorClient;
 
@@ -92,7 +93,7 @@ public class VisionAPIHelper {
       for (EntityAnnotation annotation : imageResponse.getLabelAnnotationsList()) {
         Result r = new Result();
         r.description = annotation.getDescription();
-        r.description = r.description.replaceAll("\\s", "_");
+        r.description = TagUtils.slugify(r.description);
         r.score = annotation.getScore();
         resultList.add(r);
       }

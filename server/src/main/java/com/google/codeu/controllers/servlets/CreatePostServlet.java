@@ -74,7 +74,7 @@ public class CreatePostServlet extends HttpServlet {
     res.getWriter().println(gson.toJson(result));
   }
 
-  private Post getPostFromRequest(HttpServletRequest req) throws IOException, ServletException {
+  private Post getPostFromRequest(HttpServletRequest req) throws Exception {
     UUID postId = UUID.randomUUID();
     long creationTime = System.currentTimeMillis();
 
@@ -82,12 +82,9 @@ public class CreatePostServlet extends HttpServlet {
     User author = userDao.getUser(userId);
 
     String postDetailsJson = req.getParameter("postDetails");
-    if (postDetailsJson == null) return null;
+    if (postDetailsJson == null) 
+      throw new RuntimeException("No postDetails parameter found!");
     JSONObject postDetails = new JSONObject(postDetailsJson);
-
-    if (!postDetails.has("descriptionText")
-        || !postDetails.has("imageDescriptions")
-        || !postDetails.has("tags")) return null;
 
     String descriptionText = postDetails.getString("descriptionText");
     descriptionText = processDescriptionText(descriptionText);
@@ -125,7 +122,9 @@ public class CreatePostServlet extends HttpServlet {
     List<Tag> newTags = new ArrayList<>();
     for (int i = 0; i < tagNames.length(); i++) {
       String name = tagNames.getString(i);
-      if (name == null) continue;
+      if (name == null) 
+        continue;
+      name = TagUtils.slugify(name);
       Tag tag = tagDao.getTag(name);
       if (tag == null) {
         tag = new Tag(name);
