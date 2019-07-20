@@ -18,6 +18,7 @@ import {
 } from 'constants/Notification.js';
 import { fetchTags } from 'helpers/LoadTags';
 import { tagSanitization } from 'helpers/TagValidate';
+import LocationSelector from '../ui/LocationSelector';
 
 class UploadPage extends React.Component {
   constructor() {
@@ -29,11 +30,13 @@ class UploadPage extends React.Component {
     this.handleAddPicture = this.handleAddPicture.bind(this);
     this.handleClosePopup = this.handleClosePopup.bind(this);
     this.getSuggestionTags = this.getSuggestionTags.bind(this);
+    this.handleLocation = this.handleLocation.bind(this);
 
     this.state = {
       description: '',
       images: [],
       tags: [],
+      location: null,
       popup: false,
       disabled: false,
       sugessting: false,
@@ -60,7 +63,7 @@ class UploadPage extends React.Component {
       descriptionText: this.state.description,
       imageDescriptions: [],
       tags: tagSanitization(this.state.tags),
-      location: null
+      location: this.state.location
     };
     for (let i = 0; i < images.length; i++) {
       if (images[i].selectedFile != null) {
@@ -160,6 +163,11 @@ class UploadPage extends React.Component {
       });
   };
 
+  handleLocation = location => {
+    this.handleSetState('location', location);
+    console.log(location);
+  }
+
   render() {
     return (
       <div className='UploadPage container pt-2'>
@@ -170,6 +178,9 @@ class UploadPage extends React.Component {
           handleChange={this.handlePostDescription}
         />
         <TagGroup tags={this.state.tags} onChangeTags={this.onChangeTags} />
+
+        <LocationSelector onLocationSelected={this.handleLocation}></LocationSelector>
+
         <div className='mt-2'>
           <Button
             onClick={this.handleAddPicture}
