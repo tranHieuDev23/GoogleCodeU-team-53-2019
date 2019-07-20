@@ -14,7 +14,8 @@ import {
   SUGGEST_NO_IMAGE,
   UPLOAD_CONNECTION_FAIL,
   UPLOAD_SUCCESS,
-  UPLOAD_NO_IMAGE
+  UPLOAD_NO_IMAGE,
+  UPLOAD_NO_LOCATION
 } from 'constants/Notification.js';
 import { fetchTags } from 'helpers/LoadTags';
 import { tagSanitization } from 'helpers/TagValidate';
@@ -55,47 +56,56 @@ class UploadPage extends React.Component {
   };
 
   handlePost = async (event) => {
-    this.setState({ disabled: true });
-    const data = new FormData();
+    if (this.state.location == null) {
+      notification.error(UPLOAD_NO_LOCATION);
+      return;
+    }
+
     const { images } = this.state;
+    let imageDescriptions = [];
     let count = 0;
-    const obj = {
-      descriptionText: this.state.description,
-      imageDescriptions: [],
-      tags: tagSanitization(this.state.tags),
-      location: this.state.location
-    };
     for (let i = 0; i < images.length; i++) {
       if (images[i].selectedFile != null) {
         count++;
-        obj.imageDescriptions.push(images[i].imageDescription);
+        imageDescriptions.push(images[i].imageDescription);
       }
     }
     if (count === 0) {
-      notification.error(UPLOAD_NO_IMAGE)
-      this.setState({ disabled: false });
+      notification.error(UPLOAD_NO_IMAGE);
+      return;
     }
-    else {
-      data.append('postDetails', JSON.stringify(obj));
-      let cnt = 0;
-      for (let i = 0; i < images.length; i++) {
-        if (images[i].selectedFile != null) {
-          data.append('file-' + cnt, images[i].selectedFile);
-          ++cnt;
-        }
+
+    this.setState({ disabled: true });
+    
+    const data = new FormData();
+    const obj = {
+      descriptionText: this.state.description,
+      imageDescriptions: imageDescriptions,
+      tags: tagSanitization(this.state.tags),
+      location: this.state.location
+    };
+
+
+    data.append('postDetails', JSON.stringify(obj));
+    let cnt = 0;
+    for (let i = 0; i < images.length; i++) {
+      if (images[i].selectedFile != null) {
+        data.append('file-' + cnt, images[i].selectedFile);
+        ++cnt;
       }
-      await axios.post(CREATE_POST, data, {})
-        .then(respone => {
-          const { data } = respone;
-          const id = data.id;
-          notification.success(UPLOAD_SUCCESS)
-          this.props.history.push(POST_PAGE + '/' + id);
-        })
-        .catch(() => {
-          notification.error(UPLOAD_CONNECTION_FAIL)
-        })
-      this.setState({ disabled: false });
     }
+
+    await axios.post(CREATE_POST, data, {})
+      .then(respone => {
+        const { data } = respone;
+        const id = data.id;
+        notification.success(UPLOAD_SUCCESS)
+        this.props.history.push(POST_PAGE + '/' + id);
+      })
+      .catch(() => {
+        notification.error(UPLOAD_CONNECTION_FAIL)
+      });
+    this.setState({ disabled: false });
   };
 
   getSuggestionTags = async () => {

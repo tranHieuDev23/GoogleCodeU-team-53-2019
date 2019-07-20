@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 @WebServlet(ServletLink.API_CREATE_POST)
@@ -82,24 +81,18 @@ public class CreatePostServlet extends HttpServlet {
     User author = userDao.getUser(userId);
 
     String postDetailsJson = req.getParameter("postDetails");
-    if (postDetailsJson == null) 
+    if (postDetailsJson == null)
       throw new RuntimeException("No postDetails parameter found!");
     JSONObject postDetails = new JSONObject(postDetailsJson);
 
     String descriptionText = postDetails.getString("descriptionText");
     descriptionText = processDescriptionText(descriptionText);
 
-    Location location = null;
-    try {
-      JSONObject locationJson = postDetails.getJSONObject("location");
-      String placeId = locationJson.getString("placeId");
-      double lat = locationJson.getDouble("lat");
-      double lng = locationJson.getDouble("lng");
-      location = new Location(placeId, lat, lng);
-    } catch (JSONException e) {
-      System.out.println("Cannot extract Location from request");
-      e.printStackTrace();
-    }
+    JSONObject locationJson = postDetails.getJSONObject("location");
+    String placeId = locationJson.getString("placeId");
+    double lat = locationJson.getDouble("lat");
+    double lng = locationJson.getDouble("lng");
+    Location location = new Location(placeId, lat, lng);
 
     JSONArray imageDescriptions = postDetails.getJSONArray("imageDescriptions");
     int imageCount = imageDescriptions.length();
@@ -122,7 +115,7 @@ public class CreatePostServlet extends HttpServlet {
     List<Tag> newTags = new ArrayList<>();
     for (int i = 0; i < tagNames.length(); i++) {
       String name = tagNames.getString(i);
-      if (name == null) 
+      if (name == null)
         continue;
       name = TagUtils.slugify(name);
       Tag tag = tagDao.getTag(name);
@@ -132,20 +125,12 @@ public class CreatePostServlet extends HttpServlet {
       }
       tags.add(tag);
     }
-    if (!newTags.isEmpty()) tagDao.storeTags(newTags);
+    if (!newTags.isEmpty())
+      tagDao.storeTags(newTags);
 
     List<String> likedUserIds = new ArrayList<>();
 
-    Post result =
-        new Post(
-            postId,
-            author,
-            location,
-            creationTime,
-            descriptionText,
-            postImages,
-            tags,
-            likedUserIds);
+    Post result = new Post(postId, author, location, creationTime, descriptionText, postImages, tags, likedUserIds);
     return result;
   }
 
