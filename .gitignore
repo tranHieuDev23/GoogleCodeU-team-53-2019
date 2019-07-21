@@ -18,3 +18,4 @@ client/build
 client/src/Json/
 server/src/main/webapp
 !server/src/main/webapp/WEB-INF
+client/src/constants/apiKey.js

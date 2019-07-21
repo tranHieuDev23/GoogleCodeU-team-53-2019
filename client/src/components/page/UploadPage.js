@@ -14,10 +14,12 @@ import {
   SUGGEST_NO_IMAGE,
   UPLOAD_CONNECTION_FAIL,
   UPLOAD_SUCCESS,
-  UPLOAD_NO_IMAGE
+  UPLOAD_NO_IMAGE,
+  UPLOAD_NO_LOCATION
 } from 'constants/Notification.js';
 import { fetchTags } from 'helpers/LoadTags';
 import { tagSanitization } from 'helpers/TagValidate';
+import LocationSelector from '../ui/LocationSelector';
 
 class UploadPage extends React.Component {
   constructor() {
@@ -29,11 +31,13 @@ class UploadPage extends React.Component {
     this.handleAddPicture = this.handleAddPicture.bind(this);
     this.handleClosePopup = this.handleClosePopup.bind(this);
     this.getSuggestionTags = this.getSuggestionTags.bind(this);
+    this.handleLocation = this.handleLocation.bind(this);
 
     this.state = {
       description: '',
       images: [],
       tags: [],
+      location: null,
       popup: false,
       disabled: false,
       sugessting: false,
@@ -52,47 +56,56 @@ class UploadPage extends React.Component {
   };
 
   handlePost = async (event) => {
-    this.setState({ disabled: true });
-    const data = new FormData();
+    if (this.state.location == null) {
+      notification.error(UPLOAD_NO_LOCATION);
+      return;
+    }
+
     const { images } = this.state;
+    let imageDescriptions = [];
     let count = 0;
-    const obj = {
-      descriptionText: this.state.description,
-      imageDescriptions: [],
-      tags: tagSanitization(this.state.tags),
-      location: null
-    };
     for (let i = 0; i < images.length; i++) {
       if (images[i].selectedFile != null) {
         count++;
-        obj.imageDescriptions.push(images[i].imageDescription);
+        imageDescriptions.push(images[i].imageDescription);
       }
     }
     if (count === 0) {
-      notification.error(UPLOAD_NO_IMAGE)
-      this.setState({ disabled: false });
+      notification.error(UPLOAD_NO_IMAGE);
+      return;
     }
-    else {
-      data.append('postDetails', JSON.stringify(obj));
-      let cnt = 0;
-      for (let i = 0; i < images.length; i++) {
-        if (images[i].selectedFile != null) {
-          data.append('file-' + cnt, images[i].selectedFile);
-          ++cnt;
-        }
+
+    this.setState({ disabled: true });
+    
+    const data = new FormData();
+    const obj = {
+      descriptionText: this.state.description,
+      imageDescriptions: imageDescriptions,
+      tags: tagSanitization(this.state.tags),
+      location: this.state.location
+    };
+
+
+    data.append('postDetails', JSON.stringify(obj));
+    let cnt = 0;
+    for (let i = 0; i < images.length; i++) {
+      if (images[i].selectedFile != null) {
+        data.append('file-' + cnt, images[i].selectedFile);
+        ++cnt;
       }
-      await axios.post(CREATE_POST, data, {})
-        .then(respone => {
-          const { data } = respone;
-          const id = data.id;
-          notification.success(UPLOAD_SUCCESS)
-          this.props.history.push(POST_PAGE + '/' + id);
-        })
-        .catch(() => {
-          notification.error(UPLOAD_CONNECTION_FAIL)
-        })
-      this.setState({ disabled: false });
     }
+
+    await axios.post(CREATE_POST, data, {})
+      .then(respone => {
+        const { data } = respone;
+        const id = data.id;
+        notification.success(UPLOAD_SUCCESS)
+        this.props.history.push(POST_PAGE + '/' + id);
+      })
+      .catch(() => {
+        notification.error(UPLOAD_CONNECTION_FAIL)
+      });
+    this.setState({ disabled: false });
   };
 
   getSuggestionTags = async () => {
@@ -160,6 +173,11 @@ class UploadPage extends React.Component {
       });
   };
 
+  handleLocation = location => {
+    this.handleSetState('location', location);
+    console.log(location);
+  }
+
   render() {
     return (
       <div className='UploadPage container pt-2'>
@@ -170,6 +188,9 @@ class UploadPage extends React.Component {
           handleChange={this.handlePostDescription}
         />
         <TagGroup tags={this.state.tags} onChangeTags={this.onChangeTags} />
+
+        <LocationSelector onLocationSelected={this.handleLocation}></LocationSelector>
+
         <div className='mt-2'>
           <Button
             onClick={this.handleAddPicture}
