@@ -1,5 +1,5 @@
 import React from 'react'
-import * as classes from 'css/Picture.module.scss'
+import * as classes from 'css/Picture.scss'
 
 class AddedPicture extends React.Component  {
   render()  {

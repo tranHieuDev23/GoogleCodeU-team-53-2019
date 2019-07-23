@@ -4,7 +4,6 @@ import { CREATE_POST } from 'constants/links';
 import Popup from '../ui/Popup/Popup';
 import RichTextEditor from 'components/ui/RichTextEditor';
 import AddedPicture from '../ui/AddedPicture';
-import 'css/UploadPage.scss';
 import { POST_PAGE } from 'constants/links';
 import { Button, notification } from 'antd';
 import { withRouter } from 'react-router-dom'
@@ -20,6 +19,7 @@ import {
 import { fetchTags } from 'helpers/LoadTags';
 import { tagSanitization } from 'helpers/TagValidate';
 import LocationSelector from '../ui/LocationSelector';
+import PleaseLogin from 'components/Result/PleaseLogin';
 
 class UploadPage extends React.Component {
   constructor() {
@@ -76,7 +76,7 @@ class UploadPage extends React.Component {
     }
 
     this.setState({ disabled: true });
-    
+
     const data = new FormData();
     const obj = {
       descriptionText: this.state.description,
@@ -179,68 +179,75 @@ class UploadPage extends React.Component {
   }
 
   render() {
+    const { isLogin } = this.props.userStatus;
     return (
-      <div className='UploadPage container pt-2'>
-        <h1>Create new post:</h1>
-        <RichTextEditor
-          description='Please enter description here'
-          value={this.state.description}
-          handleChange={this.handlePostDescription}
-        />
-        <TagGroup tags={this.state.tags} onChangeTags={this.onChangeTags} />
+      <React.Fragment>
+        {(isLogin) ? (
+          <div className='UploadPage container pt-2'>
+            <h1>Create new post:</h1>
+            <RichTextEditor
+              description='Please enter description here'
+              value={this.state.description}
+              handleChange={this.handlePostDescription}
+            />
+            <TagGroup tags={this.state.tags} onChangeTags={this.onChangeTags} />
 
-        <LocationSelector onLocationSelected={this.handleLocation}></LocationSelector>
+            <LocationSelector onLocationSelected={this.handleLocation}></LocationSelector>
 
-        <div className='mt-2'>
-          <Button
-            onClick={this.handleAddPicture}
-            size='large'
-            icon='upload'
-          >
-            Add new picture
+            <div className='mt-2'>
+              <Button
+                onClick={this.handleAddPicture}
+                size='large'
+                icon='upload'
+              >
+                Add new picture
           </Button>
 
-          <Button
-            onClick={this.getSuggestionTags}
-            type='dashed'
-            size='large'
-            icon='tags'
-            loading={this.state.sugessting}
-          >
-            Get suggestion tag
+              <Button
+                onClick={this.getSuggestionTags}
+                type='dashed'
+                size='large'
+                icon='tags'
+                loading={this.state.sugessting}
+              >
+                Get suggestion tag
           </Button>
 
-          <Button
-            onClick={this.handlePost}
-            type='primary'
-            icon='share-alt'
-            size='large'
-            disabled={this.state.disabled}
-          >
-            Share this post
+              <Button
+                onClick={this.handlePost}
+                type='primary'
+                icon='share-alt'
+                size='large'
+                disabled={this.state.disabled}
+              >
+                Share this post
           </Button>
 
-          <Button
-            onClick={() => { this.props.history.push('/') }}
-            type='danger'
-            icon='close'
-            size='large'
-            disabled={this.state.disabled}
-          >
-            Close this post
+              <Button
+                onClick={() => { this.props.history.push('/') }}
+                type='danger'
+                icon='close'
+                size='large'
+                disabled={this.state.disabled}
+              >
+                Close this post
           </Button>
-        </div>
-        <AddedPicture
-          images={this.state.images}
-        />
-        {this.state.popup ? (
-          <Popup
-            handleClose={this.handleClosePopup}
-            postDetail={this.state}
-            onChange={this.handleSetState}
-          />
-        ) : null}
-      </div>
+            </div>
+            <AddedPicture
+              images={this.state.images}
+            />
+            {this.state.popup ? (
+              <Popup
+                handleClose={this.handleClosePopup}
+                postDetail={this.state}
+                onChange={this.handleSetState}
+              />
+            ) : null}
+          </div>
+        ) : (
+            <PleaseLogin />
+          )}
+      </React.Fragment>
     );
   }
 }

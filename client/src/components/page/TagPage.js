@@ -29,8 +29,9 @@ class TagPage extends Component {
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
-      for (const [index, post] of newPosts.entries())
+      newPosts.forEach(function (post) {
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+      });
       this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
   }
@@ -48,8 +49,9 @@ class TagPage extends Component {
       if (newPosts != null) {
         let newMinTimestamp = timestamp;
         this.setState({ posts: newPosts });
-        for (const [index, post] of newPosts.entries())
+        newPosts.forEach(post => {
           newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        });
         this.setState({ minTimestamp: newMinTimestamp - 1 });
       }
     }
@@ -58,35 +60,32 @@ class TagPage extends Component {
   loadMorePost = async () => {
     const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', this.state.tagName);
     if (morePosts != null) {
-      let newMinTimestamp = this.state.minTimestamp;
-      for (const [index, post] of morePosts.entries())
-        newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
-      this.setState({ minTimestamp: newMinTimestamp - 1 });
-      let newPosts = [...this.state.posts];
-      newPosts.push(...morePosts);
-      this.setState({ posts: newPosts });
+      if (morePosts.length > 0) {
+        let newMinTimestamp = this.state.minTimestamp;
+        morePosts.forEach(post => {
+          newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        });
+        this.setState({ minTimestamp: newMinTimestamp - 1 });
+        let newPosts = [...this.state.posts];
+        newPosts.push(...morePosts);
+        this.setState({ posts: newPosts });
+        return true;
+      }
     }
+    return false;
   }
 
   render() {
     return (
       <div className='container pt-2'>
-        {this.state.userStatus.userEmail ? (
-          <div>
-            <h1 className='center'>#{this.state.tagName} Page</h1>
-            <NewFeedWrapper
-              userStatus={this.state.userStatus}
-              posts={this.state.posts}
-              handleLoadMorePost={this.loadMorePost}
-            />
-          </div>
-        ) : (
-            <div className='container pt-2'>
-              <div className='BigNotification'>
-                Please login to continue!!!
-              </div>
-            </div>
-          )}
+        <div>
+          <h1 className='center'>#{this.state.tagName} Page</h1>
+          <NewFeedWrapper
+            userStatus={this.state.userStatus}
+            posts={this.state.posts}
+            handleLoadMorePost={this.loadMorePost}
+          />
+        </div>
       </div>
     );
   }

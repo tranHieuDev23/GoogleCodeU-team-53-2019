@@ -1,7 +1,6 @@
 import React from 'react';
 import {Editor, EditorState, RichUtils } from 'draft-js';
 import {stateToHTML} from 'draft-js-export-html';
-import 'css/RichTextEditor.css';
 
 class RichTextEditor extends React.Component {
   constructor(props) {

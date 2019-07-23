@@ -19,12 +19,12 @@ import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { devToolsEnhancer } from 'redux-devtools-extension';
-
-import 'css/index.css';
 import Root from 'components/container/Root.js';
 import rootReducer from 'reducers/root.js';
 import * as serviceWorker from 'serviceWorker.js';
 
+import 'css/index.scss';
+import 'antd/dist/antd.css';
 /**
  * Redux storage of all client-side data.
  * Use the Redux Dev Tools chrome extension to see your storage.

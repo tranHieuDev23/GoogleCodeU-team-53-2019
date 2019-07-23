@@ -15,6 +15,11 @@
  */
 
 /** Prevent the page from becoming too wide. */
+@import 'css/UploadPage.scss';
+@import 'css/Picture.scss';
+@import 'css/RichTextEditor.scss';
+@import 'css/userPage.scss';
+
 body {
   background: #f8f8f8;
   min-height: 100vh;

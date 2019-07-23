@@ -12,14 +12,12 @@ import {
   UPLOAD_PAGE,
   POST_PAGE,
   TAG_PAGE,
+  LOGIN_PAGE,
 } from 'constants/links.js';
 import UploadPage from '../page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
 import { fetchLoginStatus } from 'helpers/UserStatus.js'
 import TagPage from 'components/page/TagPage'
-import "antd/dist/antd.css";
-import 'css/Post.scss';
-import 'css/index.css'
 
 /** Renders all components in the <root> element on ../public/index.html. */
 class Root extends Component {
@@ -56,8 +54,8 @@ class Root extends Component {
           <CustomNavBar userStatus={this.state} handleUserStatus={this.handleSetState} />
           <Suspense fallback="Loading...">
             <Switch>
-             <Route
-                exact path={'/login'}
+              <Route
+                exact path={LOGIN_PAGE}
                 component={withStatusHome(Home, this.state, this.handleSetState)}
               />
               <Route
