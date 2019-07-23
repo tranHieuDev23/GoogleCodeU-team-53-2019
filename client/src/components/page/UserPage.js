@@ -4,22 +4,19 @@ import { withRouter } from 'react-router-dom';
 import { fetchPosts } from 'helpers/LoadPost';
 import { fetchUser } from 'helpers/LoadUser';
 import Page404 from 'components/Result/Page404';
+import Loading from './Loading';
 
 class UserPage extends Component {
   constructor(props) {
     super(props);
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const { userStatus } = this.props;
     this.state = {
-      userStatus: {
-        userEmail: userStatus.userEmail,
-        userId: userStatus.userId,
-      },
       posts: [],
       userIdParam: this.props.match.params.userId,
       thisUserEmail: '',
       minTimestamp: timestamp,
+      didMount: false,
     }
     this.loadMorePost = this.loadMorePost.bind(this);
   }
@@ -27,8 +24,10 @@ class UserPage extends Component {
   componentDidMount = async () => {
     // get user email
     const user = await fetchUser(this.state.userIdParam);
-    if (user === null)
+    if (user === null) {
+      this.setState({ didMount: true });
       return;
+    }
     this.setState({ thisUserEmail: user.username });
     // get Posts
     const date = new Date();
@@ -42,13 +41,10 @@ class UserPage extends Component {
       });
       this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
+    this.setState({ didMount: true });
   }
 
   componentDidUpdate = async () => {
-    const { userStatus } = this.props;
-    if (userStatus !== this.state.userStatus) {
-      this.setState({ userStatus: userStatus });
-    }
     if (this.state.userIdParam !== this.props.match.params.userId) {
       this.setState({ userIdParam: this.props.match.params.userId });
       const date = new Date();
@@ -84,19 +80,22 @@ class UserPage extends Component {
   }
 
   render() {
+    const { didMount } = this.state;
     return (
       <div className='container pt-2'>
         {this.state.thisUserEmail ? (
           <div>
             <h1 className='center'>{this.state.thisUserEmail} Page</h1>
             <NewFeedWrapper
-              userStatus={this.state.userStatus}
+              userStatus={this.props.userStatus}
               posts={this.state.posts}
               handleLoadMorePost={this.loadMorePost}
             />
           </div>
         ) : (
-            <Page404 />
+            <React.Fragment>
+              {didMount ? (<Page404 />) : (<Loading />)}
+            </React.Fragment>
           )}
       </div>
     );

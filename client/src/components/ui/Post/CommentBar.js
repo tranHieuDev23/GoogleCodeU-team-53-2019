@@ -95,7 +95,7 @@ class CommentBar extends React.Component {
   }
 
   render() {
-
+    const { isLogin } = this.props.userStatus;
     return (
       <div className="Post__Comments">
         {(this.state.curIndex > 0) &&
@@ -107,13 +107,15 @@ class CommentBar extends React.Component {
         </div>
         }
         {this.state.items}
-        <Search
-          placeholder="Enter your comment here!"
-          enterButton="Post"
-          value={this.state.value}
-          onChange={this.handleChangeInput}
-          onSearch={this.writeNewComment}
-        />
+        {(isLogin) &&
+          < Search
+            placeholder="Enter your comment here!"
+            enterButton="Post"
+            value={this.state.value}
+            onChange={this.handleChangeInput}
+            onSearch={this.writeNewComment}
+          />
+        }
       </div>
     );
   }

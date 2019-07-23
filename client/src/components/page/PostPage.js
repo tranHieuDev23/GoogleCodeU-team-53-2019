@@ -1,6 +1,8 @@
 import React from 'react';
 import SinglePost from 'components/ui/Post/SinglePost';
 import { fetchPost } from 'helpers/LoadPost';
+import Page404 from 'components/Result/Page404';
+import Loading from './Loading';
 
 class PostPage extends React.Component {
   constructor(props) {
@@ -9,23 +11,26 @@ class PostPage extends React.Component {
       post: null,
       postIdParam: this.props.match.params.postId,
       likePopup: false,
+      didMount: false,
     };
   }
 
   onChangePost = async (index, oldPopup) => {
     const post = await fetchPost(this.state.postIdParam, true);
     if (post != null)
-      this.setState({post: post});
+      this.setState({ post: post });
     this.setState({ likePopup: oldPopup });
   }
 
   componentDidMount = async () => {
     const post = await fetchPost(this.state.postIdParam, true);
     if (post != null)
-      this.setState({post: post});
+      this.setState({ post: post });
+    this.setState({ didMount: true });
   }
 
   render() {
+    const { didMount } = this.state;
     return (
       <div className='container pt-2'>
         {(this.state.post != null && this.state.post.id) ? (
@@ -41,7 +46,9 @@ class PostPage extends React.Component {
             />
           </React.Fragment>
         ) : (
-            <div>{"This content is unavailable right now"}</div>
+            <React.Fragment>
+              {(didMount) ? (<Page404 />) : (<Loading />)}
+            </React.Fragment>
           )
         }
       </div>

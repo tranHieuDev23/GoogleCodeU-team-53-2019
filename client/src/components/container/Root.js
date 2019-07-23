@@ -13,11 +13,13 @@ import {
   POST_PAGE,
   TAG_PAGE,
   LOGIN_PAGE,
+  PLEASE_LOGIN,
 } from 'constants/links.js';
 import UploadPage from '../page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
 import { fetchLoginStatus } from 'helpers/UserStatus.js'
 import TagPage from 'components/page/TagPage'
+import PleaseLogin from 'components/Result/PleaseLogin';
 
 /** Renders all components in the <root> element on ../public/index.html. */
 class Root extends Component {
@@ -31,7 +33,7 @@ class Root extends Component {
     this.handleSetState = this.handleSetState.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount = async () => {
     const status = await fetchLoginStatus();
     this.setState({ userEmail: status.userEmail });
     this.setState({ isLogin: !!status.userEmail });
@@ -57,6 +59,10 @@ class Root extends Component {
               <Route
                 exact path={LOGIN_PAGE}
                 component={withStatusHome(Home, this.state, this.handleSetState)}
+              />
+              <Route
+                exact path={PLEASE_LOGIN}
+                component={PleaseLogin}
               />
               <Route
                 exact path={HOME}

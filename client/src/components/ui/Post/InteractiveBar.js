@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { ReactComponent as LikeIcon } from 'assets/icons/like.svg';
 import { ReactComponent as RedLikeIcon } from 'assets/icons/red_like.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/comment.svg';
-import { POST_PAGE } from 'constants/links.js';
+import { POST_PAGE, PLEASE_LOGIN } from 'constants/links.js';
 import { LIKE, UNLIKE } from 'constants/links.js';
 import axios from 'axios'
 
@@ -32,6 +32,12 @@ class InteractiveBar extends React.Component {
   }
 
   handleLike = () => {
+    console.log(this.props);
+    console.log(this.props.userStatus);
+    const { isLogin } = this.props.userStatus;
+    if (!isLogin) {
+      this.props.history.push(PLEASE_LOGIN);
+    }
     const { post } = this.props;
     let url = LIKE + '?postId=' + post.id;
     if (this.state.liked) {

@@ -8,12 +8,7 @@ class Home extends Component {
     super(props);
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const { userStatus } = this.props;
     this.state = {
-      userStatus: {
-        userEmail: userStatus.userEmail,
-        userId: userStatus.userId,
-      },
       posts: [],
       minTimestamp: timestamp,
     }
@@ -31,13 +26,6 @@ class Home extends Component {
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
       })
       this.setState({ minTimestamp: newMinTimestamp - 1 });
-    }
-  }
-
-  componentDidUpdate = () => {
-    const { userStatus } = this.props;
-    if (userStatus !== this.state.userStatus) {
-      this.setState({ userStatus: userStatus });
     }
   }
 
@@ -65,7 +53,7 @@ class Home extends Component {
         <div>
           <h1 className='center'>News Feed</h1>
           <NewFeedWrapper
-            userStatus={this.state.userStatus}
+            userStatus={this.props.userStatus}
             posts={this.state.posts}
             handleLoadMorePost={this.loadMorePost}
           />

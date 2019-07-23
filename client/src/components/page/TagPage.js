@@ -8,12 +8,7 @@ class TagPage extends Component {
     super(props);
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const { userStatus } = this.props;
     this.state = {
-      userStatus: {
-        userEmail: userStatus.userEmail,
-        userId: userStatus.userId,
-      },
       posts: [],
       tagName: this.props.match.params.tagName,
       minTimestamp: timestamp,
@@ -37,10 +32,6 @@ class TagPage extends Component {
   }
 
   componentDidUpdate = async () => {
-    const { userStatus } = this.props;
-    if (userStatus !== this.state.userStatus) {
-      this.setState({ userStatus: userStatus });
-    }
     if (this.state.tagName !== this.props.match.params.tagName) {
       this.setState({ tagName: this.props.match.params.tagName });
       const date = new Date();
@@ -81,7 +72,7 @@ class TagPage extends Component {
         <div>
           <h1 className='center'>#{this.state.tagName} Page</h1>
           <NewFeedWrapper
-            userStatus={this.state.userStatus}
+            userStatus={this.props.userStatus}
             posts={this.state.posts}
             handleLoadMorePost={this.loadMorePost}
           />
