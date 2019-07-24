@@ -16,8 +16,8 @@ class UserPage extends Component {
       userIdParam: this.props.match.params.userId,
       thisUserEmail: '',
       minTimestamp: timestamp,
-      didMount: false,
-    }
+      didMount: false
+    };
     this.loadMorePost = this.loadMorePost.bind(this);
   }
 
@@ -32,7 +32,13 @@ class UserPage extends Component {
     // get Posts
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const newPosts = await fetchPosts(timestamp, 10, '', this.state.userIdParam, '')
+    const newPosts = await fetchPosts(
+      timestamp,
+      10,
+      '',
+      this.state.userIdParam,
+      ''
+    );
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
@@ -42,14 +48,20 @@ class UserPage extends Component {
       this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
     this.setState({ didMount: true });
-  }
+  };
 
   componentDidUpdate = async () => {
     if (this.state.userIdParam !== this.props.match.params.userId) {
       this.setState({ userIdParam: this.props.match.params.userId });
       const date = new Date();
       const timestamp = date.getTime(); //current time
-      const newPosts = await fetchPosts(timestamp, 10, '', this.props.match.params.userId, '')
+      const newPosts = await fetchPosts(
+        timestamp,
+        10,
+        '',
+        this.props.match.params.userId,
+        ''
+      );
       if (newPosts != null) {
         let newMinTimestamp = timestamp;
         this.setState({ posts: newPosts });
@@ -59,10 +71,16 @@ class UserPage extends Component {
         this.setState({ minTimestamp: newMinTimestamp - 1 });
       }
     }
-  }
+  };
 
   loadMorePost = async () => {
-    const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', this.state.userIdParam, '');
+    const morePosts = await fetchPosts(
+      this.state.minTimestamp,
+      10,
+      '',
+      this.state.userIdParam,
+      ''
+    );
     if (morePosts != null) {
       if (morePosts.length > 0) {
         let newMinTimestamp = this.state.minTimestamp;
@@ -77,7 +95,7 @@ class UserPage extends Component {
       }
     }
     return false;
-  }
+  };
 
   render() {
     const { didMount } = this.state;
@@ -93,10 +111,10 @@ class UserPage extends Component {
             />
           </div>
         ) : (
-            <React.Fragment>
-              {didMount ? (<Page404 />) : (<Loading />)}
-            </React.Fragment>
-          )}
+          <React.Fragment>
+            {didMount ? <Page404 /> : <Loading />}
+          </React.Fragment>
+        )}
       </div>
     );
   }

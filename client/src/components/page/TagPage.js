@@ -11,8 +11,8 @@ class TagPage extends Component {
     this.state = {
       posts: [],
       tagName: this.props.match.params.tagName,
-      minTimestamp: timestamp,
-    }
+      minTimestamp: timestamp
+    };
     this.loadMorePost = this.loadMorePost.bind(this);
   }
 
@@ -20,23 +20,34 @@ class TagPage extends Component {
     // get Posts
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const newPosts = await fetchPosts(timestamp, 10, '', '', this.state.tagName);
+    const newPosts = await fetchPosts(
+      timestamp,
+      10,
+      '',
+      '',
+      this.state.tagName
+    );
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
-      newPosts.forEach(function (post) {
+      newPosts.forEach(function(post) {
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
       });
       this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
-  }
+  };
 
   componentDidUpdate = async () => {
     if (this.state.tagName !== this.props.match.params.tagName) {
-      this.setState({ tagName: this.props.match.params.tagName });
       const date = new Date();
       const timestamp = date.getTime(); //current time
-      const newPosts = await fetchPosts(timestamp, 10, '', '', this.props.match.params.tagName);
+      const newPosts = await fetchPosts(
+        timestamp,
+        10,
+        '',
+        '',
+        this.props.match.params.tagName
+      );
       if (newPosts != null) {
         let newMinTimestamp = timestamp;
         this.setState({ posts: newPosts });
@@ -44,12 +55,21 @@ class TagPage extends Component {
           newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
         });
         this.setState({ minTimestamp: newMinTimestamp - 1 });
-      }
+      } else this.setState({ posts: [] });
+      this.setState({
+        tagName: this.props.match.params.tagName
+      });
     }
-  }
+  };
 
   loadMorePost = async () => {
-    const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', this.state.tagName);
+    const morePosts = await fetchPosts(
+      this.state.minTimestamp,
+      10,
+      '',
+      '',
+      this.state.tagName
+    );
     if (morePosts != null) {
       if (morePosts.length > 0) {
         let newMinTimestamp = this.state.minTimestamp;
@@ -64,7 +84,7 @@ class TagPage extends Component {
       }
     }
     return false;
-  }
+  };
 
   render() {
     return (

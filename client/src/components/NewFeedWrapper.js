@@ -8,8 +8,8 @@ class NewFeedWrapper extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      hasMorePost: true,
-    }
+      hasMorePost: true
+    };
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -18,38 +18,37 @@ class NewFeedWrapper extends React.Component {
     const morePost = await this.props.handleLoadMorePost();
     this.setState({ hasMorePost: morePost });
     this.setState({ loading: false });
-  }
+  };
 
   render() {
     const { userStatus, posts } = this.props;
     const { hasMorePost } = this.state;
+
     return (
       <React.Fragment>
-        {(posts.length > 0) ? (
+        {posts.length > 0 ? (
           <div>
             <NewsFeed
               userStatus={userStatus}
               posts={posts}
             />
-            {(hasMorePost) ? (
+            {hasMorePost ? (
               <div className='LoadMorePost'>
                 <Button
-                  type="primary"
+                  type='primary'
                   loading={this.state.loading}
-                  size="large"
-                  onClick={this.handleClick}
-                >
+                  size='large'
+                  onClick={this.handleClick}>
                   Load more post
-        </Button>
+                </Button>
               </div>
             ) : (
-                <NoMoreContents />
-              )}
-          </div >
+              <NoMoreContents />
+            )}
+          </div>
         ) : (
-            <div></div>
-          )}
-
+          <div />
+        )}
       </React.Fragment>
     );
   }

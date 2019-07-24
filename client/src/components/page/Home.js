@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import NewFeedWrapper from 'components/NewFeedWrapper'
-import { fetchPosts } from 'helpers/LoadPost'
+import NewFeedWrapper from 'components/NewFeedWrapper';
+import { fetchPosts } from 'helpers/LoadPost';
 
 class Home extends Component {
   constructor(props) {
@@ -10,8 +10,8 @@ class Home extends Component {
     const timestamp = date.getTime(); //current time
     this.state = {
       posts: [],
-      minTimestamp: timestamp,
-    }
+      minTimestamp: timestamp
+    };
     this.loadMorePost = this.loadMorePost.bind(this);
   }
 
@@ -22,12 +22,12 @@ class Home extends Component {
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
-      newPosts.forEach(function (post) {
+      newPosts.forEach(function(post) {
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
-      })
+      });
       this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
-  }
+  };
 
   loadMorePost = async () => {
     const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', '');
@@ -45,7 +45,7 @@ class Home extends Component {
       }
     }
     return false;
-  }
+  };
 
   render() {
     return (

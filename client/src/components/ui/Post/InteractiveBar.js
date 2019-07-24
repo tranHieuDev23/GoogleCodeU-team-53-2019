@@ -32,8 +32,6 @@ class InteractiveBar extends React.Component {
   }
 
   handleLike = () => {
-    console.log(this.props);
-    console.log(this.props.userStatus);
     const { isLogin } = this.props.userStatus;
     if (!isLogin) {
       this.props.history.push(PLEASE_LOGIN);

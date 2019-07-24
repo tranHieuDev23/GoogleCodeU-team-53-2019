@@ -13,12 +13,12 @@ import {
   POST_PAGE,
   TAG_PAGE,
   LOGIN_PAGE,
-  PLEASE_LOGIN,
+  PLEASE_LOGIN
 } from 'constants/links.js';
 import UploadPage from '../page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
-import { fetchLoginStatus } from 'helpers/UserStatus.js'
-import TagPage from 'components/page/TagPage'
+import { fetchLoginStatus } from 'helpers/UserStatus.js';
+import TagPage from 'components/page/TagPage';
 import PleaseLogin from 'components/Result/PleaseLogin';
 
 /** Renders all components in the <root> element on ../public/index.html. */
@@ -28,8 +28,8 @@ class Root extends Component {
     this.state = {
       isLogin: false,
       userEmail: '',
-      userId: null,
-    }
+      userId: null
+    };
     this.handleSetState = this.handleSetState.bind(this);
   }
 
@@ -38,55 +38,99 @@ class Root extends Component {
     this.setState({ userEmail: status.userEmail });
     this.setState({ isLogin: !!status.userEmail });
     this.setState({ userId: status.userId });
-  }
+  };
 
   handleSetState = (name, newState) => {
     this.setState({ [name]: newState });
-  }
+  };
 
   render() {
-    const withStatusHome = (Component, userStatus, handleUserStatus) => (props) => (
-      <Component {...props} userStatus={userStatus} handleUserStatus={this.handleSetState} />
+    const withStatusHome = (
+      Component,
+      userStatus,
+      handleUserStatus
+    ) => props => (
+      <Component
+        {...props}
+        userStatus={userStatus}
+        handleUserStatus={this.handleSetState}
+      />
     );
 
     return (
-
       <BrowserRouter>
         <div className='App'>
-          <CustomNavBar userStatus={this.state} handleUserStatus={this.handleSetState} />
-          <Suspense fallback="Loading...">
+          <CustomNavBar
+            userStatus={this.state}
+            handleUserStatus={this.handleSetState}
+          />
+          <Suspense fallback='Loading...'>
             <Switch>
               <Route
-                exact path={LOGIN_PAGE}
-                component={withStatusHome(Home, this.state, this.handleSetState)}
+                exact
+                path={LOGIN_PAGE}
+                component={withStatusHome(
+                  Home,
+                  this.state,
+                  this.handleSetState
+                )}
+              />
+              <Route exact path={PLEASE_LOGIN} component={PleaseLogin} />
+              <Route
+                exact
+                path={HOME}
+                component={withStatusHome(
+                  Home,
+                  this.state,
+                  this.handleSetState
+                )}
               />
               <Route
-                exact path={PLEASE_LOGIN}
-                component={PleaseLogin}
+                exact
+                path={ABOUT_US}
+                component={withStatusHome(
+                  AboutUs,
+                  this.state,
+                  this.handleSetState
+                )}
               />
               <Route
-                exact path={HOME}
-                component={withStatusHome(Home, this.state, this.handleSetState)}
+                exact
+                path={TAG_PAGE + '/:tagName'}
+                component={withStatusHome(
+                  TagPage,
+                  this.state,
+                  this.handleSetState
+                )}
               />
               <Route
-                exact path={ABOUT_US}
-                component={withStatusHome(AboutUs, this.state, this.handleSetState)}
+                exact
+                path={USER_PAGE + '/:userId'}
+                component={withStatusHome(
+                  UserPage,
+                  this.state,
+                  this.handleSetState
+                )}
               />
               <Route
-                exact path={TAG_PAGE + '/:tagName'}
-                component={withStatusHome(TagPage, this.state, this.handleSetState)} />
-              <Route
-                exact path={USER_PAGE + '/:userId'}
-                component={withStatusHome(UserPage, this.state, this.handleSetState)} />
-              <Route
-                exact path={UPLOAD_PAGE}
-                component={withStatusHome(UploadPage, this.state, this.handleSetState)}
+                exact
+                path={UPLOAD_PAGE}
+                component={withStatusHome(
+                  UploadPage,
+                  this.state,
+                  this.handleSetState
+                )}
               />
               <Route
-                exact path={POST_PAGE + '/:postId'}
-                component={withStatusHome(PostPage, this.state, this.handleSetState)}
+                exact
+                path={POST_PAGE + '/:postId'}
+                component={withStatusHome(
+                  PostPage,
+                  this.state,
+                  this.handleSetState
+                )}
               />
-              <Redirect from="/" to={HOME} />
+              <Redirect from='/' to={HOME} />
             </Switch>
           </Suspense>
         </div>
