@@ -7,14 +7,12 @@ class Page404 extends React.Component {
   render() {
     return (
       <Result
-        status="404"
-        title="404"
-        subTitle="Sorry, the page you visited does not exist."
-        extra={<Button
-          type="primary"
-          onClick={() => this.props.history.push(HOME)
-          }>
-          Back Home
+        status='404'
+        title='404'
+        subTitle='Sorry, the page you visited does not exist.'
+        extra={
+          <Button type='primary' onClick={() => this.props.history.push(HOME)}>
+            Back Home
           </Button>
         }
       />

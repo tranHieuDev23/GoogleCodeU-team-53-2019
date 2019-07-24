@@ -11,14 +11,13 @@ class CommentBar extends React.Component {
     super(props);
     const { comments } = this.props.post;
     let startIndex = 0;
-    if (Array.isArray(comments))
-      startIndex = comments.length;
+    if (Array.isArray(comments)) startIndex = comments.length;
     this.state = {
       items: [],
       curIndex: startIndex,
       value: '',
-      curLength: startIndex,
-    }
+      curLength: startIndex
+    };
     this.handleShowMoreComment = this.handleShowMoreComment.bind(this);
     this.writeNewComment = this.writeNewComment.bind(this);
     this.handleChangeInput = this.handleChangeInput.bind(this);
@@ -26,7 +25,7 @@ class CommentBar extends React.Component {
 
   componentDidMount = () => {
     this.loadMoreComment(10);
-  }
+  };
 
   componentDidUpdate = () => {
     const { comments } = this.props.post;
@@ -36,17 +35,17 @@ class CommentBar extends React.Component {
         this.setState({ curLength: comments.length });
         this.loadMoreComment(0);
       }
-  }
+  };
 
   handleShowMoreComment = () => {
     this.loadMoreComment(10);
-  }
+  };
 
-  handleChangeInput = (event) => {
+  handleChangeInput = event => {
     this.setState({ value: event.target.value });
-  }
+  };
 
-  writeNewComment = async (value) => {
+  writeNewComment = async value => {
     const { post } = this.props;
     if (!(value == null || value === '')) {
       let url = CREATE_COMMENT;
@@ -54,68 +53,75 @@ class CommentBar extends React.Component {
       url = addParamToUrl(url, 'commentText', value);
       await axios
         .post(url, {})
-        .then(async (response) => {
+        .then(async response => {
           const { data } = response;
           if (data.id != null) {
             this.props.onChangePost(1, false);
           }
-          this.setState({ value: '' })
+          this.setState({ value: '' });
           const { onChangePost, order } = this.props;
           await onChangePost(order, true);
         })
-        .catch(function (error) {
+        .catch(function(error) {
           notification.error({
             message: 'Can upload comment',
-            description: 'Please check your connection and post it again!!!',
-          })
+            description: 'Please check your connection and post it again!!!'
+          });
         });
     }
-  }
+  };
 
-  loadMoreComment = (numOfComment) => {
+  loadMoreComment = numOfComment => {
     const { comments } = this.props.post;
     if (Array.isArray(comments)) {
-      let newItems = []
+      let newItems = [];
       const { curIndex } = this.state;
       if (curIndex > 0 || numOfComment === 0) {
         const firstIndex = Math.max(0, curIndex - numOfComment);
         for (let index = firstIndex; index < comments.length; index++) {
           let comment = comments[index];
-          newItems.push(<div className="Post__Comments__Author" key={comment.id + '-author'}>
-            {comment.author.username}
-          </div>);
-          newItems.push(<div className="Post__Comments__Comment" key={comment.id + '-comment'}>
-            {comment.text}
-          </div>)
+          newItems.push(
+            <div
+              className='Post__Comments__Author'
+              key={comment.id + '-author'}>
+              {comment.author.username}
+            </div>
+          );
+          newItems.push(
+            <div
+              className='Post__Comments__Comment'
+              key={comment.id + '-comment'}>
+              {comment.text}
+            </div>
+          );
           this.setState({ curIndex: firstIndex });
           this.setState({ items: newItems });
         }
       }
     }
-  }
+  };
 
   render() {
     const { isLogin } = this.props.userStatus;
     return (
-      <div className="Post__Comments">
-        {(this.state.curIndex > 0) &&
+      <div className='Post__Comments'>
+        {this.state.curIndex > 0 && (
           <div
-            className="Post__Comments__ShowMore"
-            onClick={this.handleShowMoreComment}
-          >
+            className='Post__Comments__ShowMore'
+            onClick={this.handleShowMoreComment}>
             Show more comments
-        </div>
-        }
+          </div>
+        )}
         {this.state.items}
-        {(isLogin) &&
-          < Search
-            placeholder="Enter your comment here!"
-            enterButton="Post"
+        {isLogin && (
+          <Search
+            placeholder='Enter your comment here!'
+            enterButton='Post'
             value={this.state.value}
             onChange={this.handleChangeInput}
             onSearch={this.writeNewComment}
           />
-        }
+        )}
       </div>
     );
   }

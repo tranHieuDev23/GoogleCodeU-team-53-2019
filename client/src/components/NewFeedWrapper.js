@@ -28,10 +28,7 @@ class NewFeedWrapper extends React.Component {
       <React.Fragment>
         {posts.length > 0 ? (
           <div>
-            <NewsFeed
-              userStatus={userStatus}
-              posts={posts}
-            />
+            <NewsFeed userStatus={userStatus} posts={posts} />
             {hasMorePost ? (
               <div className='LoadMorePost'>
                 <Button

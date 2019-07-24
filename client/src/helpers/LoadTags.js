@@ -2,10 +2,11 @@ import { RETRIEVE_TAG } from 'constants/links';
 import axios from 'axios';
 import { notification } from 'antd';
 
-export const fetchTags = async (data) => {
+export const fetchTags = async data => {
   let tags = null;
   const url = RETRIEVE_TAG;
-  await axios.post(url, data, {})
+  await axios
+    .post(url, data, {})
     .then(respone => {
       const { data } = respone;
       tags = data.tags;
@@ -13,8 +14,8 @@ export const fetchTags = async (data) => {
     .catch(() => {
       notification.error({
         message: 'Can not load suggestion tags',
-        description: 'Please check your connection and load again',
-      })
-    })
+        description: 'Please check your connection and load again'
+      });
+    });
   return tags;
-}
+};

@@ -7,8 +7,8 @@ class UploadImage extends React.Component {
 
     this.state = {
       selectedFile: null,
-      imageDescription: '',
-    }
+      imageDescription: ''
+    };
     this.fileHandleChange = this.fileHandleChange.bind(this);
     this.textHandleChange = this.textHandleChange.bind(this);
     this.handleAddPicure = this.handleAddPicure.bind(this);
@@ -18,70 +18,67 @@ class UploadImage extends React.Component {
 
   componentDidMount = () => {
     this.upload.current.click();
-  }
+  };
 
-  fileHandleChange = (event) => {
-    this.setState({ selectedFile: event.target.files[0] })
-  }
+  fileHandleChange = event => {
+    this.setState({ selectedFile: event.target.files[0] });
+  };
 
-  textHandleChange = (event) => {
+  textHandleChange = event => {
     const { value } = event.target;
     this.setState({ imageDescription: value });
-  }
+  };
 
   handleAddPicure = () => {
     if (this.state.selectedFile == null) {
       notification.error({
         message: 'Error when upload',
         description: 'You must choose an picture to upload'
-      })
+      });
       this.props.handleClose();
-    }
-    else {
+    } else {
       const { type } = this.state.selectedFile;
       if (String(type).indexOf('image') !== 0) {
         notification.error({
           message: 'Error when upload',
-          description: 'You may upload only images file',
-        })
+          description: 'You may upload only images file'
+        });
         this.props.handleClose();
-      }
-      else {
+      } else {
         let arr = [...this.props.postDetail.images];
         arr.push(this.state);
-        this.props.onChange("images", arr);
+        this.props.onChange('images', arr);
         this.props.handleClose();
       }
     }
-  }
+  };
 
   closePopup = () => {
     this.props.handleClose();
-  }
+  };
 
   render() {
     return (
-      <div className="UploadImage">
+      <div className='UploadImage'>
         <input
           ref={this.upload}
-          style={{ 'display': 'none' }}
-          type="file"
-          name="file"
+          style={{ display: 'none' }}
+          type='file'
+          name='file'
           onChange={this.fileHandleChange}
         />
         <input
-          type="text"
-          className="form-control form-control-lg"
-          placeholder="Enter image description here"
+          type='text'
+          className='form-control form-control-lg'
+          placeholder='Enter image description here'
           onChange={this.textHandleChange}
         />
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button
             onClick={this.handleAddPicure}
-            size="large"
-            type="dashed"
-            icon="cloud-upload"
-          >
+            size='large'
+            type='dashed'
+            icon='cloud-upload'>
             Add this picture
           </Button>
 
@@ -89,8 +86,7 @@ class UploadImage extends React.Component {
             onClick={this.closePopup}
             size='large'
             icon='close-square'
-            type='danger'
-          >
+            type='danger'>
             Cancel upload
           </Button>
         </div>

@@ -11,29 +11,27 @@ class PostPage extends React.Component {
       post: null,
       postIdParam: this.props.match.params.postId,
       likePopup: false,
-      didMount: false,
+      didMount: false
     };
   }
 
   onChangePost = async (index, oldPopup) => {
     const post = await fetchPost(this.state.postIdParam, true);
-    if (post != null)
-      this.setState({ post: post });
+    if (post != null) this.setState({ post: post });
     this.setState({ likePopup: oldPopup });
-  }
+  };
 
   componentDidMount = async () => {
     const post = await fetchPost(this.state.postIdParam, true);
-    if (post != null)
-      this.setState({ post: post });
+    if (post != null) this.setState({ post: post });
     this.setState({ didMount: true });
-  }
+  };
 
   render() {
     const { didMount } = this.state;
     return (
       <div className='container pt-2'>
-        {(this.state.post != null && this.state.post.id) ? (
+        {this.state.post != null && this.state.post.id ? (
           <React.Fragment>
             <h1 className='center'>{this.state.post.author.username} post</h1>
             <SinglePost
@@ -46,11 +44,10 @@ class PostPage extends React.Component {
             />
           </React.Fragment>
         ) : (
-            <React.Fragment>
-              {(didMount) ? (<Page404 />) : (<Loading />)}
-            </React.Fragment>
-          )
-        }
+          <React.Fragment>
+            {didMount ? <Page404 /> : <Loading />}
+          </React.Fragment>
+        )}
       </div>
     );
   }

@@ -6,7 +6,7 @@ import RichTextEditor from 'components/ui/RichTextEditor';
 import AddedPicture from '../ui/AddedPicture';
 import { POST_PAGE } from 'constants/links';
 import { Button, notification } from 'antd';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 import TagGroup from '../ui/tag/TagGroup';
 import {
   SUGGEST_COMPLETED,
@@ -40,22 +40,21 @@ class UploadPage extends React.Component {
       location: null,
       popup: false,
       disabled: false,
-      sugessting: false,
+      sugessting: false
     };
   }
 
-  handleChangePopup = (newPopup) => {
+  handleChangePopup = newPopup => {
     this.setState({ popup: newPopup });
-  }
+  };
 
-  componentDidMount = () => {
-  }
+  componentDidMount = () => {};
 
   handleSetState = (name, newState) => {
     this.setState({ [name]: newState });
   };
 
-  handlePost = async (event) => {
+  handlePost = async event => {
     if (this.state.location == null) {
       notification.error(UPLOAD_NO_LOCATION);
       return;
@@ -85,7 +84,6 @@ class UploadPage extends React.Component {
       location: this.state.location
     };
 
-
     data.append('postDetails', JSON.stringify(obj));
     let cnt = 0;
     for (let i = 0; i < images.length; i++) {
@@ -95,15 +93,16 @@ class UploadPage extends React.Component {
       }
     }
 
-    await axios.post(CREATE_POST, data, {})
+    await axios
+      .post(CREATE_POST, data, {})
       .then(respone => {
         const { data } = respone;
         const id = data.id;
-        notification.success(UPLOAD_SUCCESS)
+        notification.success(UPLOAD_SUCCESS);
         this.props.history.push(POST_PAGE + '/' + id);
       })
       .catch(() => {
-        notification.error(UPLOAD_CONNECTION_FAIL)
+        notification.error(UPLOAD_CONNECTION_FAIL);
       });
     this.setState({ disabled: false });
   };
@@ -112,17 +111,16 @@ class UploadPage extends React.Component {
     this.setState({ sugessting: true });
     let suggestionTags = null;
 
-    // build form data 
+    // build form data
     const data = new FormData();
     const { images } = this.state;
     let count = 0;
     for (let i = 0; i < images.length; i++)
       if (images[i].selectedFile != null) count++;
     if (count === 0) {
-      notification.error(SUGGEST_NO_IMAGE)
+      notification.error(SUGGEST_NO_IMAGE);
       this.setState({ sugessting: false });
-    }
-    else {
+    } else {
       data.append('numberOfImages', count);
       let cnt = 0;
       for (let i = 0; i < images.length; i++) {
@@ -131,7 +129,7 @@ class UploadPage extends React.Component {
           ++cnt;
         }
       }
-      // end of make form data 
+      // end of make form data
 
       // fetch tag here
       suggestionTags = await fetchTags(data);
@@ -139,19 +137,18 @@ class UploadPage extends React.Component {
         let newTags = [...this.state.tags];
         for (let i = 0; i < suggestionTags.length; i++) {
           const item = suggestionTags[i];
-          if (!newTags.includes(item))
-            newTags.push(item);
+          if (!newTags.includes(item)) newTags.push(item);
         }
         this.setState({ tags: newTags });
-        notification.success(SUGGEST_COMPLETED)
+        notification.success(SUGGEST_COMPLETED);
       }
       this.setState({ sugessting: false });
     }
-  }
+  };
 
-  onChangeTags = (newTags) => {
+  onChangeTags = newTags => {
     this.setState({ tags: newTags });
-  }
+  };
 
   handlePostDescription = newState => {
     this.setState({ description: newState });
@@ -176,13 +173,13 @@ class UploadPage extends React.Component {
   handleLocation = location => {
     this.handleSetState('location', location);
     console.log(location);
-  }
+  };
 
   render() {
     const { isLogin } = this.props.userStatus;
     return (
       <React.Fragment>
-        {(isLogin) ? (
+        {isLogin ? (
           <div className='UploadPage container pt-2'>
             <h1>Create new post:</h1>
             <RichTextEditor
@@ -192,50 +189,46 @@ class UploadPage extends React.Component {
             />
             <TagGroup tags={this.state.tags} onChangeTags={this.onChangeTags} />
 
-            <LocationSelector onLocationSelected={this.handleLocation}></LocationSelector>
+            <LocationSelector onLocationSelected={this.handleLocation} />
 
             <div className='mt-2'>
               <Button
                 onClick={this.handleAddPicture}
                 size='large'
-                icon='upload'
-              >
+                icon='upload'>
                 Add new picture
-          </Button>
+              </Button>
 
               <Button
                 onClick={this.getSuggestionTags}
                 type='dashed'
                 size='large'
                 icon='tags'
-                loading={this.state.sugessting}
-              >
+                loading={this.state.sugessting}>
                 Get suggestion tag
-          </Button>
+              </Button>
 
               <Button
                 onClick={this.handlePost}
                 type='primary'
                 icon='share-alt'
                 size='large'
-                disabled={this.state.disabled}
-              >
+                disabled={this.state.disabled}>
                 Share this post
-          </Button>
+              </Button>
 
               <Button
-                onClick={() => { this.props.history.push('/') }}
+                onClick={() => {
+                  this.props.history.push('/');
+                }}
                 type='danger'
                 icon='close'
                 size='large'
-                disabled={this.state.disabled}
-              >
+                disabled={this.state.disabled}>
                 Close this post
-          </Button>
+              </Button>
             </div>
-            <AddedPicture
-              images={this.state.images}
-            />
+            <AddedPicture images={this.state.images} />
             {this.state.popup ? (
               <Popup
                 handleClose={this.handleClosePopup}
@@ -245,8 +238,8 @@ class UploadPage extends React.Component {
             ) : null}
           </div>
         ) : (
-            <PleaseLogin />
-          )}
+          <PleaseLogin />
+        )}
       </React.Fragment>
     );
   }

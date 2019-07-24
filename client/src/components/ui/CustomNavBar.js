@@ -7,7 +7,7 @@ import {
   USER_PAGE,
   UPLOAD_PAGE
 } from 'constants/links.js';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Menu, Icon, Dropdown, Button } from 'antd';
 /** The common navbar ui used throughout the application. */
 class CustomNavBar extends Component {
@@ -111,4 +111,4 @@ class CustomNavBar extends Component {
     );
   }
 }
-export default CustomNavBar;
+export default withRouter(CustomNavBar);
