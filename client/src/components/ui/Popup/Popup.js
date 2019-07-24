@@ -1,6 +1,6 @@
 import React from 'react';
 import * as classes from './Popup.module.scss';
-import UploadPicture from 'components/ui/UploadImage.js'
+import UploadPicture from 'components/ui/UploadImage.js';
 
 class Popup extends React.Component {
   render() {

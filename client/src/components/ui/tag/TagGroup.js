@@ -8,17 +8,16 @@ class TagGroup extends React.Component {
     this.state = {
       tags: this.props.tags,
       inputVisible: false,
-      inputValue: '',
+      inputValue: ''
     };
   }
 
   componentDidUpdate = () => {
     const { tags } = this.props;
     if (tags !== this.state.tags) {
-      this.setState({tags: tags});
+      this.setState({ tags: tags });
     }
-  }
-  
+  };
 
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
@@ -43,7 +42,7 @@ class TagGroup extends React.Component {
     this.setState({
       tags,
       inputVisible: false,
-      inputValue: '',
+      inputValue: ''
     });
     this.props.onChangeTags(tags);
   };
@@ -57,8 +56,7 @@ class TagGroup extends React.Component {
         onClose={e => {
           e.preventDefault();
           this.handleClose(tag);
-        }}
-      >
+        }}>
         {tag}
       </Tag>
     );
@@ -73,12 +71,12 @@ class TagGroup extends React.Component {
     const { tags, inputVisible, inputValue } = this.state;
     const tagChild = tags.map(this.forMap);
     return (
-      <Row type="flex" style={{ marginBottom: 16 }}>
+      <Row type='flex' style={{ marginBottom: 16 }}>
         {inputVisible && (
           <Input
             ref={this.saveInputRef}
-            type="text"
-            size="small"
+            type='text'
+            size='small'
             style={{ width: 78 }}
             value={inputValue}
             onChange={this.handleInputChange}
@@ -87,8 +85,10 @@ class TagGroup extends React.Component {
           />
         )}
         {!inputVisible && (
-          <Tag onClick={this.showInput} style={{ background: '#fff', borderStyle: 'dashed' }}>
-            <Icon type="plus" /> New Tag
+          <Tag
+            onClick={this.showInput}
+            style={{ background: '#fff', borderStyle: 'dashed' }}>
+            <Icon type='plus' /> New Tag
           </Tag>
         )}
 
@@ -100,11 +100,10 @@ class TagGroup extends React.Component {
             duration: 100,
             onComplete: e => {
               e.target.style = '';
-            },
+            }
           }}
           leave={{ opacity: 0, width: 0, scale: 0, duration: 200 }}
-          appear={false}
-        >
+          appear={false}>
           {tagChild}
         </TweenOneGroup>
       </Row>

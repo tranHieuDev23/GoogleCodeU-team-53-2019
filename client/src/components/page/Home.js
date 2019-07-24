@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import NewFeedWrapper from 'components/NewFeedWrapper'
-import { fetchPosts } from 'helpers/LoadPost'
+import NewFeedWrapper from 'components/NewFeedWrapper';
+import { fetchPosts } from 'helpers/LoadPost';
+import Loading from 'components/page/Loading';
 
 class Home extends Component {
   constructor(props) {
     super(props);
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const { userStatus } = this.props;
     this.state = {
-      userStatus: {
-        userEmail: userStatus.userEmail,
-        userId: userStatus.userId,
-      },
       posts: [],
       minTimestamp: timestamp,
-    }
+      didMount: false
+    };
     this.loadMorePost = this.loadMorePost.bind(this);
   }
 
@@ -27,51 +24,50 @@ class Home extends Component {
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
-      for (const [index, post] of newPosts.entries()) 
+      newPosts.forEach(function(post) {
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
-      this.setState({minTimestamp: newMinTimestamp - 1});
+      });
+      this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
-  }
-
-  componentDidUpdate = () => {
-    const { userStatus } = this.props;
-    if (userStatus !== this.state.userStatus) {
-      this.setState({ userStatus: userStatus });
-    }
-  }
+    this.setState({ didMount: true });
+  };
 
   loadMorePost = async () => {
     const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', '');
     if (morePosts != null) {
-      let newMinTimestamp = this.state.minTimestamp;
-      for (const [index, post] of morePosts.entries()) 
-        newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
-      this.setState({minTimestamp: newMinTimestamp - 1});
-      let newPosts = [...this.state.posts];
-      newPosts.push(...morePosts);
-      this.setState({posts: newPosts});
+      if (morePosts.length > 0) {
+        let newMinTimestamp = this.state.minTimestamp;
+        morePosts.forEach(post => {
+          newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        });
+        this.setState({ minTimestamp: newMinTimestamp - 1 });
+        let newPosts = [...this.state.posts];
+        newPosts.push(...morePosts);
+        this.setState({ posts: newPosts });
+        return true;
+      }
     }
-  }
+    return false;
+  };
 
   render() {
+    const { didMount } = this.state;
     return (
       <div className='container pt-2'>
-        {this.state.userStatus.userEmail ? (
-          <div>
-            <h1 className='center'>News Feed</h1>
+        <div>
+          <h1 className='center'>News Feed</h1>
+          {this.state.posts.length > 0 ? (
             <NewFeedWrapper
-              userStatus={this.state.userStatus}
+              userStatus={this.props.userStatus}
               posts={this.state.posts}
               handleLoadMorePost={this.loadMorePost}
             />
-          </div>
-        ) : (
-            <div className='container pt-2'>
-              <div className='BigNotification'>
-                Please login to continue!!!
-              </div>
-            </div>
+          ) : (
+            <React.Fragment>
+              {didMount ? <React.Fragment /> : <Loading />}
+            </React.Fragment>
           )}
+        </div>
       </div>
     );
   }

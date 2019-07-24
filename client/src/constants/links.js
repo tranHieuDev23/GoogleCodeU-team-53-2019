@@ -38,28 +38,28 @@ export const HOME = '/';
 /** Client link to the user's page. */
 
 /** Client link to the upload page. */
-export const CREATE_POST = servletPrefix + "/create-post";
+export const CREATE_POST = servletPrefix + '/create-post';
 
 /** Client link to retrieve post */
-export const RETRIEVE_POSTS = servletPrefix + "/retrieve-posts";
+export const RETRIEVE_POSTS = servletPrefix + '/retrieve-posts';
 
-export const RETRIEVE_POST = servletPrefix + "/retrieve-post";
+export const RETRIEVE_POST = servletPrefix + '/retrieve-post';
 
-export const RETRIEVE_USER = servletPrefix + "/retrieve-user";
+export const RETRIEVE_USER = servletPrefix + '/retrieve-user';
 
-export const RETRIEVE_USERS = servletPrefix + "/retrieve-users";
+export const RETRIEVE_USERS = servletPrefix + '/retrieve-users';
 
-export const RETRIEVE_TAG = servletPrefix + "/predict-tag";
+export const RETRIEVE_TAG = servletPrefix + '/predict-tag';
 
-export const LIKE = servletPrefix + "/like";
+export const LIKE = servletPrefix + '/like';
 
-export const UNLIKE = servletPrefix + "/unlike";
+export const UNLIKE = servletPrefix + '/unlike';
 
-export const CREATE_COMMENT = servletPrefix + "/create-comment";
+export const CREATE_COMMENT = servletPrefix + '/create-comment';
 
-export const DELETE_COMMENT = servletPrefix + "/delete-comment";
+export const DELETE_COMMENT = servletPrefix + '/delete-comment';
 
-export const PREDICT_TAG = servletPrefix + "/predict-tag";
+export const PREDICT_TAG = servletPrefix + '/predict-tag';
 
 export const LOGIN_PAGE = '/login';
 
@@ -67,6 +67,8 @@ export const USER_PAGE = '/user';
 
 export const UPLOAD_PAGE = '/create-post';
 
-export const POST_PAGE = '/post'
+export const POST_PAGE = '/post';
 
-export const TAG_PAGE = '/tag'
+export const TAG_PAGE = '/tag';
+
+export const PLEASE_LOGIN = '/please-login';

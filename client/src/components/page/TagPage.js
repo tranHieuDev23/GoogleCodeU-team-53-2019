@@ -8,16 +8,11 @@ class TagPage extends Component {
     super(props);
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const { userStatus } = this.props;
     this.state = {
-      userStatus: {
-        userEmail: userStatus.userEmail,
-        userId: userStatus.userId,
-      },
       posts: [],
       tagName: this.props.match.params.tagName,
-      minTimestamp: timestamp,
-    }
+      minTimestamp: timestamp
+    };
     this.loadMorePost = this.loadMorePost.bind(this);
   }
 
@@ -25,68 +20,83 @@ class TagPage extends Component {
     // get Posts
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const newPosts = await fetchPosts(timestamp, 10, '', '', this.state.tagName);
+    const newPosts = await fetchPosts(
+      timestamp,
+      10,
+      '',
+      '',
+      this.state.tagName
+    );
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
-      for (const [index, post] of newPosts.entries())
+      newPosts.forEach(function(post) {
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+      });
       this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
-  }
+  };
 
   componentDidUpdate = async () => {
-    const { userStatus } = this.props;
-    if (userStatus !== this.state.userStatus) {
-      this.setState({ userStatus: userStatus });
-    }
     if (this.state.tagName !== this.props.match.params.tagName) {
-      this.setState({ tagName: this.props.match.params.tagName });
       const date = new Date();
       const timestamp = date.getTime(); //current time
-      const newPosts = await fetchPosts(timestamp, 10, '', '', this.props.match.params.tagName);
+      const newPosts = await fetchPosts(
+        timestamp,
+        10,
+        '',
+        '',
+        this.props.match.params.tagName
+      );
       if (newPosts != null) {
         let newMinTimestamp = timestamp;
         this.setState({ posts: newPosts });
-        for (const [index, post] of newPosts.entries())
+        newPosts.forEach(post => {
           newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        });
         this.setState({ minTimestamp: newMinTimestamp - 1 });
-      }
+      } else this.setState({ posts: [] });
+      this.setState({
+        tagName: this.props.match.params.tagName
+      });
     }
-  }
+  };
 
   loadMorePost = async () => {
-    const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', this.state.tagName);
+    const morePosts = await fetchPosts(
+      this.state.minTimestamp,
+      10,
+      '',
+      '',
+      this.state.tagName
+    );
     if (morePosts != null) {
-      let newMinTimestamp = this.state.minTimestamp;
-      for (const [index, post] of morePosts.entries())
-        newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
-      this.setState({ minTimestamp: newMinTimestamp - 1 });
-      let newPosts = [...this.state.posts];
-      newPosts.push(...morePosts);
-      this.setState({ posts: newPosts });
+      if (morePosts.length > 0) {
+        let newMinTimestamp = this.state.minTimestamp;
+        morePosts.forEach(post => {
+          newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
+        });
+        this.setState({ minTimestamp: newMinTimestamp - 1 });
+        let newPosts = [...this.state.posts];
+        newPosts.push(...morePosts);
+        this.setState({ posts: newPosts });
+        return true;
+      }
     }
-  }
+    return false;
+  };
 
   render() {
     return (
       <div className='container pt-2'>
-        {this.state.userStatus.userEmail ? (
-          <div>
-            <h1 className='center'>#{this.state.tagName} Page</h1>
-            <NewFeedWrapper
-              userStatus={this.state.userStatus}
-              posts={this.state.posts}
-              handleLoadMorePost={this.loadMorePost}
-            />
-          </div>
-        ) : (
-            <div className='container pt-2'>
-              <div className='BigNotification'>
-                Please login to continue!!!
-              </div>
-            </div>
-          )}
+        <div>
+          <h1 className='center'>#{this.state.tagName} Page</h1>
+          <NewFeedWrapper
+            userStatus={this.props.userStatus}
+            posts={this.state.posts}
+            handleLoadMorePost={this.loadMorePost}
+          />
+        </div>
       </div>
     );
   }

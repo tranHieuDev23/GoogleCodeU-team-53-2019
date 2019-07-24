@@ -22,12 +22,9 @@ import PropTypes from 'prop-types';
  * @return The html representation of the card.
  */
 
-
-
 const Message = function(props) {
-
   function createMarkup() {
-    return {__html: props.content};
+    return { __html: props.content };
   }
 
   return (
@@ -35,7 +32,7 @@ const Message = function(props) {
       <div className='message-header'>
         {props.sender + ' - ' + new Date(props.timestamp)}
       </div>
-      <div className='message-body'dangerouslySetInnerHTML={createMarkup()} />
+      <div className='message-body' dangerouslySetInnerHTML={createMarkup()} />
     </div>
   );
 };
