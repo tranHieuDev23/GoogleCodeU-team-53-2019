@@ -99,9 +99,8 @@ public class PostDao {
         if (post.getLocation().getLongitude() > northEast.getLongitude())
           continue;
       } else {
-        if (post.getLocation().getLongitude() < northEast.getLongitude())
-          continue;
-        if (post.getLocation().getLongitude() > southWest.getLongitude())
+        if (post.getLocation().getLongitude() > northEast.getLongitude()
+            && post.getLocation().getLongitude() < southWest.getLongitude())
           continue;
       }
       results.add(post);
