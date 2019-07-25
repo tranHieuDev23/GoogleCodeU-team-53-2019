@@ -135,7 +135,6 @@ class Explore extends React.Component {
           onClick={onClickListener} />
       )
     });
-    console.log(postMarkers);
 
     return (
       <div>
