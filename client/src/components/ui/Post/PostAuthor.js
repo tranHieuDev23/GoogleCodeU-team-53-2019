@@ -9,16 +9,27 @@ import { GOOGLE_MAPS_API_KEY } from '../../../constants/apiKey'
 class PostAuthor extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
+      locationId: null,
       locationName: null
     };
-    const { location } = this.props.post;
-    if (location == null)
+    this.applyLocationName = this.applyLocationName.bind(this);
+    this.applyLocationName(this.props.post.location);
+  }
+
+  componentDidUpdate() {
+    this.applyLocationName(this.props.post.location);
+  }
+
+  applyLocationName(location) {
+    if (location.placeId == this.state.locationId)
       return;
+    this.setState({
+      locationId: location.placeId,
+      locationName: null
+    });
     const { google } = this.props;
-    const { placeId } = location;
-    getPlaceName(google, placeId).then((result) => {
+    getPlaceName(google, location.placeId).then((result) => {
       this.setState({
         locationName: result
       });

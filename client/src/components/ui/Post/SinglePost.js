@@ -12,16 +12,20 @@ class SinglePost extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      numberOfLike: 0,
+      post: this.props.post,
+      numberOfLike: (this.props.post != null? this.props.post.likedUserIds.length : 0),
     }
     this.onChangeLikes = this.onChangeLikes.bind(this);
   }
 
-  componentDidMount = () => {
-    const { post } = this.props;
-    if (Array.isArray(post.likedUserIds)) {
-      this.setState({ numberOfLike: post.likedUserIds.length });
-    }
+  componentDidUpdate = () => {
+    const {post} = this.props;
+    if (!postChanged(this.state.post, post))
+      return;
+    this.setState({
+      post: post,
+      numberOfLike: (post != null? post.likedUserIds.length : 0)
+    });
   }
 
   onChangeLikes = (newLikes) => {
@@ -29,7 +33,7 @@ class SinglePost extends React.Component {
   }
 
   render() {
-    const { post } = this.props;
+    const { post, numberOfLike } = this.state;
     return (
       <React.Fragment>
         {
@@ -43,12 +47,12 @@ class SinglePost extends React.Component {
                 <SinglePicture {...this.props} />
                 <InteractiveBar
                   {...this.props}
-                  numberOfLike={this.state.numberOfLike}
+                  numberOfLike={numberOfLike}
                   onChangeLikes={this.onChangeLikes}
                 />
                 <LikeBar
                   {...this.props}
-                  numberOfLike={this.state.numberOfLike}
+                  numberOfLike={numberOfLike}
                   onChangeLikes={this.onChangeLikes}
                 />
                 {this.props.withComment &&
@@ -65,3 +69,18 @@ class SinglePost extends React.Component {
 }
 
 export default withRouter(SinglePost);
+
+function postChanged(oldPost, newPost) {
+  if (oldPost == null)
+    return newPost != null;
+  if (newPost == null)
+    return true;
+  if (oldPost.id !== newPost.id)
+    return true;
+  if (oldPost.likedUserIds.length !== newPost.likedUserIds.length)
+    return true;
+  for (let i = 0; i < oldPost.likedUserIds.length; i ++)
+    if (oldPost.likedUserIds[i] !== newPost.likedUserIds[i])
+      return true;
+  return false;
+}
