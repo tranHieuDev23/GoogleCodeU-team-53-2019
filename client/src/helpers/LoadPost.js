@@ -44,3 +44,24 @@ export const fetchPosts = async (maxCreationTime, limit, position, userId, tagNa
     });
   return posts;
 }
+
+export const fetchPostsWithLocation = async (maxCreationTime, limit, bound) => {
+  let url = RETRIEVE_POSTS;
+  url = addFirstParamToUrl(url, 'maxCreationTime', maxCreationTime);
+  url = addParamToUrl(url, 'limit', limit);
+  url = addParamToUrl(url, 'swLat', bound.sw.lat);
+  url = addParamToUrl(url, 'swLng', bound.sw.lng);
+  url = addParamToUrl(url, 'neLat', bound.ne.lat);
+  url = addParamToUrl(url, 'neLng', bound.ne.lng);
+  let posts = null;
+  await axios
+    .post(url, {})
+    .then((response) => {
+      const { data } = response;
+      posts = data.posts;
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+  return posts;
+};

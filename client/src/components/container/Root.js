@@ -12,9 +12,11 @@ import {
   UPLOAD_PAGE,
   POST_PAGE,
   TAG_PAGE,
+  EXPLORE_PAGE
 } from 'constants/links.js';
 import UploadPage from '../page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
+import Explore from "components/page/Explore.js";
 import { fetchLoginStatus } from 'helpers/UserStatus.js'
 import TagPage from 'components/page/TagPage'
 import "antd/dist/antd.css";
@@ -81,6 +83,10 @@ class Root extends Component {
               <Route
                 exact path={POST_PAGE + '/:postId'}
                 component={withStatusHome(PostPage, this.state, this.handleSetState)}
+              />
+              <Route
+                exact path={EXPLORE_PAGE}
+                component={withStatusHome(Explore, this.state, this.handleSetState)}
               />
               <Redirect from="/" to={HOME} />
             </Switch>
