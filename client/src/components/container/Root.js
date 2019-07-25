@@ -23,11 +23,7 @@ import { fetchLoginStatus } from 'helpers/UserStatus.js'
 import TagPage from 'components/page/TagPage'
 import "antd/dist/antd.css";
 import 'css/Post.scss';
-import 'css/index.css'
-import UploadPage from '../page/UploadPage';
-import PostPage from 'components/page/PostPage.js';
-import { fetchLoginStatus } from 'helpers/UserStatus.js';
-import TagPage from 'components/page/TagPage';
+import 'css/index.scss'
 import PleaseLogin from 'components/Result/PleaseLogin';
 
 /** Renders all components in the <root> element on ../public/index.html. */

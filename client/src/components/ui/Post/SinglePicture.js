@@ -30,7 +30,7 @@ class SinglePicture extends React.Component {
     if (postImages === null)
       return;
     const promises = [];
-    for (const [index, picture] of postImages.entries())
+    for (const [, picture] of postImages.entries())
       promises.push(getImageItem(picture.imageUrl.value, picture.imageDescription));
     Promise.all(promises).then((results) => {
       this.setState({

@@ -22,7 +22,7 @@ class PostAuthor extends React.Component {
   }
 
   applyLocationName(location) {
-    if (location.placeId == this.state.locationId)
+    if (location.placeId === this.state.locationId)
       return;
     this.setState({
       locationId: location.placeId,
