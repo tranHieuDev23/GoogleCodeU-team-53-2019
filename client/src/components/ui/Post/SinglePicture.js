@@ -14,11 +14,9 @@ class SinglePicture extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log("DidUpdate called!");
     const { postImages } = this.props.post;
     if (!postImagesChanged(this.state.postImages, postImages))
       return;
-    console.log("Update allowed!")
     this.applyPostImages(postImages);
   }
 
@@ -89,11 +87,9 @@ function postImagesChanged(oldImages, newImages) {
   for (let i = 0; i < oldImages.length; i ++) {  
     let oldImage = oldImages[i];
     let newImage = newImages[i];
-    console.log(oldImage !== newImage);
     if (oldImage.id !== newImage.id)
       return true;
   };
-  console.log(oldImages, newImages);
   return false;
 }
 
