@@ -86,40 +86,27 @@ public class PostDao {
   public List<Post> getPosts(Location southWest, Location northEast, long maxCreationTime, int limit) {
     if (southWest == null || northEast == null)
       return new ArrayList<>();
-
-    Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
-        FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
-    Filter swLatFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LATITUDE,
-        FilterOperator.GREATER_THAN_OR_EQUAL, southWest.getLatitude());
-    Filter neLatFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LATITUDE, FilterOperator.LESS_THAN_OR_EQUAL,
-        southWest.getLatitude());
-    Filter swLngFilter = null, neLngFilter = null;
-    if (northEast.getLongitude() < southWest.getLongitude()) {
-      swLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE, FilterOperator.LESS_THAN_OR_EQUAL,
-          southWest.getLongitude());
-      neLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE, FilterOperator.GREATER_THAN_OR_EQUAL,
-          southWest.getLongitude());
-    } else {
-      swLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE, FilterOperator.GREATER_THAN_OR_EQUAL,
-          southWest.getLongitude());
-      neLngFilter = new Query.FilterPredicate(PROPERTY_NAME_LOCATION_LONGITUDE, FilterOperator.LESS_THAN_OR_EQUAL,
-          southWest.getLongitude());
+    List<Post> validPosts = getPosts(maxCreationTime, limit);
+    List<Post> results = new ArrayList<>();
+    for (Post post : validPosts) {
+      if (post.getLocation().getLatitude() < southWest.getLatitude())
+        continue;
+      if (post.getLocation().getLatitude() > northEast.getLatitude())
+        continue;
+      if (southWest.getLongitude() < northEast.getLongitude()) {
+        if (post.getLocation().getLongitude() < southWest.getLongitude())
+          continue;
+        if (post.getLocation().getLongitude() > northEast.getLongitude())
+          continue;
+      } else {
+        if (post.getLocation().getLongitude() < northEast.getLongitude())
+          continue;
+        if (post.getLocation().getLongitude() > southWest.getLongitude())
+          continue;
+      }
+      results.add(post);
     }
-
-    Query query = new Query(ENTITY_KIND)
-        .setFilter(
-            CompositeFilterOperator.and(maxCreationTimeFilter, swLatFilter, swLngFilter, neLatFilter, neLngFilter))
-        .addSort(PROPERTY_NAME_CREATION_TIME, SortDirection.DESCENDING);
-
-    PreparedQuery result = datastore.prepare(query);
-    FetchOptions options = FetchOptions.Builder.withLimit(limit);
-    List<Post> posts = new ArrayList<>();
-    for (Entity entity : result.asIterable(options)) {
-      Post post = getPostFromEntity(entity);
-      if (post != null)
-        posts.add(post);
-    }
-    return posts;
+    return results;
   }
 
   public List<Post> getPosts(String userId, long maxCreationTime, int limit) {
@@ -146,7 +133,7 @@ public class PostDao {
   public List<Post> getPosts(UUID tagId, long maxCreationTime, int limit) {
     if (tagId == null)
       return new ArrayList<>();
-    List<String> idsToQuery = Arrays.asList(new String[] {tagId.toString()});
+    List<String> idsToQuery = Arrays.asList(new String[] { tagId.toString() });
     Filter maxCreationTimeFilter = new Query.FilterPredicate(PROPERTY_NAME_CREATION_TIME,
         FilterOperator.LESS_THAN_OR_EQUAL, maxCreationTime);
     Filter tagFilter = new Query.FilterPredicate(PROPERTY_NAME_TAGS, FilterOperator.IN, idsToQuery);

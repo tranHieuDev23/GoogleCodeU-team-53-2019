@@ -40,7 +40,10 @@ public class RetrievePostsServlet extends HttpServlet {
 
     res.setContentType("application/json");
 
-    boolean baseOnLocation = req.getParameterMap().containsKey("sw");
+    boolean baseOnLocation = req.getParameterMap().containsKey("swLat")
+      && req.getParameterMap().containsKey("swLng")
+      && req.getParameterMap().containsKey("neLat")
+      && req.getParameterMap().containsKey("neLng");
     boolean baseOnUser = req.getParameterMap().containsKey("userId");
     boolean baseOnTag = req.getParameterMap().containsKey("tagName");
     boolean baseOnTime = (!baseOnLocation) && (!baseOnUser) && (!baseOnTag);
@@ -66,10 +69,10 @@ public class RetrievePostsServlet extends HttpServlet {
   private List<Post> getPostsBasedOnLocation(HttpServletRequest req) {
     long maxCreationTime = Long.parseLong(req.getParameter("maxCreationTime"));
     int limit = Integer.parseInt(req.getParameter("limit"));
-    double swLat = Double.parseDouble(req.getParameter("sw.lat"));
-    double swLng = Double.parseDouble(req.getParameter("sw.lng"));
-    double neLat = Double.parseDouble(req.getParameter("ne.lat"));
-    double neLng = Double.parseDouble(req.getParameter("ne.lng"));
+    double swLat = Double.parseDouble(req.getParameter("swLat"));
+    double swLng = Double.parseDouble(req.getParameter("swLng"));
+    double neLat = Double.parseDouble(req.getParameter("neLat"));
+    double neLng = Double.parseDouble(req.getParameter("neLng"));
     Location southWest = new Location("", swLat, swLng);
     Location northEast = new Location("", neLat, neLng);
 

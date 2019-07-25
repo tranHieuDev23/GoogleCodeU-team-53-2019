@@ -1,10 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Map, Marker, InfoWindow, GoogleApiWrapper } from "google-maps-react";
-import PostCard from '../ui/Post/PostCard';
-import { fetchPostsWithLocation } from 'helpers/LoadPost'
+import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+import { fetchPost, fetchPostsWithLocation } from 'helpers/LoadPost'
 import { getCurrentLocation } from "../../helpers/LocationHelper";
 import { GOOGLE_MAPS_API_KEY } from '../../constants/apiKey';
+import SinglePost from '../ui/Post/SinglePost';
 
 const DEFAULT_BOUNDS = {
   sw: {
@@ -28,9 +28,8 @@ class Explore extends React.Component {
     this.state = {
       bounds: bounds,
       posts: [],
-      activeMarker: null,
       activePost: null,
-      showingInfoWindow: false
+      likePopup: null
     };
     this.boundsChangeCount = 0;
 
@@ -38,6 +37,7 @@ class Explore extends React.Component {
     this.setToCurrentLocation = this.setToCurrentLocation.bind(this);
     this.onBoundsChanged = this.onBoundsChanged.bind(this);
     this.createMarkerClickedListener = this.createMarkerClickedListener.bind(this);
+    this.onPostUpdated = this.onPostUpdated.bind(this);
   }
 
   componentDidMount() {
@@ -96,13 +96,21 @@ class Explore extends React.Component {
   }
 
   createMarkerClickedListener(post) {
-    return (props, marker) => {
+    return () => {
       this.setState({
-        activeMarker: marker,
         activePost: post,
-        showingInfoWindow: true
       });
     }
+  }
+
+  onPostUpdated = async (index, oldPopup) => {
+    if (this.state.activePost === null)
+      return;
+    const updatedPost = await fetchPost(this.state.activePost.id);
+    this.setState({
+      activePost: updatedPost,
+      likePopup: oldPopup
+    });
   }
 
   render() {
@@ -120,10 +128,14 @@ class Explore extends React.Component {
         <Marker
           key={index}
           title={post.author.username}
-          position={post.location}
+          position={{
+            lat: post.location.latitude,
+            lng: post.location.longitude
+          }}
           onClick={onClickListener} />
       )
     });
+    console.log(postMarkers);
 
     return (
       <div>
@@ -138,15 +150,22 @@ class Explore extends React.Component {
             style={style}
             onBounds_changed={this.onBoundsChanged}>
             {postMarkers}
-            <InfoWindow
-              marker={this.state.activeMarker}
-              visible={this.state.showingInfoWindow}>
-              {
-                PostCard(this.state.activePost)
-              }
-            </InfoWindow>
           </Map>
         </div >
+        {
+          (this.state.activePost === null)
+            ? <div />
+            : (
+              <div className="pt-4">
+                <SinglePost
+                  userStatus={this.props.userStatus}
+                  post={this.state.activePost}
+                  withComment={false}
+                  popup={this.state.likePopup}
+                  onChangePost={this.onPostUpdated}/>
+              </div>
+            )
+        }
       </div>
     );
   }
