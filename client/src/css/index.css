@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-/** Prevent the page from becoming too wide. */
 body {
   background: #f8f8f8;
+}
+
+/** Prevent the page from becoming too wide. */
+#root {
+  margin-left: auto;
+  margin-right: auto;
   min-height: 100vh;
   max-width: 1000px;
   margin: auto !important;
@@ -41,7 +46,7 @@ nav li {
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-  body {
+  #root {
     width: 80%;
   }
 }
