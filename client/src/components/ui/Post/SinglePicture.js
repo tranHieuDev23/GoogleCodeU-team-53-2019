@@ -5,17 +5,34 @@ import Gallery from 'react-grid-gallery';
 class SinglePicture extends React.Component {
   constructor(props) {
     super(props);
-
-    const { postImages } = this.props.post;
-    const promises = [];
-    for (let index = 0; index < postImages.length; index++) {
-      const picture = postImages[index];
-      promises.push(
-        getImageItem(picture.imageUrl.value, picture.imageDescription)
-      );
+    this.state = {
+      postImages: [],
+      items: []
     }
+    this.applyPostImages = this.applyPostImages.bind(this);
+    this.applyPostImages(this.props.post.postImages);
+  }
 
-    Promise.all(promises).then(results => {
+  componentDidUpdate() {
+    console.log("DidUpdate called!");
+    const { postImages } = this.props.post;
+    if (!postImagesChanged(this.state.postImages, postImages))
+      return;
+    console.log("Update allowed!")
+    this.applyPostImages(postImages);
+  }
+
+  applyPostImages(postImages) {
+    this.setState({
+      postImages: postImages,
+      items: []
+    });
+    if (postImages === null)
+      return;
+    const promises = [];
+    for (const [, picture] of postImages.entries())
+      promises.push(getImageItem(picture.imageUrl.value, picture.imageDescription));
+    Promise.all(promises).then((results) => {
       this.setState({
         items: results
       });
@@ -23,7 +40,7 @@ class SinglePicture extends React.Component {
   }
 
   render() {
-    let galleryStyle = {
+    const galleryStyle = {
       marginLeft: 'auto',
       marginRight: 'auto'
     };
@@ -60,6 +77,24 @@ function getImageItem(imageSrc, imageDescription) {
     };
     img.src = imageSrc;
   });
+}
+
+function postImagesChanged(oldImages, newImages) {
+  if (oldImages == null)
+    return newImages != null;
+  if (newImages == null)
+    return true;
+  if (oldImages.length !== newImages.length) 
+    return true;
+  for (let i = 0; i < oldImages.length; i ++) {  
+    let oldImage = oldImages[i];
+    let newImage = newImages[i];
+    console.log(oldImage !== newImage);
+    if (oldImage.id !== newImage.id)
+      return true;
+  };
+  console.log(oldImages, newImages);
+  return false;
 }
 
 export default SinglePicture;

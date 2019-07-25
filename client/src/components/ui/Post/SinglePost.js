@@ -12,52 +12,75 @@ class SinglePost extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      numberOfLike: 0
-    };
+      post: this.props.post,
+      numberOfLike: (this.props.post != null? this.props.post.likedUserIds.length : 0),
+    }
     this.onChangeLikes = this.onChangeLikes.bind(this);
   }
 
-  componentDidMount = () => {
-    const { post } = this.props;
-    if (Array.isArray(post.likedUserIds)) {
-      this.setState({ numberOfLike: post.likedUserIds.length });
-    }
-  };
+  componentDidUpdate = () => {
+    const {post} = this.props;
+    if (!postChanged(this.state.post, post))
+      return;
+    this.setState({
+      post: post,
+      numberOfLike: (post != null? post.likedUserIds.length : 0)
+    });
+  }
 
   onChangeLikes = newLikes => {
     this.setState({ numberOfLike: newLikes });
   };
 
   render() {
-    const { post } = this.props;
+    const { post, numberOfLike } = this.state;
     return (
       <React.Fragment>
-        {post == null ? (
-          <div />
-        ) : (
-          <div className='Post'>
-            <PostAuthor {...this.props} />
-            <div className='Post__Description'>
-              {parse(post.descriptionText)}
-            </div>
-            <DisplayTags tags={post.tags} />
-            <SinglePicture {...this.props} />
-            <InteractiveBar
-              {...this.props}
-              numberOfLike={this.state.numberOfLike}
-              onChangeLikes={this.onChangeLikes}
-            />
-            <LikeBar
-              {...this.props}
-              numberOfLike={this.state.numberOfLike}
-              onChangeLikes={this.onChangeLikes}
-            />
-            {this.props.withComment && <CommentBar {...this.props} />}
-          </div>
-        )}
-      </React.Fragment>
+        {
+          (post == null) ? (
+            <div />
+          ) : (
+              <div className="Post">
+                <PostAuthor {...this.props} />
+                <div className="Post__Description">{parse(post.descriptionText)}</div>
+                <DisplayTags tags={post.tags} />
+                <SinglePicture {...this.props} />
+                <InteractiveBar
+                  {...this.props}
+                  numberOfLike={numberOfLike}
+                  onChangeLikes={this.onChangeLikes}
+                />
+                <LikeBar
+                  {...this.props}
+                  numberOfLike={numberOfLike}
+                  onChangeLikes={this.onChangeLikes}
+                />
+                {this.props.withComment &&
+                  <CommentBar
+                    {...this.props}
+                  />
+                }
+              </div>
+            )
+        }
+      </React.Fragment >
     );
   }
 }
 
 export default withRouter(SinglePost);
+
+function postChanged(oldPost, newPost) {
+  if (oldPost == null)
+    return newPost != null;
+  if (newPost == null)
+    return true;
+  if (oldPost.id !== newPost.id)
+    return true;
+  if (oldPost.likedUserIds.length !== newPost.likedUserIds.length)
+    return true;
+  for (let i = 0; i < oldPost.likedUserIds.length; i ++)
+    if (oldPost.likedUserIds[i] !== newPost.likedUserIds[i])
+      return true;
+  return false;
+}

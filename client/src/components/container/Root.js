@@ -12,13 +12,18 @@ import {
   UPLOAD_PAGE,
   POST_PAGE,
   TAG_PAGE,
+  EXPLORE_PAGE,
   LOGIN_PAGE,
   PLEASE_LOGIN
 } from 'constants/links.js';
 import UploadPage from '../page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
-import { fetchLoginStatus } from 'helpers/UserStatus.js';
-import TagPage from 'components/page/TagPage';
+import Explore from "components/page/Explore.js";
+import { fetchLoginStatus } from 'helpers/UserStatus.js'
+import TagPage from 'components/page/TagPage'
+import "antd/dist/antd.css";
+import 'css/Post.scss';
+import 'css/index.scss'
 import PleaseLogin from 'components/Result/PleaseLogin';
 
 /** Renders all components in the <root> element on ../public/index.html. */
@@ -130,7 +135,11 @@ class Root extends Component {
                   this.handleSetState
                 )}
               />
-              <Redirect from='/' to={HOME} />
+              <Route
+                exact path={EXPLORE_PAGE}
+                component={withStatusHome(Explore, this.state, this.handleSetState)}
+              />
+              <Redirect from="/" to={HOME} />
             </Switch>
           </Suspense>
         </div>

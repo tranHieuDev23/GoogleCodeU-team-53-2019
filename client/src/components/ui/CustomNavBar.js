@@ -5,7 +5,8 @@ import {
   LOGIN,
   LOGOUT,
   USER_PAGE,
-  UPLOAD_PAGE
+  UPLOAD_PAGE,
+  EXPLORE_PAGE
 } from 'constants/links.js';
 import { Link, withRouter } from 'react-router-dom';
 import { Menu, Icon, Dropdown, Button } from 'antd';
@@ -89,12 +90,9 @@ class CustomNavBar extends Component {
     return (
       <div className='navbar navbar-dark bg-primary'>
         <div>
-          <Link to={HOME} className='navbar-brand'>
-            Home
-          </Link>
-          <Link to={ABOUT_US} className='navbar-toggler'>
-            About Our Team
-          </Link>
+          <Link to={HOME} className="navbar-brand">Home</Link>
+          <Link to={EXPLORE_PAGE} className="navbar-toggler">Explore</Link>
+          <Link to={ABOUT_US} className="navbar-toggler">About Our Team</Link>
         </div>
         <div>
           <Link to={UPLOAD_PAGE} className='navbar-toggler'>
