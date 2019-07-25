@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/** Prevent the page from becoming too wide. */
+@import 'css/UploadPage.scss';
+@import 'css/Picture.scss';
+@import 'css/RichTextEditor.scss';
+@import 'css/userPage.scss';
+@import 'css/Post.scss';
+
 body {
   background: #f8f8f8;
 }

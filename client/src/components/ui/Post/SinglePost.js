@@ -1,12 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import SinglePicture from 'components/ui/Post/SinglePicture';
-import PostAuthor from 'components/ui/Post/PostAuthor.js'
+import PostAuthor from 'components/ui/Post/PostAuthor.js';
 import LikeBar from 'components/ui/Post/LikeBar';
 import parse from 'html-react-parser';
-import InteractiveBar from 'components/ui/Post/InteractiveBar'
+import InteractiveBar from 'components/ui/Post/InteractiveBar';
 import CommentBar from 'components/ui/Post/CommentBar';
-import DisplayTags from 'components/ui/tag/DisplayTags'
+import DisplayTags from 'components/ui/tag/DisplayTags';
 
 class SinglePost extends React.Component {
   constructor(props) {
@@ -28,9 +28,9 @@ class SinglePost extends React.Component {
     });
   }
 
-  onChangeLikes = (newLikes) => {
-    this.setState({ numberOfLike: newLikes })
-  }
+  onChangeLikes = newLikes => {
+    this.setState({ numberOfLike: newLikes });
+  };
 
   render() {
     const { post, numberOfLike } = this.state;

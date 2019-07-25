@@ -6,7 +6,7 @@ class LikeBar extends React.Component {
     super(props);
 
     this.state = {
-      popup: this.props.popup,
+      popup: this.props.popup
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -14,19 +14,19 @@ class LikeBar extends React.Component {
     this.handleSetState = this.handleSetState.bind(this);
   }
 
-  handleClick = async (event) => {
+  handleClick = async event => {
     event.stopPropagation();
     const { onChangePost, order } = this.props;
     await onChangePost(order, true);
-    if (!this.state.popup)  {
-      this.setState({popup: true}); 
+    if (!this.state.popup) {
+      this.setState({ popup: true });
     }
   };
 
   handleClosePopup = () => {
     if (this.state.popup) {
       this.setState({
-        popup: false,
+        popup: false
       });
     }
   };

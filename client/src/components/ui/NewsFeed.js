@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import SinglePost from './Post/SinglePost';
 import { fetchPost } from 'helpers/LoadPost.js';
 
@@ -11,8 +11,8 @@ class NewsFeed extends React.Component {
     super(props);
     this.state = {
       items: [],
-      curIndex: 0,
-    }
+      curIndex: 0
+    };
   }
 
   onChangePost = async (index, oldPopup) => {
@@ -23,58 +23,57 @@ class NewsFeed extends React.Component {
       console.log("Can't re fetch single post");
       return;
     }
-    const date = new Date(); 
-    const timestamp = date.getTime(); 
-    newItems[index] = <SinglePost
+    const date = new Date();
+    const timestamp = date.getTime();
+    newItems[index] = (
+      <SinglePost
         userStatus={this.props.userStatus}
         post={newPost}
         order={index}
-        key={index + '-' + timestamp}
+        key={newPost.id + '-' + timestamp}
         onChangePost={this.onChangePost}
         withComment={false}
         popup={oldPopup}
       />
-    this.setState({items: newItems});
-  }
+    );
+    this.setState({ items: newItems });
+  };
 
   componentDidMount = () => {
     this.addMorePost();
-  }
+  };
 
-  componentDidUpdate = () => {
+  componentDidUpdate = async () => {
     this.addMorePost();
-  }
+  };
 
-  addMorePost = () => {
+  addMorePost = (curIndex = this.state.curIndex, items = this.state.items) => {
     const { posts } = this.props;
-    let newItems = [...this.state.items];
+    let newItems = [...items];
     if (isArray(posts)) {
-      const { curIndex } = this.state;
       for (let index = curIndex; index < posts.length; index++) {
         let post = posts[index];
-        newItems.push(<SinglePost 
-          userStatus={this.props.userStatus} 
-          post={post} 
-          order={index}
-          key={index} 
-          onChangePost={this.onChangePost}
-          withComment={false}
-          popup={false}
-        />);
+        newItems.push(
+          <SinglePost
+            userStatus={this.props.userStatus}
+            post={post}
+            order={index}
+            key={post.id}
+            onChangePost={this.onChangePost}
+            withComment={false}
+            popup={false}
+          />
+        );
       }
       if (curIndex !== posts.length) {
         this.setState({ curIndex: posts.length });
         this.setState({ items: newItems });
       }
     }
-  }
+  };
 
   render() {
-    return (
-      <div>
-        {this.state.items}
-      </div>
-    );
+    return <div>{this.state.items}</div>;
   }
 }
 
