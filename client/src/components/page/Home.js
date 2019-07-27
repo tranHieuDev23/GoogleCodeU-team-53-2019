@@ -20,7 +20,7 @@ class Home extends Component {
   componentDidMount = async () => {
     const date = new Date();
     const timestamp = date.getTime(); //current time
-    const newPosts = await fetchPosts(timestamp, 10, '', '', '');
+    const newPosts = await fetchPosts(timestamp, 5, '', '', '');
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
@@ -33,7 +33,7 @@ class Home extends Component {
   };
 
   loadMorePost = async () => {
-    const morePosts = await fetchPosts(this.state.minTimestamp, 10, '', '', '');
+    const morePosts = await fetchPosts(this.state.minTimestamp, 5, '', '', '');
     if (morePosts != null) {
       if (morePosts.length > 0) {
         let newMinTimestamp = this.state.minTimestamp;

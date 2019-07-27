@@ -57,7 +57,7 @@ class UserPage extends Component {
       const timestamp = date.getTime(); //current time
       const newPosts = await fetchPosts(
         timestamp,
-        10,
+        5,
         '',
         this.props.match.params.userId,
         ''
@@ -76,7 +76,7 @@ class UserPage extends Component {
   loadMorePost = async () => {
     const morePosts = await fetchPosts(
       this.state.minTimestamp,
-      10,
+      5,
       '',
       this.state.userIdParam,
       ''
