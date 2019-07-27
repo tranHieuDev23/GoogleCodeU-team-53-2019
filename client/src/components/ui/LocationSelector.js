@@ -7,6 +7,7 @@ import {
   getPlaceId,
   getPlaceName
 } from '../../helpers/LocationHelper';
+import { addSearchBox } from './PlaceSearchBox';
 
 class LocationSelector extends React.Component {
   constructor(props) {
@@ -52,6 +53,20 @@ class LocationSelector extends React.Component {
       .catch(reason => {
         console.log(reason);
       });
+  }
+
+  mapReady(mapProps, map) {
+    const {google} = mapProps;
+    addSearchBox(google, map, (place) => {
+      this.setState({
+        selectedLocation: {
+          placeId: place.placeId,
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        },
+        selectedLocationName: place.formatted_address
+      });
+    });
   }
 
   mapClicked(mapProps, map, clickEvent) {
@@ -101,6 +116,7 @@ class LocationSelector extends React.Component {
             zoom={14}
             center={this.state.selectedLocation}
             style={style}
+            onReady={this.mapReady.bind(this)}
             onClick={this.mapClicked.bind(this)}>
             {this.state.selectedLocation == null ? null : (
               <Marker
