@@ -15,7 +15,7 @@ export const fetchPost = async (postId, withComment = false) => {
       const { data } = response;
       post = data;
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
     });
   return post;
@@ -42,7 +42,7 @@ export const fetchPosts = async (
       const { data } = response;
       posts = data.posts;
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
     });
   return posts;

@@ -22,7 +22,7 @@ class TagPage extends Component {
     const timestamp = date.getTime(); //current time
     const newPosts = await fetchPosts(
       timestamp,
-      10,
+      5,
       '',
       '',
       this.state.tagName
@@ -43,7 +43,7 @@ class TagPage extends Component {
       const timestamp = date.getTime(); //current time
       const newPosts = await fetchPosts(
         timestamp,
-        10,
+        5,
         '',
         '',
         this.props.match.params.tagName
