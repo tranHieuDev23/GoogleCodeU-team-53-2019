@@ -1,10 +1,11 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { Map, Marker, GoogleApiWrapper } from "google-maps-react";
+import { Map, GoogleApiWrapper } from "google-maps-react";
 import { fetchPost, fetchPostsWithLocation } from 'helpers/LoadPost'
 import { getCurrentLocation } from "../../helpers/LocationHelper";
 import { GOOGLE_MAPS_API_KEY } from '../../constants/apiKey';
 import SinglePost from '../ui/Post/SinglePost';
+import CustomMarker from 'components/ui/explore/CustomMarker';
 
 const DEFAULT_BOUNDS = {
   sw: {
@@ -125,8 +126,8 @@ class Explore extends React.Component {
     this.state.posts.forEach((post, index) => {
       const onClickListener = this.createMarkerClickedListener(post);
       postMarkers.push(
-        <Marker
-          key={index}
+        <CustomMarker
+          key={post.id}
           title={post.author.username}
           position={{
             lat: post.location.latitude,
