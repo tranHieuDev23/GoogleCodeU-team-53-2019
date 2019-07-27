@@ -172,7 +172,6 @@ class UploadPage extends React.Component {
 
   handleLocation = location => {
     this.handleSetState('location', location);
-    console.log(location);
   };
 
   render() {
