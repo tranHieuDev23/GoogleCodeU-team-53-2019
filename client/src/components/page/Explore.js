@@ -6,6 +6,7 @@ import { getCurrentLocation } from "../../helpers/LocationHelper";
 import { GOOGLE_MAPS_API_KEY } from '../../constants/apiKey';
 import SinglePost from '../ui/Post/SinglePost';
 import CustomMarker from 'components/ui/explore/CustomMarker';
+import { addSearchBox } from 'components/ui/PlaceSearchBox';
 
 const DEFAULT_BOUNDS = {
   sw: {
@@ -36,6 +37,7 @@ class Explore extends React.Component {
 
     this.loadPosts = this.loadPosts.bind(this);
     this.setToCurrentLocation = this.setToCurrentLocation.bind(this);
+    this.onMapReady = this.onMapReady.bind(this);
     this.onBoundsChanged = this.onBoundsChanged.bind(this);
     this.createMarkerClickedListener = this.createMarkerClickedListener.bind(this);
     this.onPostUpdated = this.onPostUpdated.bind(this);
@@ -83,6 +85,24 @@ class Explore extends React.Component {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  onMapReady(mapProps, map) {
+    const { google } = mapProps;
+    addSearchBox(google, map, (place) => {
+      const location = {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng()
+      };
+      const bounds = new this.props.google.maps.LatLngBounds();
+      const delta = [-0.25, 0.25];
+      delta.forEach(dLat => {
+        delta.forEach(dLng => {
+          bounds.extend({ lat: location.lat + dLat, lng: location.lng + dLng });
+        });
+      });
+      this.setState({ bounds: bounds });
+    });
   }
 
   onBoundsChanged(mapProps, map) {
@@ -138,7 +158,8 @@ class Explore extends React.Component {
     });
 
     return (
-      <div>
+      <div className='container pt-2'>
+        <h1 className='center'>Explore</h1>
         <div className="py-3">
           <button type="button" onClick={this.setToCurrentLocation}>Set to current location</button>
         </div>
@@ -148,6 +169,7 @@ class Explore extends React.Component {
             google={this.props.google}
             bounds={this.state.bounds}
             style={style}
+            onReady={this.onMapReady}
             onBounds_changed={this.onBoundsChanged}>
             {postMarkers}
           </Map>
@@ -162,7 +184,7 @@ class Explore extends React.Component {
                   post={this.state.activePost}
                   withComment={false}
                   popup={this.state.likePopup}
-                  onChangePost={this.onPostUpdated}/>
+                  onChangePost={this.onPostUpdated} />
               </div>
             )
         }
