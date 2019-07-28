@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NewFeedWrapper from 'components/NewFeedWrapper';
 import { withRouter } from 'react-router-dom';
 import { fetchPosts } from 'helpers/LoadPost';
+import PleaseLogin from 'components/Result/PleaseLogin';
 
 class TagPage extends Component {
   constructor(props) {
@@ -11,7 +12,8 @@ class TagPage extends Component {
     this.state = {
       posts: [],
       tagName: this.props.match.params.tagName,
-      minTimestamp: timestamp
+      minTimestamp: timestamp, 
+      didMount: false,
     };
     this.loadMorePost = this.loadMorePost.bind(this);
   }
@@ -35,6 +37,7 @@ class TagPage extends Component {
       });
       this.setState({ minTimestamp: newMinTimestamp - 1 });
     }
+    this.setState({didMount: true});
   };
 
   componentDidUpdate = async () => {
@@ -87,8 +90,10 @@ class TagPage extends Component {
   };
 
   render() {
+    const {didMount} = this.state;
     return (
       <div className='container pt-2'>
+        
         <div>
           <h1 className='center'>#{this.state.tagName} Page</h1>
           <NewFeedWrapper
@@ -96,6 +101,7 @@ class TagPage extends Component {
             posts={this.state.posts}
             handleLoadMorePost={this.loadMorePost}
           />
+          {didMount ? (<React.Fragment />) : (<PleaseLogin />)}
         </div>
       </div>
     );
