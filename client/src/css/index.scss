@@ -23,7 +23,9 @@
 @import 'css/LocationSelector.scss';
 
 body {
-  background: #f8f8f8;
+  background: #DEEAFC;
+  padding: 0;
+  margin: 0;
 }
 
 /** Prevent the page from becoming too wide. */
@@ -36,15 +38,29 @@ body {
 }
 
 /** Remove bullet points from navigation bar. */
-nav ul {
+.navbar {
   list-style-type: none;
-  padding-left: 0;
+  background-color: #77A6F7 !important;
 }
 
 /** Keep navigation menu on one line. */
-nav li {
-  display: inline-block;
-  margin-right: 10px;
+.navbar li{
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.navbar-toggler {
+  margin: 2px;
+  background-color: #77A6F7;
+  color: #FFFFFF !important; 
+  border: 1px solid #DEEAFC !important;
+  border-radius: 5px !important;
+  text-align: center;
+  padding: 5px 10px;
+}
+.navbar-toggler:hover {
+  background-color: #4483EF;
+  transition: 0.3s;
 }
 
 /** Used to hide certain elements. */
