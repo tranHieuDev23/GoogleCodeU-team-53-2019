@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import NewFeedWrapper from 'components/NewFeedWrapper';
 import { withRouter } from 'react-router-dom';
 import { fetchPosts } from 'helpers/LoadPost';
-import PleaseLogin from 'components/Result/PleaseLogin';
+import Loading from './Loading';
 
 class TagPage extends Component {
   constructor(props) {
@@ -101,7 +101,7 @@ class TagPage extends Component {
             posts={this.state.posts}
             handleLoadMorePost={this.loadMorePost}
           />
-          {didMount ? (<React.Fragment />) : (<PleaseLogin />)}
+          {didMount ? (<React.Fragment />) : (<Loading />)}
         </div>
       </div>
     );

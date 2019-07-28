@@ -1,5 +1,7 @@
 import React from 'react';
-import { Upload, Icon, message } from 'antd';
+import { Upload, Icon, message, notification } from 'antd';
+import { isItImage } from 'helpers/StringProcess';
+import { PLEASE_UPLOAD_IMAGE } from 'constants/Notification';
 
 const { Dragger } = Upload;
 
@@ -23,11 +25,17 @@ class UploadSinglePicture extends React.Component {
     this.setState({ showUploadList: true });
     const { status } = info.file;
     if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
-      console.log(info.file.originFileObj);
-      const newImages = [...images]
-      newImages.push(info.file.originFileObj);
-      handleChangeProps('images', newImages)
+      const type = info.file.type;
+      if (!isItImage(type)) {
+        notification.error(PLEASE_UPLOAD_IMAGE);
+      }
+      else {
+        message.success(`${info.file.name} file uploaded successfully.`);
+        console.log(info.file.originFileObj);
+        const newImages = [...images]
+        newImages.push(info.file.originFileObj);
+        handleChangeProps('images', newImages)
+      }
       this.setState({ showUploadList: false });
       this.setState({ fileList: [] })
     } else if (status === 'error') {
