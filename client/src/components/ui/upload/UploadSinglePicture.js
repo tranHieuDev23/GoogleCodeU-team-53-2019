@@ -53,7 +53,7 @@ class UploadSinglePicture extends React.Component {
           </p>
           <p className="ant-upload-text">Click or drag image to this area to upload</p>
           <p className="ant-upload-hint">
-            Please pload your images here!
+            Please upload your images here!
          </p>
         </Dragger>,
       </div>
