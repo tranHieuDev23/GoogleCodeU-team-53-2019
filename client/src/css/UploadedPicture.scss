@@ -1,0 +1,39 @@
+.AddedContainer {
+  position: relative;
+  width: 50%;
+  :hover {
+    opacity: 0.7;
+  }
+}
+
+.AddedImg {
+  border-radius: 4px;
+  padding: 5px;
+  width: 80%;
+  height: auto;
+}
+
+.Btn_Edit {
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.Btn_Delete {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.AddedWrapper {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

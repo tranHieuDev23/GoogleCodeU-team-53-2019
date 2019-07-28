@@ -1,57 +1,73 @@
-import React from 'react';
+import React from 'react'
 import axios from 'axios';
 import { CREATE_POST } from 'constants/links';
-import Popup from '../ui/Popup/Popup';
 import RichTextEditor from 'components/ui/RichTextEditor';
-import AddedPicture from '../ui/AddedPicture';
 import { POST_PAGE } from 'constants/links';
 import { Button, notification } from 'antd';
 import { withRouter } from 'react-router-dom';
 import TagGroup from '../ui/tag/TagGroup';
 import {
   SUGGEST_COMPLETED,
-  SUGGEST_NO_IMAGE,
   UPLOAD_CONNECTION_FAIL,
   UPLOAD_SUCCESS,
-  UPLOAD_NO_IMAGE,
   UPLOAD_NO_LOCATION
 } from 'constants/Notification.js';
 import { fetchTags } from 'helpers/LoadTags';
-import { tagSanitization } from 'helpers/TagValidate';
 import LocationSelector from '../ui/LocationSelector';
 import PleaseLogin from 'components/Result/PleaseLogin';
+import UploadSinglePicture from 'components/ui/upload/UploadSinglePicture';
+import UploadedPicture from 'components/ui/upload/UploadedPicture';
+import { BuildFormDataToGetTag, BuildFormDataToUpload } from 'helpers/BuildFromData';
 
 class UploadPage extends React.Component {
-  constructor() {
-    super();
-
-    this.handleSetState = this.handleSetState.bind(this);
-    this.handlePost = this.handlePost.bind(this);
-    this.handlePostDescription = this.handlePostDescription.bind(this);
-    this.handleAddPicture = this.handleAddPicture.bind(this);
-    this.handleClosePopup = this.handleClosePopup.bind(this);
-    this.getSuggestionTags = this.getSuggestionTags.bind(this);
-    this.handleLocation = this.handleLocation.bind(this);
-
+  constructor(props) {
+    super(props);
     this.state = {
+      numberOfImages: 0,
       description: '',
+
       images: [],
+      imageDescriptions: [],
+
       tags: [],
       location: null,
-      popup: false,
       disabled: false,
-      sugessting: false
-    };
+    }
   }
 
-  handleChangePopup = newPopup => {
-    this.setState({ popup: newPopup });
-  };
+  handleSetState = (name, value) => {
+    this.setState({ [name]: value });
+  }
 
-  componentDidMount = () => {};
+  componentDidUpdate = () => {
+    let newNumberOfImages = 0;
+    const { images, numberOfImages } = this.state;
+    images.forEach(image => {
+      if (image !== null)
+        newNumberOfImages++;
+    });
+    if (newNumberOfImages !== numberOfImages)
+      this.setState({ numberOfImages: newNumberOfImages });
+  }
 
-  handleSetState = (name, newState) => {
-    this.setState({ [name]: newState });
+  getSugesstionTags = async () => {
+    const { images } = this.state;
+    const data = BuildFormDataToGetTag(images);
+    if (data === null) return;
+    const suggestionTags = await fetchTags(data);
+    if (Array.isArray(suggestionTags)) {
+      let newTags = [...this.state.tags];
+      for (let i = 0; i < suggestionTags.length; i++) {
+        const item = suggestionTags[i];
+        if (!newTags.includes(item)) newTags.push(item);
+      }
+      this.setState({ tags: newTags });
+      notification.success(SUGGEST_COMPLETED);
+    }
+  }
+
+  handleLocation = location => {
+    this.handleSetState('location', location);
   };
 
   handlePost = async event => {
@@ -59,40 +75,8 @@ class UploadPage extends React.Component {
       notification.error(UPLOAD_NO_LOCATION);
       return;
     }
-
-    const { images } = this.state;
-    let imageDescriptions = [];
-    let count = 0;
-    for (let i = 0; i < images.length; i++) {
-      if (images[i].selectedFile != null) {
-        count++;
-        imageDescriptions.push(images[i].imageDescription);
-      }
-    }
-    if (count === 0) {
-      notification.error(UPLOAD_NO_IMAGE);
-      return;
-    }
-
     this.setState({ disabled: true });
-
-    const data = new FormData();
-    const obj = {
-      descriptionText: this.state.description,
-      imageDescriptions: imageDescriptions,
-      tags: tagSanitization(this.state.tags),
-      location: this.state.location
-    };
-
-    data.append('postDetails', JSON.stringify(obj));
-    let cnt = 0;
-    for (let i = 0; i < images.length; i++) {
-      if (images[i].selectedFile != null) {
-        data.append('file-' + cnt, images[i].selectedFile);
-        ++cnt;
-      }
-    }
-
+    const data = BuildFormDataToUpload(this.state);
     await axios
       .post(CREATE_POST, data, {})
       .then(respone => {
@@ -107,138 +91,65 @@ class UploadPage extends React.Component {
     this.setState({ disabled: false });
   };
 
-  getSuggestionTags = async () => {
-    this.setState({ sugessting: true });
-    let suggestionTags = null;
-
-    // build form data
-    const data = new FormData();
-    const { images } = this.state;
-    let count = 0;
-    for (let i = 0; i < images.length; i++)
-      if (images[i].selectedFile != null) count++;
-    if (count === 0) {
-      notification.error(SUGGEST_NO_IMAGE);
-      this.setState({ sugessting: false });
-    } else {
-      data.append('numberOfImages', count);
-      let cnt = 0;
-      for (let i = 0; i < images.length; i++) {
-        if (images[i].selectedFile != null) {
-          data.append('file-' + cnt, images[i].selectedFile);
-          ++cnt;
-        }
-      }
-      // end of make form data
-
-      // fetch tag here
-      suggestionTags = await fetchTags(data);
-      if (Array.isArray(suggestionTags)) {
-        let newTags = [...this.state.tags];
-        for (let i = 0; i < suggestionTags.length; i++) {
-          const item = suggestionTags[i];
-          if (!newTags.includes(item)) newTags.push(item);
-        }
-        this.setState({ tags: newTags });
-        notification.success(SUGGEST_COMPLETED);
-      }
-      this.setState({ sugessting: false });
-    }
-  };
-
-  onChangeTags = newTags => {
-    this.setState({ tags: newTags });
-  };
-
-  handlePostDescription = newState => {
-    this.setState({ description: newState });
-  };
-
-  handleClosePopup = () => {
-    if (this.state.popup) {
-      this.setState({
-        popup: false
-      });
-    }
-  };
-
-  handleAddPicture = event => {
-    event.stopPropagation();
-    if (!this.state.popup)
-      this.setState((oldState, newProps) => {
-        return { popup: !oldState.popup };
-      });
-  };
-
-  handleLocation = location => {
-    this.handleSetState('location', location);
-  };
-
   render() {
+    const { images, numberOfImages, imageDescriptions } = this.state;
     const { isLogin } = this.props.userStatus;
+
     return (
       <React.Fragment>
-        {isLogin ? (
-          <div className='UploadPage container pt-2'>
-            <h1>Create new post:</h1>
-            <RichTextEditor
-              description='Please enter description here'
-              value={this.state.description}
-              handleChange={this.handlePostDescription}
-            />
-            <TagGroup tags={this.state.tags} onChangeTags={this.onChangeTags} />
-
-            <LocationSelector onLocationSelected={this.handleLocation} />
-
-            <div className='mt-2'>
-              <Button
-                onClick={this.handleAddPicture}
-                size='large'
-                icon='upload'>
-                Add new picture
-              </Button>
-
-              <Button
-                onClick={this.getSuggestionTags}
-                type='dashed'
-                size='large'
-                icon='tags'
-                loading={this.state.sugessting}>
-                Get suggestion tag
-              </Button>
-
-              <Button
-                onClick={this.handlePost}
-                type='primary'
-                icon='share-alt'
-                size='large'
-                disabled={this.state.disabled}>
-                Share this post
-              </Button>
-
-              <Button
-                onClick={() => {
-                  this.props.history.push('/');
-                }}
-                type='danger'
-                icon='close'
-                size='large'
-                disabled={this.state.disabled}>
-                Close this post
-              </Button>
-            </div>
-            <AddedPicture images={this.state.images} />
-            {this.state.popup ? (
-              <Popup
-                handleClose={this.handleClosePopup}
-                postDetail={this.state}
-                onChange={this.handleSetState}
+        {
+          isLogin ? (
+            <div>
+              <h1 className='center'>Create your new post:</h1>
+              <UploadedPicture
+                images={images}
+                imageDescriptions={imageDescriptions}
+                handleChangeProps={this.handleSetState}
               />
-            ) : null}
-          </div>
-        ) : (
-          <PleaseLogin />
-        )}
+              <UploadSinglePicture
+                images={images}
+                handleChangeProps={this.handleSetState}
+              />
+              {(numberOfImages) ? (
+                <React.Fragment>
+                  <RichTextEditor
+                    description='Please enter your post description here'
+                    value={this.state.description}
+                    handleChange={(newState) => { this.setState({ description: newState }) }}
+                  />
+                  <TagGroup
+                    tags={this.state.tags}
+                    onChangeTags={(newState) => { this.setState({ tags: newState }) }}
+                    getSugesstion={this.getSugesstionTags}
+                  />
+                  <LocationSelector onLocationSelected={this.handleLocation} />
+                  <span>
+                    <Button
+                      onClick={this.handlePost}
+                      type='primary'
+                      icon='share-alt'
+                      size='large'
+                      disabled={this.state.disabled}>
+                      Share this post
+                    </Button>
+
+                    <Button
+                      onClick={() => {
+                        this.props.history.push('/');
+                      }}
+                      type='danger'
+                      icon='close'
+                      size='large'
+                      disabled={this.state.disabled}>
+                      Close this post
+                    </Button>
+                  </span>
+                </React.Fragment>
+              ) : (<React.Fragment />)}
+            </div>) : (
+              <PleaseLogin />
+            )
+        }
       </React.Fragment>
     );
   }

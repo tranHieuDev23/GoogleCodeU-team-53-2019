@@ -16,7 +16,7 @@ import {
   LOGIN_PAGE,
   PLEASE_LOGIN
 } from 'constants/links.js';
-import UploadPage from '../page/UploadPage';
+import UploadPage from 'components/page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
 import Explore from "components/page/Explore.js";
 import { fetchLoginStatus } from 'helpers/UserStatus.js'
@@ -58,7 +58,7 @@ class Root extends Component {
       <Component
         {...props}
         userStatus={userStatus}
-        handleUserStatus={this.handleSetState}
+        handleUserStatus={handleUserStatus}
       />
     );
 

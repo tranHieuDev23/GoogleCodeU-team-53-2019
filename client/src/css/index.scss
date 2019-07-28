@@ -15,12 +15,13 @@
  */
 
 /** Prevent the page from becoming too wide. */
-@import 'css/UploadPage.scss';
-@import 'css/Picture.scss';
-@import 'css/RichTextEditor.scss';
-@import 'css/userPage.scss';
-@import 'css/Post.scss';
-@import 'css/LocationSelector.scss';
+@import "css/UploadPage.scss";
+@import "css/Picture.scss";
+@import "css/RichTextEditor.scss";
+@import "css/userPage.scss";
+@import "css/Post.scss";
+@import "css/LocationSelector.scss";
+@import "css/UploadedPicture.scss";
 
 body {
   background: #f8f8f8;
@@ -64,7 +65,7 @@ nav li {
   padding: 25% 25%;
 }
 
-.BigNotification  {
+.BigNotification {
   text-align: center;
   font-size: 40px;
   font-weight: bold;
