@@ -1,0 +1,30 @@
+.AddedContainer {
+  position: relative;
+  :hover {
+    opacity: 0.7;
+  }
+}
+
+.AddedImg {
+  border-radius: 4px;
+  width: 100%;
+  height: auto;
+}
+
+.Btn_Edit {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.Btn_Delete {
+  position: absolute;
+  top: 50%;
+  left: 60%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  cursor: pointer;
+}

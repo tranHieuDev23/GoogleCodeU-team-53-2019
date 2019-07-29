@@ -27,3 +27,8 @@ export const UPLOAD_NO_LOCATION = {
   message: 'Cannot upload',
   description: 'Please select a location for your post.'
 }
+
+export const PLEASE_UPLOAD_IMAGE = {
+  message: 'Cannot upload',
+  description: 'You can only upload files in image format'
+}

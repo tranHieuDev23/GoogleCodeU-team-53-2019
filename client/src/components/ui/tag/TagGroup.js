@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag, Input, Icon, Row } from 'antd';
+import { Tag, Input, Icon, Row, Button } from 'antd';
 import { TweenOneGroup } from 'rc-tween-one';
 
 class TagGroup extends React.Component {
@@ -8,7 +8,8 @@ class TagGroup extends React.Component {
     this.state = {
       tags: this.props.tags,
       inputVisible: false,
-      inputValue: ''
+      inputValue: '',
+      sugessting: false,
     };
   }
 
@@ -47,6 +48,13 @@ class TagGroup extends React.Component {
     this.props.onChangeTags(tags);
   };
 
+  handlesuggestTag = async () => {
+    this.setState({sugessting: true});
+    const { getSugesstion } = this.props;
+    await getSugesstion();
+    this.setState({sugessting: false});
+  }
+
   saveInputRef = input => (this.input = input);
 
   forMap = tag => {
@@ -71,7 +79,14 @@ class TagGroup extends React.Component {
     const { tags, inputVisible, inputValue } = this.state;
     const tagChild = tags.map(this.forMap);
     return (
-      <Row type='flex' style={{ marginBottom: 16 }}>
+      <Row type='flex' style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
+        <Button
+          size='small'
+          loading={this.state.sugessting}
+          onClick={this.handlesuggestTag}
+        >
+          Get tag sugesstion
+        </Button>
         {inputVisible && (
           <Input
             ref={this.saveInputRef}

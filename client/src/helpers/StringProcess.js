@@ -9,3 +9,9 @@ export const isThisPathUserPage = link => {
   const page = link.substr(0, 5);
   return page === '/user';
 };
+
+export const isItImage = type => {
+  if (type.length < 5) return false;
+  const page = type.substr(0, 5);
+  return page === 'image';
+}
