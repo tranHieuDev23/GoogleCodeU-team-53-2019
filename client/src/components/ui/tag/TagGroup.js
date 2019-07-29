@@ -85,7 +85,7 @@ class TagGroup extends React.Component {
           loading={this.state.sugessting}
           onClick={this.handlesuggestTag}
         >
-          Get sugesstion tag
+          Get tag sugesstion
         </Button>
         {inputVisible && (
           <Input
