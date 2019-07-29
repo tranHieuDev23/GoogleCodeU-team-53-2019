@@ -30,7 +30,8 @@ class EditProfile extends React.Component {
         id: user.id,
         username: user.username,
         bioText: user.bioText,
-        avatarUrl: user.avatarUrl
+        birthDate: user.birthdate,
+        avatarUrl: user.avatarUrl,
       });
     }
     this.setState({ didMount: true });
