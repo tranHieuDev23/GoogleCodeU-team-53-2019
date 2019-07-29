@@ -4,7 +4,6 @@ import com.google.codeu.controllers.datastore.UserDao;
 import com.google.codeu.models.User;
 import com.google.codeu.utils.ServletLink;
 import com.google.codeu.utils.UserJsonifier;
-import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
