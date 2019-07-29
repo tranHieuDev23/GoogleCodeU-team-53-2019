@@ -55,25 +55,28 @@ class UploadedPicture extends React.Component {
         let url = file && URL.createObjectURL(file);
         const thisKey = index;
         items.push(
-          <div className='AddedContainer' key={thisKey}>
-            <img
-              className='AddedImg'
-              src={url}
-              alt=''
-            />
-            <Button
-              className='Btn_Edit'
-              icon='edit'
-              order={index}
-              onClick={() => this.handleChangeDescription(thisKey)}
-            />
-            <Button
-              className='Btn_Delete'
-              icon='delete'
-              onClick={() => this.handleDeleteImage(thisKey)}
-            >
-            </Button>
+          <div className='col-md-6 pb-4'>
+            <div className='AddedContainer' key={thisKey}>
+              <img
+                className='AddedImg'
+                src={url}
+                alt=''
+              />
+              <Button
+                className='Btn_Edit'
+                icon='edit'
+                order={index}
+                onClick={() => this.handleChangeDescription(thisKey)}
+              />
+              <Button
+                className='Btn_Delete'
+                icon='delete'
+                onClick={() => this.handleDeleteImage(thisKey)}
+              >
+              </Button>
+            </div>
           </div>
+
         );
       }
       ++index;
@@ -92,7 +95,7 @@ class UploadedPicture extends React.Component {
             />
           </div>
         }
-        <div className='AddedWrapper'> {items}</div >
+        <div className='row mt-3'> {items}</div >
       </React.Fragment>
     );
   }

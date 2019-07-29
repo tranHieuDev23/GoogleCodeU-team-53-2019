@@ -123,8 +123,8 @@ class UploadPage extends React.Component {
                     getSugesstion={this.getSugesstionTags}
                   />
                   <LocationSelector onLocationSelected={this.handleLocation} />
-                  <span>
-                    <Button
+                  <div className='mt-3'>
+                    <Button className='mr-3'
                       onClick={this.handlePost}
                       type='primary'
                       icon='share-alt'
@@ -143,7 +143,7 @@ class UploadPage extends React.Component {
                       disabled={this.state.disabled}>
                       Close this post
                     </Button>
-                  </span>
+                  </div>
                 </React.Fragment>
               ) : (<React.Fragment />)}
             </div>) : (
