@@ -59,7 +59,10 @@ public class UpdateUserServlet extends HttpServlet {
 
         try {
             String username = req.getParameter("username");
-            Date birthdate = dateFormat.parse(req.getParameter("birthdate"));
+            if (username.isEmpty())
+                throw new RuntimeException("username cannot be empty!");
+            String birthdateString = req.getParameter("birthdate");
+            Date birthdate = (!birthdateString.equals("") ? dateFormat.parse(req.getParameter("birthdate")) : null);
             String bioText = req.getParameter("bioText");
             Part avatarPart = req.getPart("avatar");
             Link avatarUrl = null;

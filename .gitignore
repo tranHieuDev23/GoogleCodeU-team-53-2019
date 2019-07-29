@@ -19,3 +19,5 @@ client/src/Json/
 server/src/main/webapp
 !server/src/main/webapp/WEB-INF
 client/src/constants/apiKey.js
+server/src/main/webapp/service-worker.js
+server/src/main/webapp/asset-manifest.json
