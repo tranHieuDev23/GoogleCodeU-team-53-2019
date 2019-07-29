@@ -7,6 +7,7 @@ import { GOOGLE_MAPS_API_KEY } from '../../constants/apiKey';
 import SinglePost from '../ui/Post/SinglePost';
 import CustomMarker from 'components/ui/explore/CustomMarker';
 import { addSearchBox } from 'components/ui/PlaceSearchBox';
+import { Button } from 'antd';
 
 const DEFAULT_BOUNDS = {
   sw: {
@@ -160,8 +161,13 @@ class Explore extends React.Component {
     return (
       <div className='container pt-2'>
         <h1 className='center'>Explore</h1>
-        <div className="py-3">
-          <button type="button" onClick={this.setToCurrentLocation}>Set to current location</button>
+        <div className="mb-3">
+          <Button
+            icon='environment'
+            size='large'
+            onClick={this.setToCurrentLocation}>
+            Set to current location
+          </Button>
         </div>
 
         <div style={style}>
