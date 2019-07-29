@@ -19,7 +19,6 @@ class LocationSelector extends React.Component {
   }
 
   setToCurrentLocation() {
-    console.log('setToCurrentLocation called!');
     getCurrentLocation()
       .then(result => {
         const location = {
@@ -60,12 +59,14 @@ class LocationSelector extends React.Component {
     addSearchBox(google, map, (place) => {
       this.setState({
         selectedLocation: {
-          placeId: place.placeId,
+          placeId: place.place_id,
           lat: place.geometry.location.lat(),
           lng: place.geometry.location.lng()
         },
         selectedLocationName: place.formatted_address
       });
+      if (this.props.onLocationSelected)
+        this.props.onLocationSelected(this.state.selectedLocation);
     });
   }
 

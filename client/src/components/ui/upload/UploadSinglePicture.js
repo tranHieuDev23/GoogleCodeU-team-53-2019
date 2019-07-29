@@ -31,7 +31,6 @@ class UploadSinglePicture extends React.Component {
       }
       else {
         message.success(`${info.file.name} file uploaded successfully.`);
-        console.log(info.file.originFileObj);
         const newImages = [...images]
         newImages.push(info.file.originFileObj);
         handleChangeProps('images', newImages)
