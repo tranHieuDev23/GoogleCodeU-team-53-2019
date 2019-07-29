@@ -114,7 +114,7 @@ class LocationSelector extends React.Component {
           <Button
             icon='environment'
             size='large'
-            onClick={this.setToCurrentLocation()}>
+            onClick={this.setToCurrentLocation}>
             Set to current location
           </Button>
         </div>
