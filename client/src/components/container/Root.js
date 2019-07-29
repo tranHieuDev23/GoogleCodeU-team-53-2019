@@ -13,8 +13,8 @@ import {
   POST_PAGE,
   TAG_PAGE,
   EXPLORE_PAGE,
-  LOGIN_PAGE,
-  PLEASE_LOGIN
+  PLEASE_LOGIN,
+  EDIT_PROFILE_PAGE
 } from 'constants/links.js';
 import UploadPage from 'components/page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
@@ -25,6 +25,7 @@ import "antd/dist/antd.css";
 import 'css/Post.scss';
 import 'css/index.scss'
 import PleaseLogin from 'components/Result/PleaseLogin';
+import EditProfile from 'components/page/EditProfile';
 
 /** Renders all components in the <root> element on ../public/index.html. */
 class Root extends Component {
@@ -71,15 +72,6 @@ class Root extends Component {
           />
           <Suspense fallback='Loading...'>
             <Switch>
-              <Route
-                exact
-                path={LOGIN_PAGE}
-                component={withStatusHome(
-                  Home,
-                  this.state,
-                  this.handleSetState
-                )}
-              />
               <Route exact path={PLEASE_LOGIN} component={PleaseLogin} />
               <Route
                 exact
@@ -138,6 +130,10 @@ class Root extends Component {
               <Route
                 exact path={EXPLORE_PAGE}
                 component={withStatusHome(Explore, this.state, this.handleSetState)}
+              />
+              <Route
+                exact path={EDIT_PROFILE_PAGE}
+                component={withStatusHome(EditProfile, this.state, this.handleSetState)}
               />
               <Redirect from="/" to={HOME} />
             </Switch>

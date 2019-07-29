@@ -74,3 +74,5 @@ export const TAG_PAGE = '/tag'
 export const EXPLORE_PAGE = '/explore';
 
 export const PLEASE_LOGIN = '/please-login';
+
+export const EDIT_PROFILE_PAGE = '/edit-profile';

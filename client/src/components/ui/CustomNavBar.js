@@ -6,7 +6,8 @@ import {
   LOGOUT,
   USER_PAGE,
   UPLOAD_PAGE,
-  EXPLORE_PAGE
+  EXPLORE_PAGE,
+  EDIT_PROFILE_PAGE
 } from 'constants/links.js';
 import { Link, withRouter } from 'react-router-dom';
 import { Menu, Icon, Dropdown, Button } from 'antd';
@@ -43,7 +44,7 @@ class CustomNavBar extends Component {
         this.props.history.push(USER_PAGE + '/' + userId);
         break;
       case 'editProfile':
-        // TODO
+        this.props.history.push(EDIT_PROFILE_PAGE);
         break;
       default:
         break;
