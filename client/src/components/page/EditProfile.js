@@ -26,9 +26,10 @@ class EditProfile extends React.Component {
     const { isLogin, userId } = this.props.userStatus;
     if (isLogin) {
       const user = await fetchUser(userId);
-      const newBirthDate = '';
-      if (user.birthdate !== null) 
+      let newBirthDate = '';
+      if (user.birthdate !== null && user.birthdate !== undefined) {
         newBirthDate = user.birthdate; 
+      }
       this.setState({
         id: user.id,
         username: user.username,
