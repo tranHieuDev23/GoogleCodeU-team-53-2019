@@ -34,7 +34,7 @@ class UserPage extends Component {
     const timestamp = date.getTime(); //current time
     const newPosts = await fetchPosts(
       timestamp,
-      10,
+      5,
       '',
       this.state.userIdParam,
       ''
@@ -111,10 +111,10 @@ class UserPage extends Component {
             />
           </div>
         ) : (
-          <React.Fragment>
-            {didMount ? <Page404 /> : <Loading />}
-          </React.Fragment>
-        )}
+            <React.Fragment>
+              {didMount ? <Page404 /> : <Loading />}
+            </React.Fragment>
+          )}
       </div>
     );
   }

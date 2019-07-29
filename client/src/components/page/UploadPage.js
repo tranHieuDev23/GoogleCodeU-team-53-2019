@@ -18,6 +18,7 @@ import PleaseLogin from 'components/Result/PleaseLogin';
 import UploadSinglePicture from 'components/ui/upload/UploadSinglePicture';
 import UploadedPicture from 'components/ui/upload/UploadedPicture';
 import { BuildFormDataToGetTag, BuildFormDataToUpload } from 'helpers/BuildFromData';
+import Loading from './Loading';
 
 class UploadPage extends React.Component {
   constructor(props) {
@@ -93,62 +94,73 @@ class UploadPage extends React.Component {
 
   render() {
     const { images, numberOfImages, imageDescriptions } = this.state;
-    const { isLogin } = this.props.userStatus;
+    const { isLogin, fetchedStatus } = this.props.userStatus;
 
     return (
       <React.Fragment>
-        {
-          isLogin ? (
-            <div>
-              <h1 className='center'>Create your new post:</h1>
-              <UploadedPicture
-                images={images}
-                imageDescriptions={imageDescriptions}
-                handleChangeProps={this.handleSetState}
-              />
-              <UploadSinglePicture
-                images={images}
-                handleChangeProps={this.handleSetState}
-              />
-              {(numberOfImages) ? (
-                <React.Fragment>
-                  <RichTextEditor
-                    description='Please enter your post description here'
-                    value={this.state.description}
-                    handleChange={(newState) => { this.setState({ description: newState }) }}
+        {fetchedStatus ? (
+          <React.Fragment>
+            {
+              isLogin ? (
+                <div>
+                  <h1 className='center'>Create your new post:</h1>
+                  <UploadedPicture
+                    images={images}
+                    imageDescriptions={imageDescriptions}
+                    handleChangeProps={this.handleSetState}
                   />
-                  <TagGroup
-                    tags={this.state.tags}
-                    onChangeTags={(newState) => { this.setState({ tags: newState }) }}
-                    getSugesstion={this.getSugesstionTags}
+                  <UploadSinglePicture
+                    images={images}
+                    handleChangeProps={this.handleSetState}
                   />
-                  <LocationSelector onLocationSelected={this.handleLocation} />
-                  <div className='mt-3'>
-                    <Button className='mr-3'
-                      onClick={this.handlePost}
-                      type='primary'
-                      icon='share-alt'
-                      size='large'
-                      disabled={this.state.disabled}>
-                      Share this post
+                  {(numberOfImages) ? (
+                    <React.Fragment>
+                      <RichTextEditor
+                        description='Please enter your post description here'
+                        value={this.state.description}
+                        handleChange={(newState) => {
+                          this.setState({ description: newState })
+                        }}
+                      />
+                      <TagGroup
+                        tags={this.state.tags}
+                        onChangeTags={(newState) => {
+                          this.setState({ tags: newState })
+                        }}
+                        getSugesstion={this.getSugesstionTags}
+                      />
+                      <LocationSelector onLocationSelected={this.handleLocation} />
+                      <div className='mt-3'>
+                        <Button className='mr-3'
+                          onClick={this.handlePost}
+                          type='primary'
+                          icon='share-alt'
+                          size='large'
+                          disabled={this.state.disabled}>
+                          Share this post
                     </Button>
 
-                    <Button
-                      onClick={() => {
-                        this.props.history.push('/');
-                      }}
-                      type='danger'
-                      icon='close'
-                      size='large'
-                      disabled={this.state.disabled}>
-                      Close this post
+                        <Button
+                          onClick={() => {
+                            this.props.history.push('/');
+                          }}
+                          type='danger'
+                          icon='close'
+                          size='large'
+                          disabled={this.state.disabled}>
+                          Close this post
                     </Button>
-                  </div>
-                </React.Fragment>
-              ) : (<React.Fragment />)}
-            </div>) : (
-              <PleaseLogin />
-            )
+                      </div>
+                    </React.Fragment>
+                  ) : (<React.Fragment />)}
+                </div>) : (
+                  <PleaseLogin />
+                )
+            }
+          </React.Fragment>
+        ) : (
+            <Loading />
+          )
         }
       </React.Fragment>
     );

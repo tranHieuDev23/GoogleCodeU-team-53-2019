@@ -20,7 +20,7 @@ import com.google.codeu.controllers.datastore.UserDao;
 import com.google.codeu.controllers.storage.CloudStorageHelper;
 import com.google.codeu.models.User;
 import com.google.codeu.utils.ServletLink;
-import com.google.gson.Gson;
+import com.google.codeu.utils.UserJsonifier;
 
 @WebServlet(ServletLink.API_UPDATE_USER)
 @MultipartConfig
@@ -33,7 +33,6 @@ public class UpdateUserServlet extends HttpServlet {
     private UserService userService;
     private UserDao userDao;
     private CloudStorageHelper storageHelper;
-    private Gson gson;
 
     @Override
     public void init() throws ServletException {
@@ -41,7 +40,6 @@ public class UpdateUserServlet extends HttpServlet {
         userService = UserServiceFactory.getUserService();
         userDao = new UserDao();
         storageHelper = CloudStorageHelper.getInstance();
-        gson = new Gson();
     }
 
     @Override
@@ -59,7 +57,10 @@ public class UpdateUserServlet extends HttpServlet {
 
         try {
             String username = req.getParameter("username");
-            Date birthdate = dateFormat.parse(req.getParameter("birthdate"));
+            if (username.isEmpty())
+                throw new RuntimeException("username cannot be empty!");
+            String birthdateString = req.getParameter("birthdate");
+            Date birthdate = (!birthdateString.equals("") ? dateFormat.parse(req.getParameter("birthdate")) : null);
             String bioText = req.getParameter("bioText");
             Part avatarPart = req.getPart("avatar");
             Link avatarUrl = null;
@@ -78,6 +79,6 @@ public class UpdateUserServlet extends HttpServlet {
 
         userDao.updateUser(user);
         resp.setContentType("application/json");
-        resp.getWriter().println(gson.toJson(user));
+        resp.getWriter().println(UserJsonifier.jsonify(user).toString());
     }
 }
