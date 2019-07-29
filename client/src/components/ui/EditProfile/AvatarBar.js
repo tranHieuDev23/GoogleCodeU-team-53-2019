@@ -1,5 +1,5 @@
 import React from 'react';
-import { Upload, Avatar, Button, Icon, notification, message } from 'antd';
+import { Upload, Button, Icon, notification, message } from 'antd';
 
 import { isItImage } from 'helpers/StringProcess';
 import { PLEASE_UPLOAD_IMAGE } from 'constants/Notification';
@@ -43,24 +43,31 @@ class AvatarBar extends React.Component {
     if (newAvatar !== null)
       url = newAvatar && URL.createObjectURL(newAvatar);
     return (
-      <div>
-        <Avatar 
-          shape="square" 
-          //style={{ width: '100%', paddingTop: '100%' }} 
-          size={150}
+      <div className="mb-4">
+        <img
+          className='center mb-2'
+          style={{
+            display: 'block',
+            maxWidth: '80%',
+            width: 'auto',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
           src={url}
+          alt="Avatar"
         />
-        <div className='center'>
-          <Upload
-            showUploadList={showUploadList}
-            onChange={this.onChange}
-            fileList={this.state.fileList}
-          >
-            <Button>
-              <Icon type="upload" /> Change avatar
-           </Button>
-          </Upload>,
-        </div>
+        <Upload
+          style={{
+            width: '100%',
+            display: 'block'
+          }}
+          showUploadList={showUploadList}
+          onChange={this.onChange}
+          fileList={this.state.fileList}>
+          <Button block={true}>
+            <Icon type="upload" /> Change avatar
+          </Button>
+        </Upload>
       </div>
     );
   }
