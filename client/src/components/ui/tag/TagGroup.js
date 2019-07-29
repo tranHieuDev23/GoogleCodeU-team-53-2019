@@ -79,7 +79,7 @@ class TagGroup extends React.Component {
     const { tags, inputVisible, inputValue } = this.state;
     const tagChild = tags.map(this.forMap);
     return (
-      <Row type='flex' style={{ marginBottom: 16 }}>
+      <Row type='flex' style={{ marginBottom: '1.5rem', marginTop: '1.5rem' }}>
         <Button
           size='small'
           loading={this.state.sugessting}

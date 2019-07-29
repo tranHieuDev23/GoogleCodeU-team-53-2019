@@ -1,5 +1,6 @@
 import React from 'react';
 import poweredByGoogle from 'assets/powered_by_google_on_white_hdpi.png';
+import { Button } from "antd";
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 import { GOOGLE_MAPS_API_KEY } from '../../constants/apiKey';
 import {
@@ -16,6 +17,9 @@ class LocationSelector extends React.Component {
       selectedLocation: null,
       selectedLocationName: null
     };
+    this.setToCurrentLocation = this.setToCurrentLocation.bind(this);
+    this.mapReady = this.mapReady.bind(this);
+    this.mapClicked = this.mapClicked.bind(this);
   }
 
   setToCurrentLocation() {
@@ -106,10 +110,13 @@ class LocationSelector extends React.Component {
     };
     return (
       <div>
-        <div className='py-3'>
-          <button type='button' onClick={this.setToCurrentLocation.bind(this)}>
+        <div className='mb-3'>
+          <Button
+            icon='environment'
+            size='large'
+            onClick={this.setToCurrentLocation()}>
             Set to current location
-          </button>
+          </Button>
         </div>
         <div style={style}>
           <Map
@@ -117,8 +124,8 @@ class LocationSelector extends React.Component {
             zoom={14}
             center={this.state.selectedLocation}
             style={style}
-            onReady={this.mapReady.bind(this)}
-            onClick={this.mapClicked.bind(this)}>
+            onReady={this.mapReady}
+            onClick={this.mapClicked}>
             {this.state.selectedLocation == null ? null : (
               <Marker
                 title={this.state.selectedLocationName}
@@ -128,8 +135,8 @@ class LocationSelector extends React.Component {
           </Map>
         </div>
         {this.state.selectedLocation == null ? null : (
-          <div>
-            <p>Selected location: {this.state.selectedLocationName}</p>
+          <div className='mt-2'>
+            <p className='mb-1'>Selected location: {this.state.selectedLocationName}</p>
             <img
               alt={'Powered by Google'}
               src={poweredByGoogle}
