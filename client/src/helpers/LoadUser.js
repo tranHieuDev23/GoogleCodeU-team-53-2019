@@ -7,7 +7,6 @@ export const fetchUser = async userId => {
   let user = null;
   await axios
     .post(url, {})
-    //.post('/api/TestUser', {})
     .then(response => {
       const { data } = response;
       user = data;

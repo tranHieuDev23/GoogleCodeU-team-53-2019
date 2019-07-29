@@ -61,6 +61,8 @@ export const DELETE_COMMENT = servletPrefix + '/delete-comment';
 
 export const PREDICT_TAG = servletPrefix + '/predict-tag';
 
+export const API_EDIT_PROFILE = servletPrefix + '/update-user';
+
 export const LOGIN_PAGE = '/login';
 
 export const USER_PAGE = '/user';

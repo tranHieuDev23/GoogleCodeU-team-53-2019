@@ -34,16 +34,20 @@ class Root extends Component {
     this.state = {
       isLogin: false,
       userEmail: '',
-      userId: null
+      userId: null,
+      fetchedStatus: false,
     };
     this.handleSetState = this.handleSetState.bind(this);
   }
 
   componentDidMount = async () => {
     const status = await fetchLoginStatus();
-    this.setState({ userEmail: status.userEmail });
-    this.setState({ isLogin: !!status.userEmail });
-    this.setState({ userId: status.userId });
+    this.setState({
+      userEmail: status.userEmail,
+      isLogin: !!status.userEmail,
+      userId: status.userId,
+      fetchedStatus: true,
+    });
   };
 
   handleSetState = (name, newState) => {
