@@ -3,6 +3,7 @@ package com.google.codeu.controllers.servlets;
 import com.google.codeu.controllers.datastore.UserDao;
 import com.google.codeu.models.User;
 import com.google.codeu.utils.ServletLink;
+import com.google.codeu.utils.UserJsonifier;
 import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -17,12 +18,10 @@ public class RetrieveUserServlet extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   private UserDao userDao;
-  private Gson gson;
 
   @Override
   public void init() throws ServletException {
     userDao = new UserDao();
-    gson = new Gson();
   }
 
   @Override
@@ -30,6 +29,6 @@ public class RetrieveUserServlet extends HttpServlet {
     res.setContentType("application/json");
     String userId = req.getParameter("userId");
     User result = userDao.getUser(userId);
-    res.getWriter().println(gson.toJson(result));
+    res.getWriter().println(UserJsonifier.jsonify(result).toString());
   }
 }
