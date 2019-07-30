@@ -1,19 +1,12 @@
 import React from 'react';
-import { Icon } from 'antd';
 import EditProfileForm from './EditProfileForm';
 
 class EditProfileWrapper extends React.Component {
   render() {
     return (
-      <div>
-        <div className="EditProfile">
-          <span>
-            <Icon type='edit' />
-            Edit profile
-          </span>
-        </div>
+      <div className='container pt-2'>
+        <h1 className='center'>Edit Profile</h1>
         <EditProfileForm {...this.props} />
-
       </div>
     );
   }

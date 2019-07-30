@@ -8,14 +8,12 @@ class EditProfileForm extends React.Component {
     return (
       <div>
         <br />
-        <Row gutter={32} type="flex">
-          <Col span={19} >
-
-          <TextFrom {...this.props}/>
+        <Row gutter={24} type="flex">
+          <Col md={18} >
+            <TextFrom {...this.props} />
           </Col>
-          <Col span={5}>
-
-          <AvatarBar {...this.props}/>
+          <Col md={6}>
+            <AvatarBar {...this.props} />
           </Col>
         </Row>
       </div >
