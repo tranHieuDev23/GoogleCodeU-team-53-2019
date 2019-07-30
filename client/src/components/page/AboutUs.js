@@ -19,21 +19,30 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import TeammateIntro from 'components/ui/TeammateIntro.js';
+import { Row, Col } from 'antd';
 
 /**
  * @param teammate A teammate defined in reducers/teammates.js.
  * @param id A unique id for the teammate.
  * @return The html representation of a teammate's intro.
  */
-const createTeammateUi = function(teammate, id) {
+const createTeammateUi = function (teammate, id) {
   return (
-    <TeammateIntro
-      key={id}
-      name={teammate.name}
-      description={teammate.description}
-      hobby={teammate.hobby}
-      askMeAbout={teammate.askMeAbout}
-    />
+    <Col lg={12}>
+      <div style={{
+        height: '100%',
+        paddingBottom: '1.5rem'
+      }}>
+        <TeammateIntro
+          key={id}
+          name={teammate.name}
+          description={`Summer feelz: ${teammate.description}`}
+          hobby={`Hobbies: ${teammate.hobby}`}
+          askMeAbout={`Ask me about: ${teammate.askMeAbout}`}
+          displayImage={teammate.displayImage}
+        />
+      </div>
+    </Col>
   );
 };
 
@@ -47,8 +56,10 @@ class AboutUs extends Component {
 
     return (
       <div className='container pt-2'>
-        <h1 className='center'>About Our Team</h1>
-        {createTeammateListUi}
+        <h1 className='center'>About Our Team - CodeU Team 53</h1>
+        <Row gutter={16} type='flex' align='center'>
+          {createTeammateListUi}
+        </Row>
       </div>
     );
   }
@@ -60,7 +71,7 @@ AboutUs.propTypes = {
 };
 
 /** Maps teammates data from redux to AboutUs. */
-const mapStateToProps = function(state) {
+const mapStateToProps = function (state) {
   return { teammates: state.teammates };
 };
 

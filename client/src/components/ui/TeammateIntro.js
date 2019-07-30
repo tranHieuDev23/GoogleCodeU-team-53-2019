@@ -16,21 +16,36 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Card, Avatar } from 'antd';
+
+const { Meta } = Card;
 
 /**
  * An introduction card for each teammate.
  * @return The html representation of the card.
  */
-const TeammateIntro = function(props) {
+const TeammateIntro = function (props) {
   return (
-    <div className='TeammateIntro'>
-      <h2>{props.name}</h2>
-      <ul>
-        <li>{props.description}</li>
-        <li>{props.hobby}</li>
-        <li>{props.askMeAbout}</li>
-      </ul>
-    </div>
+    <Card
+      style={{ 
+        width: '100%',
+        height: '100%'
+      }}>
+      <Meta
+        avatar={
+          <Avatar
+            size={120}
+            src={props.displayImage} />
+        }
+        title={props.name}
+        description={
+          <ul>
+            <li>{props.description}</li>
+            <li>{props.hobby}</li>
+            <li>{props.askMeAbout}</li>
+          </ul>
+        } />
+    </Card>
   );
 };
 
