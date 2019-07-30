@@ -28,13 +28,12 @@ import { Row, Col } from 'antd';
  */
 const createTeammateUi = function (teammate, id) {
   return (
-    <Col lg={12}>
+    <Col lg={12} key={id}>
       <div style={{
         height: '100%',
         paddingBottom: '1.5rem'
       }}>
         <TeammateIntro
-          key={id}
           name={teammate.name}
           description={`Summer feelz: ${teammate.description}`}
           hobby={`Hobbies: ${teammate.hobby}`}
@@ -57,7 +56,7 @@ class AboutUs extends Component {
     return (
       <div className='container pt-2'>
         <h1 className='center'>About Our Team - CodeU Team 53</h1>
-        <Row gutter={16} type='flex' align='center'>
+        <Row gutter={16} type='flex' justify='center'>
           {createTeammateListUi}
         </Row>
       </div>
