@@ -11,6 +11,7 @@ import {
 } from 'constants/links.js';
 import { Link, withRouter } from 'react-router-dom';
 import { Menu, Icon, Dropdown, Button } from 'antd';
+import { isThisPathUserPage } from 'helpers/StringProcess';
 /** The common navbar ui used throughout the application. */
 class CustomNavBar extends Component {
   constructor(props) {
@@ -48,8 +49,9 @@ class CustomNavBar extends Component {
   };
 
   render() {
-    const { userEmail } = this.state;
+    const { userEmail, userId } = this.state;
     const isLogin = userEmail ? true : false;
+    const { pathname } = this.props.location;
 
     const menu = (
       <Menu onClick={this.handleMenuClick}>
@@ -67,7 +69,15 @@ class CustomNavBar extends Component {
             Edit your profile
           </Menu.Item>
         )}
-        {isLogin && (
+        {(isLogin && isThisPathUserPage(pathname)) && (
+          <Menu.Item key='userpage-2'>
+            <a href={USER_PAGE + '/' + userId}>
+              <Icon type='profile' />
+              <span className='ml-2'>Your page</span>
+            </a>
+          </Menu.Item>
+        )}
+        {(isLogin && !isThisPathUserPage(pathname)) && (
           <Menu.Item key='userpage'>
             <Icon type='profile' />
             Your page
