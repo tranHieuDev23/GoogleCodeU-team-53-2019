@@ -1,15 +1,21 @@
 import React from 'react';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import Gallery from 'react-grid-gallery';
+import Gallery from "react-photo-gallery";
+import Carousel, { Modal, ModalGateway } from "react-images";
+import CustomPhoto from './CustomPhoto';
 
 class SinglePicture extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       postImages: [],
-      items: []
+      items: [],
+      viewerIsOpen: false,
+      currentImage: 0
     }
     this.applyPostImages = this.applyPostImages.bind(this);
+    this.openLightbox = this.openLightbox.bind(this);
+    this.closeLightbox = this.closeLightbox.bind(this);
+
     this.applyPostImages(this.props.post.postImages);
   }
 
@@ -37,25 +43,43 @@ class SinglePicture extends React.Component {
     });
   }
 
+  openLightbox(event, { photo, index }) {
+    this.setState({
+      viewerIsOpen: true,
+      currentImage: index
+    });
+  }
+
+  closeLightbox() {
+    this.setState({
+      viewerIsOpen: false
+    });
+  }
+
   render() {
-    const galleryStyle = {
-      marginLeft: 'auto',
-      marginRight: 'auto'
-    };
+    const { items, viewerIsOpen, currentImage } = this.state;
     return (
-      <React.Fragment>
-        {this.state == null ? (
-          <div />
-        ) : (
-          <Gallery
-            style={galleryStyle}
-            images={this.state.items}
-            rowHeight={240}
-            enableLightbox={true}
-            enableImageSelection={false}
-          />
-        )}
-      </React.Fragment>
+      this.state == null ? (
+        null
+      ) : (
+          <div className="mt-3">
+            <Gallery
+              photos={items}
+              margin={0}
+              onClick={this.openLightbox}
+              renderImage={CustomPhoto} />
+            <ModalGateway>
+              {viewerIsOpen ? (
+                <Modal onClose={this.closeLightbox}>
+                  <Carousel
+                    currentIndex={currentImage}
+                    views={items}
+                  />
+                </Modal>
+              ) : null}
+            </ModalGateway>
+          </div>
+        )
     );
   }
 }
@@ -66,9 +90,9 @@ function getImageItem(imageSrc, imageDescription) {
     img.onload = () => {
       resolve({
         src: imageSrc,
-        thumbnail: imageSrc,
-        thumbnailHeight: img.height,
-        thumbnailWidth: img.width,
+        source: imageSrc,
+        height: img.height,
+        width: img.width,
         alt: imageDescription,
         caption: imageDescription
       });
@@ -82,9 +106,9 @@ function postImagesChanged(oldImages, newImages) {
     return newImages != null;
   if (newImages == null)
     return true;
-  if (oldImages.length !== newImages.length) 
+  if (oldImages.length !== newImages.length)
     return true;
-  for (let i = 0; i < oldImages.length; i ++) {  
+  for (let i = 0; i < oldImages.length; i++) {
     let oldImage = oldImages[i];
     let newImage = newImages[i];
     if (oldImage.id !== newImage.id)

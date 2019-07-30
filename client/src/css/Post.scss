@@ -4,20 +4,21 @@
   flex-direction: column;
   border: 1px solid white;
   border-radius: 10px;
-  /**box-shadow: 3px 3px 7px -1px rgba(184, 180, 184, 1);*/
   background: white;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+
+  &__Description {
+    margin-bottom: 1rem;
+  }
 
   &:not(:last-child) {
     margin-bottom: 20px;
   }
-
-  &__Description {
-    padding: 10px;
-  }
 }
 
 .Post__Icons {
-  padding: 15px;
+  padding: 15px 0;
   &__Icon {
     cursor: pointer;
     height: 40px;
@@ -31,7 +32,7 @@
 
 .Post__Author {
   display: flex;
-  padding: 15px;
+  padding: 15px 0;
   align-items: center;
 
   &__Wrapper {
@@ -57,7 +58,7 @@
 }
 
 .Post__Comments {
-  padding: 15px;
+  padding: 15px 0;
 
   &__Author {
     font-weight: bold;
@@ -87,7 +88,7 @@
 }
 
 .Post__LikeBar {
-  padding: 15px;
+  padding: 15px 0;
   font-weight: bold;
 
   &__hidden {

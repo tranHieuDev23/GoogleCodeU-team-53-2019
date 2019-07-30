@@ -40,8 +40,9 @@ class DisplayTags extends React.Component {
         <div style={{ marginRight: 8, display: 'inline', color: 'Gray' }}>
           Categories:
         </div>
-        {serverTags.map(tag => (
-          <React.Fragment>
+        {serverTags.map((tag, index) => (
+          <React.Fragment
+            key={index}>
             {!isThisPathTagPage(pathname) ? (
               <CheckableTag
                 key={tag}
