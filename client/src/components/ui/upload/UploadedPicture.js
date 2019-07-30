@@ -49,14 +49,12 @@ class UploadedPicture extends React.Component {
     const items = [];
     const { images } = this.props;
 
-    let index = 0;
-    images.forEach(file => {
+    images.forEach((file, index) => {
       if (file != null) {
         let url = file && URL.createObjectURL(file);
-        const thisKey = index;
         items.push(
-          <div className='col-md-6 pb-4'>
-            <div className='AddedContainer' key={thisKey}>
+          <div key={index} className='col-md-6 pb-4'>
+            <div className='AddedContainer'>
               <img
                 className='AddedImg'
                 src={url}
@@ -66,12 +64,12 @@ class UploadedPicture extends React.Component {
                 className='Btn_Edit'
                 icon='edit'
                 order={index}
-                onClick={() => this.handleChangeDescription(thisKey)}
+                onClick={() => this.handleChangeDescription(index)}
               />
               <Button
                 className='Btn_Delete'
                 icon='delete'
-                onClick={() => this.handleDeleteImage(thisKey)}
+                onClick={() => this.handleDeleteImage(index)}
               >
               </Button>
             </div>
@@ -79,7 +77,6 @@ class UploadedPicture extends React.Component {
 
         );
       }
-      ++index;
     });
 
     const { open, description } = this.state;
