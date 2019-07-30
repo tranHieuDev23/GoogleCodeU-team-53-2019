@@ -103,7 +103,7 @@ class UploadPage extends React.Component {
             {
               isLogin ? (
                 <div>
-                  <h1 className='center'>Create your new post:</h1>
+                  <h1 className='center'>Create New Post</h1>
                   <UploadedPicture
                     images={images}
                     imageDescriptions={imageDescriptions}
@@ -137,8 +137,8 @@ class UploadPage extends React.Component {
                           icon='share-alt'
                           size='large'
                           disabled={this.state.disabled}>
-                          Share this post
-                    </Button>
+                          Post
+                        </Button>
 
                         <Button
                           onClick={() => {
@@ -148,11 +148,24 @@ class UploadPage extends React.Component {
                           icon='close'
                           size='large'
                           disabled={this.state.disabled}>
-                          Close this post
-                    </Button>
+                          Cancel
+                        </Button>
                       </div>
                     </React.Fragment>
-                  ) : (<React.Fragment />)}
+                  ) : (
+                    <div className='mt-3'>
+                      <Button
+                        onClick={() => {
+                          this.props.history.push('/');
+                        }}
+                        type='danger'
+                        icon='close'
+                        size='large'
+                        disabled={this.state.disabled}>
+                        Cancel
+                      </Button>
+                    </div>
+                  )}
                 </div>) : (
                   <PleaseLogin />
                 )

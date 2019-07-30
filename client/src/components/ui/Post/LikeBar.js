@@ -41,7 +41,7 @@ class LikeBar extends React.Component {
     if (numberOfLike === 1) {
       str = 'Liked by one person';
     } else if (numberOfLike > 1) {
-      str = 'Liked by ' + numberOfLike + ' peoples';
+      str = 'Liked by ' + numberOfLike + ' people';
     }
     let thisClass = 'Post__LikeBar';
     if (str === '') thisClass += '__hidden';

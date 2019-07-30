@@ -68,7 +68,10 @@ class EditProfile extends React.Component {
                     editUserData={this.handleSetState}
                   />
                   <div className="EditProfile">
-                    <Button type='primary' onClick={this.handleSubmit}>Change profile</Button>
+                    <Button className='mr-2' type='primary' onClick={this.handleSubmit}>Save</Button>
+                    <Button type='danger' onClick={()=>{
+                      this.props.history.push('/');
+                    }}>Cancel</Button>
                   </div>
                 </div>
               ) : (
