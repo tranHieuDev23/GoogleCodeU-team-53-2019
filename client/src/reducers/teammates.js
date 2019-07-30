@@ -1,3 +1,7 @@
+import user from '../assets/icons/user.svg';
+import hieu from '../assets/hieu.jpg';
+import suyeon from '../assets/suyeon.jpg';
+import hyeln from '../assets/hyeln.jpg';
 /**
  * Copyright 2019 Google Inc.
  *
@@ -15,37 +19,48 @@
  */
 
 /** @return A json representation of our teammate. */
-const createTeammate = function(name, description, hobby, askMeAbout) {
-  return { name, description, hobby, askMeAbout };
+const createTeammate = function(name, description, hobby, askMeAbout, displayImage) {
+  return { name, description, hobby, askMeAbout, displayImage };
 };
 
 /** Json of all teammates.. */
 const teammates = {
   1: createTeammate(
-    'Teammate A Name',
-    'Feelings',
-    'AspirationalHobby:',
-    'Ask me About: '
+    'Suyeon Lee',
+    'I need more coffee',
+    'Making certain routine during a day',
+    'Coffee, Music, Books, Exchange student, Kakao, Travel',
+    suyeon
   ),
   2: createTeammate(
-    'Teammate B Name',
-    'Feelings',
-    'AspirationalHobby:',
-    'Ask me About: '
+    'Hye In Kim',
+    'Optimistic, Excited and Hopeful! I am going to ICML 2019!',
+    'I want to learn Neuroscience',
+    'Art (I was an art student), Anime, Electronic Music, Nerd stuff',
+    hyeln
   ),
   3: createTeammate(
-    'Teammate C Name',
-    'Feelings',
-    'AspirationalHobby:',
-    'Ask me About: '
+    'Trần Minh Hiếu',
+    'A little bit melted under Hanoi\'s summer heat. I want to go to the sea~',
+    'Doing cool stuffs with Genetics Algorithm and Neural Network.',
+    'Programming, Comics, Anime, Haruki Murakami and general nerd stuffs.',
+    hieu
   ),
   4: createTeammate(
-    'Teammate D Name',
-    'Feelings',
-    'AspirationalHobby:',
-    'Ask me About: '
+    'Hoàng Bảo Long',
+    'I just wanna go out to sea. It\'s too hot now in Vietnam!',
+    'Learning about Deep learning and optimization',
+    'Football, anime and fantasy novels.',
+    user
   ),
-  keys: [1, 2, 3, 4]
+  5: createTeammate(
+    'Johnny Bravo',
+    'I want to go backpacking in Vietnam',
+    'To complete my Sport Pilot Flying License',
+    'Star Wars, GSuite/Google Apps, Google Cloud, Microsoft, SCUBA Diving, Food and Travel',
+    user
+  ),
+  keys: [1, 2, 3, 4, 5]
 };
 
 /**
