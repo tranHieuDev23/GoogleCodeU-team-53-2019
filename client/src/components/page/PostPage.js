@@ -44,10 +44,10 @@ class PostPage extends React.Component {
             />
           </React.Fragment>
         ) : (
-          <React.Fragment>
-            {didMount ? <Page404 /> : <Loading />}
-          </React.Fragment>
-        )}
+            <React.Fragment>
+              {didMount ? <Page404 /> : <Loading />}
+            </React.Fragment>
+          )}
       </div>
     );
   }

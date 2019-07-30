@@ -23,9 +23,10 @@
 @import "css/LocationSelector.scss";
 @import "css/UploadedPicture.scss";
 @import "css/EditProfile.scss";
+@import "css/UserProfile.scss";
 
 body {
-  background: #DEEAFC;
+  background: #deeafc;
   padding: 0;
   margin: 0;
 }
@@ -42,26 +43,26 @@ body {
 /** Remove bullet points from navigation bar. */
 .navbar {
   list-style-type: none;
-  background-color: #77A6F7 !important;
+  background-color: #77a6f7 !important;
 }
 
 /** Keep navigation menu on one line. */
-.navbar li{
-    display: inline-block;
-    margin-right: 10px;
+.navbar li {
+  display: inline-block;
+  margin-right: 10px;
 }
 
 .navbar-toggler {
   margin: 2px;
-  background-color: #77A6F7;
-  color: #FFFFFF !important; 
-  border: 1px solid #DEEAFC !important;
+  background-color: #77a6f7;
+  color: #ffffff !important;
+  border: 1px solid #deeafc !important;
   border-radius: 5px !important;
   text-align: center;
   padding: 5px 10px;
 }
 .navbar-toggler:hover {
-  background-color: #4483EF;
+  background-color: #4483ef;
   transition: 0.3s;
 }
 
