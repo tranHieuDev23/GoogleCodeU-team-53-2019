@@ -32,7 +32,7 @@ export const LOGIN_STATUS = servletPrefix + '/login-status';
 export const MESSAGE = servletPrefix + '/messages';
 
 /** Client link to the about page. */
-export const ABOUT_US = servletPrefix + '/aboutus';
+export const ABOUT_US = '/aboutus';
 /** Client link to the home page. */
 export const HOME = '/';
 /** Client link to the user's page. */
