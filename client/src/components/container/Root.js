@@ -14,7 +14,8 @@ import {
   TAG_PAGE,
   EXPLORE_PAGE,
   PLEASE_LOGIN,
-  EDIT_PROFILE_PAGE
+  EDIT_PROFILE_PAGE,
+  LOGIN_PAGE
 } from 'constants/links.js';
 import UploadPage from 'components/page/UploadPage';
 import PostPage from 'components/page/PostPage.js';
@@ -26,6 +27,7 @@ import 'css/Post.scss';
 import 'css/index.scss'
 import PleaseLogin from 'components/Result/PleaseLogin';
 import EditProfile from 'components/page/EditProfile';
+import LoginPage from 'components/page/LoginPage';
 
 /** Renders all components in the <root> element on ../public/index.html. */
 class Root extends Component {
@@ -77,6 +79,15 @@ class Root extends Component {
           <Suspense fallback='Loading...'>
             <Switch>
               <Route exact path={PLEASE_LOGIN} component={PleaseLogin} />
+              <Route
+                exact
+                path={LOGIN_PAGE}
+                component={withStatusHome(
+                  LoginPage,
+                  this.state,
+                  this.handleSetState
+                )}
+              />
               <Route
                 exact
                 path={HOME}
