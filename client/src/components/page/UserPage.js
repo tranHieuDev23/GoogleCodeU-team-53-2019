@@ -5,6 +5,7 @@ import { fetchPosts } from 'helpers/LoadPost';
 import { fetchUser } from 'helpers/LoadUser';
 import Page404 from 'components/Result/Page404';
 import Loading from './Loading';
+import UserProfile from 'components/ui/UserProfile';
 
 class UserPage extends Component {
   constructor(props) {
@@ -14,8 +15,8 @@ class UserPage extends Component {
     this.state = {
       posts: [],
       userIdParam: this.props.match.params.userId,
-      thisUserEmail: '',
       minTimestamp: timestamp,
+      profile: null,
       didMount: false
     };
     this.loadMorePost = this.loadMorePost.bind(this);
@@ -28,7 +29,7 @@ class UserPage extends Component {
       this.setState({ didMount: true });
       return;
     }
-    this.setState({ thisUserEmail: user.username });
+    this.setState({ profile: user });
     // get Posts
     const date = new Date();
     const timestamp = date.getTime(); //current time
@@ -98,15 +99,21 @@ class UserPage extends Component {
   };
 
   render() {
-    const { didMount } = this.state;
+    const { didMount, profile, posts } = this.state;
+    const { userStatus } = this.props;
+    let owner = false;
+    if (profile !== null)
+      owner = (profile.id === userStatus.userId);
+
     return (
       <div className='container pt-2'>
-        {this.state.thisUserEmail ? (
+        {(profile !== null) ? (
           <div>
-            <h1 className='center'>{this.state.thisUserEmail} Page</h1>
+            <h1 className='center'>{profile.username} Page</h1>
+            <UserProfile profile={profile} owner={owner} />
             <NewFeedWrapper
-              userStatus={this.props.userStatus}
-              posts={this.state.posts}
+              userStatus={userStatus}
+              posts={posts}
               handleLoadMorePost={this.loadMorePost}
             />
           </div>

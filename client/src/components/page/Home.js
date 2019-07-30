@@ -24,7 +24,7 @@ class Home extends Component {
     if (newPosts != null) {
       let newMinTimestamp = this.state.minTimestamp;
       this.setState({ posts: newPosts });
-      newPosts.forEach(function(post) {
+      newPosts.forEach(function (post) {
         newMinTimestamp = Math.min(newMinTimestamp, post.creationTime);
       });
       this.setState({ minTimestamp: newMinTimestamp - 1 });
@@ -63,10 +63,10 @@ class Home extends Component {
               handleLoadMorePost={this.loadMorePost}
             />
           ) : (
-            <React.Fragment>
-              {didMount ? <React.Fragment /> : <Loading />}
-            </React.Fragment>
-          )}
+              <React.Fragment>
+                {didMount ? <React.Fragment /> : <Loading />}
+              </React.Fragment>
+            )}
         </div>
       </div>
     );

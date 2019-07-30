@@ -23,18 +23,14 @@ class CustomNavBar extends Component {
 
   componentDidMount = () => {
     const { userStatus } = this.props;
-    this.setState({ userEmail: userStatus.userEmail });
-    this.setState({ userId: userStatus.userId });
+    this.setState({ userEmail: userStatus.userEmail, userId: userStatus.userId });
   };
 
   componentDidUpdate = () => {
     const { userStatus } = this.props;
-    if (userStatus.userEmail !== this.state.userEmail) {
-      this.setState({ userEmail: userStatus.userEmail });
-      this.setState({ userId: userStatus.userId });
-    }
-    if (userStatus.userId !== this.state.userId)
-      this.setState({ userId: userStatus.userId });
+    const { userEmail, userId } = this.state;
+    if (userStatus.userEmail !== userEmail || userStatus.userId !== userId)
+      this.setState({ userEmail: userStatus.userEmail, userId: userStatus.userId });
   };
 
   handleMenuClick = e => {

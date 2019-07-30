@@ -7,24 +7,25 @@ import parse from 'html-react-parser';
 import InteractiveBar from 'components/ui/Post/InteractiveBar';
 import CommentBar from 'components/ui/Post/CommentBar';
 import DisplayTags from 'components/ui/tag/DisplayTags';
+import CloseBtn from '../CloseBtn';
 
 class SinglePost extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       post: this.props.post,
-      numberOfLike: (this.props.post != null? this.props.post.likedUserIds.length : 0),
+      numberOfLike: (this.props.post != null ? this.props.post.likedUserIds.length : 0),
     }
     this.onChangeLikes = this.onChangeLikes.bind(this);
   }
 
   componentDidUpdate = () => {
-    const {post} = this.props;
+    const { post } = this.props;
     if (!postChanged(this.state.post, post))
       return;
     this.setState({
       post: post,
-      numberOfLike: (post != null? post.likedUserIds.length : 0)
+      numberOfLike: (post != null ? post.likedUserIds.length : 0)
     });
   }
 
@@ -41,6 +42,9 @@ class SinglePost extends React.Component {
             <div />
           ) : (
               <div className="Post">
+                <div className="Post__btn">
+                  <CloseBtn />
+                </div>
                 <PostAuthor {...this.props} />
                 <div className="Post__Description">{parse(post.descriptionText)}</div>
                 <DisplayTags tags={post.tags} />
@@ -79,7 +83,7 @@ function postChanged(oldPost, newPost) {
     return true;
   if (oldPost.likedUserIds.length !== newPost.likedUserIds.length)
     return true;
-  for (let i = 0; i < oldPost.likedUserIds.length; i ++)
+  for (let i = 0; i < oldPost.likedUserIds.length; i++)
     if (oldPost.likedUserIds[i] !== newPost.likedUserIds[i])
       return true;
   return false;

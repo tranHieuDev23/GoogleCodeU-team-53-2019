@@ -1,0 +1,41 @@
+.user-profile {
+  margin-bottom: 5rem;
+
+  &__row {
+    min-height: 10rem;
+    align-items: flex-start;
+  }
+
+  img {
+    display: block;
+    margin: auto;
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+
+    @media only screen and (max-width: 900px) {
+      height: 5.5rem;
+      width: 5.5rem;
+    }
+  }
+
+  &__bio {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.3rem;
+  }
+
+  &__wrapper {
+    align-items: center;
+  }
+
+  &__name {
+    margin-right: 2rem;
+    font-weight: 700;
+    font-size: 1.7rem;
+  }
+
+  &__bioText {
+    width: 90%;
+  }
+}
