@@ -1,5 +1,6 @@
 .user-profile {
-  margin-bottom: 5rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 
   &__row {
     min-height: 10rem;
@@ -9,14 +10,9 @@
   img {
     display: block;
     margin: auto;
-    height: 10rem;
-    width: 10rem;
+    height: 150px;
+    width: 150px;
     border-radius: 50%;
-
-    @media only screen and (max-width: 900px) {
-      height: 5.5rem;
-      width: 5.5rem;
-    }
   }
 
   &__bio {

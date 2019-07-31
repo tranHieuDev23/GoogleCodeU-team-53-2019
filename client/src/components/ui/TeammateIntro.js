@@ -39,7 +39,9 @@ const TeammateIntro = function (props) {
         }
         title={props.name}
         description={
-          <ul>
+          <ul style={{
+            paddingLeft: '16px'
+          }}>
             <li>{props.description}</li>
             <li>{props.hobby}</li>
             <li>{props.askMeAbout}</li>
