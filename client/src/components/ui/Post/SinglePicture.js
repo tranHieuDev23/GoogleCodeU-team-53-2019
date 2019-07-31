@@ -65,7 +65,7 @@ class SinglePicture extends React.Component {
           <div className="mt-3">
             <Gallery
               photos={items}
-              margin={0}
+              margin={4}
               onClick={this.openLightbox}
               renderImage={CustomPhoto} />
             <ModalGateway>

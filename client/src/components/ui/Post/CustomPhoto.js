@@ -18,7 +18,10 @@ const CustomPhoto = ({ index, onClick, photo, margin, direction, top, left, key 
   const customImgStyle = {
     position: 'absolute',
     top: '-100%', left: '0', right: '0', bottom: '-100%',
-    margin: 'auto'
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginLeft: margin,
+    marginRight: margin
   };
 
   return (
