@@ -2,6 +2,7 @@ import user from '../assets/icons/user.svg';
 import hieu from '../assets/hieu.jpg';
 import suyeon from '../assets/suyeon.jpg';
 import hyeln from '../assets/hyeln.jpg';
+import long from '../assets/long.jpg';
 /**
  * Copyright 2019 Google Inc.
  *
@@ -51,7 +52,7 @@ const teammates = {
     'I just wanna go out to sea. It\'s too hot now in Vietnam!',
     'Learning about Deep learning and optimization',
     'Football, anime and fantasy novels.',
-    user
+    long
   ),
   5: createTeammate(
     'Johnny Bravo',
