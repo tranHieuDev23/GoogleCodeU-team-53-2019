@@ -109,7 +109,6 @@ class UserPage extends Component {
       <div className='container pt-2'>
         {(profile !== null) ? (
           <div>
-            <h1 className='center'>{profile.username} Page</h1>
             <UserProfile profile={profile} owner={owner} />
             <NewFeedWrapper
               userStatus={userStatus}

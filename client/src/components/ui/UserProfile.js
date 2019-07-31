@@ -15,16 +15,22 @@ class UserProfile extends React.Component {
           </Col>
           <Col span={17} offset={1}>
             <div className="user-profile__bio">
-              <Row type="flex" className="user-profile__wrapper">
+              <div className="user-profile__wrapper">
                 <span className="user-profile__name">{profile.username}</span>
-                {owner &&
-                  <Button onClick={() => { this.props.history.push(EDIT_PROFILE_PAGE) }}>Edit profile</Button>
-                }
-              </Row>
+              </div>
               {(profile.birthdate !== '' && profile.birthdate !== undefined) &&
-                <span className="user-profile__birthdate">{'Birthday: ' + profile.birthdate}</span>
+                <div>
+                  <span className="user-profile__birthdate">{'Birthday: ' + profile.birthdate}</span>
+                </div>
               }
-              <span className="user-profile__bioText">{profile.bioText}</span>
+              <div>
+                <span className="user-profile__bioText">{profile.bioText}</span>
+              </div>
+              {owner &&
+                <div>
+                  <Button onClick={() => { this.props.history.push(EDIT_PROFILE_PAGE) }}>Edit profile</Button>
+                </div>
+              }
             </div>
           </Col>
         </Row>
