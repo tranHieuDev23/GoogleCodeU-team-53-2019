@@ -3,6 +3,7 @@ import hieu from '../assets/hieu.jpg';
 import suyeon from '../assets/suyeon.jpg';
 import hyeln from '../assets/hyeln.jpg';
 import long from '../assets/long.jpg';
+import johnny from '../assets/johny.jpg';
 /**
  * Copyright 2019 Google Inc.
  *
@@ -55,11 +56,11 @@ const teammates = {
     long
   ),
   5: createTeammate(
-    'Johnny Bravo',
+    'Johnny Benitez',
     'I want to go backpacking in Vietnam',
     'To complete my Sport Pilot Flying License',
     'Star Wars, GSuite/Google Apps, Google Cloud, Microsoft, SCUBA Diving, Food and Travel',
-    user
+    johnny
   ),
   keys: [1, 2, 3, 4, 5]
 };
