@@ -1,8 +1,10 @@
 import React from 'react';
+import { withRouter } from 'react-router-dom';
 import SinglePost from 'components/ui/Post/SinglePost';
 import { fetchPost } from 'helpers/LoadPost';
 import Page404 from 'components/Result/Page404';
 import Loading from './Loading';
+import { HOME } from 'constants/links';
 
 class PostPage extends React.Component {
   constructor(props) {
@@ -16,9 +18,14 @@ class PostPage extends React.Component {
   }
 
   onChangePost = async (index, oldPopup) => {
-    const post = await fetchPost(this.state.postIdParam, true);
-    if (post != null) this.setState({ post: post });
-    this.setState({ likePopup: oldPopup });
+    if (oldPopup === 'delete') {
+      this.props.history.push(HOME);
+    }
+    else {
+      const post = await fetchPost(this.state.postIdParam, true);
+      if (post != null) this.setState({ post: post });
+      this.setState({ likePopup: oldPopup });
+    }
   };
 
   componentDidMount = async () => {
@@ -53,4 +60,4 @@ class PostPage extends React.Component {
   }
 }
 
-export default PostPage;
+export default withRouter(PostPage);

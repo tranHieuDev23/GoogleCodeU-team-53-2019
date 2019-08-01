@@ -32,3 +32,17 @@ export const PLEASE_UPLOAD_IMAGE = {
   message: 'Cannot upload',
   description: 'You can only upload files in image format'
 }
+
+export const SOMETHING_WRONG = {
+  message: 'Sorry',
+  description: 'Something was wrong. Please try again later'
+}
+
+export const DELETE_POST_SUCCESS = {
+  message: 'Delete completed',
+}
+
+export const CANT_DELETE = {
+  message: 'Sorry',
+  description: "You don't have permission to delete this post"
+}
