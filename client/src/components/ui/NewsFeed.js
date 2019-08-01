@@ -16,27 +16,34 @@ class NewsFeed extends React.Component {
   }
 
   onChangePost = async (index, oldPopup) => {
-    let newItems = [...this.state.items];
-    const { posts } = this.props;
-    let newPost = await fetchPost(posts[index].id);
-    if (newPost == null) {
-      console.log("Can't re fetch single post");
-      return;
+    if (oldPopup === 'delete') {
+      let newItems = [...this.state.items];
+      newItems[index] = null;
+      this.setState({ items: newItems });
     }
-    const date = new Date();
-    const timestamp = date.getTime();
-    newItems[index] = (
-      <SinglePost
-        userStatus={this.props.userStatus}
-        post={newPost}
-        order={index}
-        key={newPost.id + '-' + timestamp}
-        onChangePost={this.onChangePost}
-        withComment={false}
-        popup={oldPopup}
-      />
-    );
-    this.setState({ items: newItems });
+    else {
+      let newItems = [...this.state.items];
+      const { posts } = this.props;
+      let newPost = await fetchPost(posts[index].id);
+      if (newPost == null) {
+        console.log("Can't re fetch single post");
+        return;
+      }
+      const date = new Date();
+      const timestamp = date.getTime();
+      newItems[index] = (
+        <SinglePost
+          userStatus={this.props.userStatus}
+          post={newPost}
+          order={index}
+          key={newPost.id + '-' + timestamp}
+          onChangePost={this.onChangePost}
+          withComment={false}
+          popup={oldPopup}
+        />
+      );
+      this.setState({ items: newItems });
+    }
   };
 
   componentDidMount = () => {

@@ -8,6 +8,8 @@ import InteractiveBar from 'components/ui/Post/InteractiveBar';
 import CommentBar from 'components/ui/Post/CommentBar';
 import DisplayTags from 'components/ui/tag/DisplayTags';
 import CloseBtn from '../CloseBtn';
+import { Popconfirm, Button } from 'antd';
+import { deletePost } from 'helpers/DeletePost';
 
 class SinglePost extends React.Component {
   constructor(props) {
@@ -33,8 +35,19 @@ class SinglePost extends React.Component {
     this.setState({ numberOfLike: newLikes });
   };
 
+  handleDelete = async () => {
+    const { post } = this.state;
+    const status = await deletePost(post.id);
+    if (status) {
+      const { onChangePost, order } = this.props;
+      onChangePost(order, 'delete');
+    }
+
+  }
+
   render() {
     const { post, numberOfLike } = this.state;
+    const { userId } = this.props.userStatus;
     return (
       <React.Fragment>
         {
@@ -43,7 +56,19 @@ class SinglePost extends React.Component {
           ) : (
               <div className="Post">
                 <div className="Post__btn">
-                  <CloseBtn />
+                  {(userId === post.author.id) &&
+                    <Popconfirm
+                      placement="bottomRight"
+                      title='Are you sure to delete this post?'
+                      onConfirm={this.handleDelete}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button>
+                        <CloseBtn />
+                      </Button>
+                    </Popconfirm>
+                  }
                 </div>
                 <PostAuthor {...this.props} />
                 <div className="Post__Description">{parse(post.descriptionText)}</div>
