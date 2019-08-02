@@ -115,7 +115,9 @@ class CustomNavBar extends Component {
             </div>
             <div className="nav-item">
               <Dropdown overlay={menu}>
-                <Button style={{
+                <Button 
+                  className="ant-btn-navbar"
+                  style={{
                   width: '100%'
                 }}>
                   Account <Icon type='user' />

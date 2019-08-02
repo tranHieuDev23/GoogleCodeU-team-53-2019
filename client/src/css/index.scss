@@ -52,7 +52,7 @@ body {
   margin-right: 10px;
 }
 
-.nav-link, .ant-btn {
+.nav-link, .ant-btn-navbar {
   margin: 2px;
   background-color: #77a6f7;
   color: #ffffff !important;
@@ -63,7 +63,7 @@ body {
   font-size: 1.25rem !important;
   line-height: 1;
 }
-.navbar-link:hover, .ant-btn:hover {
+.navbar-link:hover, .ant-btn-navbar:hover {
   background-color: #4483ef;
   transition: 0.3s;
 }
