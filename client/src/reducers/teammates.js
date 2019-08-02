@@ -1,4 +1,3 @@
-import user from '../assets/icons/user.svg';
 import hieu from '../assets/hieu.jpg';
 import suyeon from '../assets/suyeon.jpg';
 import hyeln from '../assets/hyeln.jpg';

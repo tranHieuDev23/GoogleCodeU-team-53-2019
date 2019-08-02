@@ -71,13 +71,6 @@
     }
   }
 
-  &__ShowMore {
-    margin-bottom: 15px;
-    border-bottom: 1px solid gray;
-    text-align: center;
-    cursor: pointer;
-  }
-
   &__TextArea {
     border-bottom: 1px solid gray;
     margin-bottom: 15px;
@@ -85,6 +78,11 @@
     min-height: 1000;
     text-align: center;
   }
+}
+
+.ShowMoreComment {
+  text-align: center;
+  cursor: pointer;
 }
 
 .Post__LikeBar {
