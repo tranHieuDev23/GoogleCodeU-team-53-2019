@@ -95,22 +95,36 @@ class CustomNavBar extends Component {
     );
 
     return (
-      <div className='navbar navbar-dark bg-primary'>
-        <div>
-          <Link to={HOME} className="navbar-brand">Home</Link>
-          <Link to={EXPLORE_PAGE} className="navbar-toggler">Explore</Link>
-          <Link to={ABOUT_US} className="navbar-toggler">About Our Team</Link>
-        </div>
-        <div>
-          <Link to={UPLOAD_PAGE} className='navbar-toggler'>
-            Create New Post
-          </Link>
-          <Dropdown overlay={menu}>
-            <Button>
-              Account
-              <Icon type='user' />
-            </Button>
-          </Dropdown>
+      <div className='navbar navbar-expand-lg navbar-dark bg-primary'>
+        <Link to={HOME} className="navbar-brand">Home</Link>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+          <div className="navbar-nav">
+            <div className="nav-item">
+              <Link to={EXPLORE_PAGE} className="nav-link">Explore</Link>
+            </div>
+            <div className="nav-item">
+              <Link to={ABOUT_US} className="nav-link">About Our Team</Link>
+            </div>
+          </div>
+          <div className="navbar-nav ml-auto">
+            <div className="nav-item">
+              <Link to={UPLOAD_PAGE} className='nav-link'>Create New Post</Link>
+            </div>
+            <div className="nav-item">
+              <Dropdown overlay={menu}>
+                <Button 
+                  className="ant-btn-navbar"
+                  style={{
+                  width: '100%'
+                }}>
+                  Account <Icon type='user' />
+                </Button>
+              </Dropdown>
+            </div>
+          </div>
         </div>
       </div>
     );
