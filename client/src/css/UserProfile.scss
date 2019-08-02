@@ -10,8 +10,10 @@
   img {
     display: block;
     margin: auto;
-    height: 150px;
+    margin-top: 1rem;
+    max-width: 100%;
     width: 150px;
+    height: auto;
     border-radius: 50%;
   }
 
