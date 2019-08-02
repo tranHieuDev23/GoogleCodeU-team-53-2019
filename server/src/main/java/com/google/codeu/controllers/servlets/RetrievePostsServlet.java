@@ -1,7 +1,9 @@
 package com.google.codeu.controllers.servlets;
 
+import com.google.codeu.controllers.datastore.CommentDao;
 import com.google.codeu.controllers.datastore.PostDao;
 import com.google.codeu.controllers.datastore.TagDao;
+import com.google.codeu.models.Comment;
 import com.google.codeu.models.Location;
 import com.google.codeu.models.Post;
 import com.google.codeu.models.Tag;
@@ -23,11 +25,13 @@ public class RetrievePostsServlet extends HttpServlet {
 
   private PostDao postDao;
   private TagDao tagDao;
+  private CommentDao commentDao;
 
   @Override
   public void init() throws ServletException {
     postDao = new PostDao();
     tagDao = new TagDao();
+    commentDao = new CommentDao();
   }
 
   @Override
@@ -55,7 +59,19 @@ public class RetrievePostsServlet extends HttpServlet {
     if (baseOnTag) posts = getPostsBasedOnTag(req);
 
     JSONObject result = new JSONObject();
-    result.put("posts", new JSONArray(posts));
+    String withComment =req.getParameter("withComment");
+    if (!("true").equals(withComment)) {
+      result.put("posts", new JSONArray(posts));
+    } else {
+      JSONArray postsArray = new JSONArray();
+      for (Post post : posts) {
+        List<Comment> comments = commentDao.getComments(post.getId());
+        JSONObject postObject = new JSONObject(post);
+        postObject.put("comments", new JSONArray(comments));
+        postsArray.put(postObject);
+      }
+      result.put("posts", postsArray);
+    }
     res.getWriter().println(result.toString());
   }
 
