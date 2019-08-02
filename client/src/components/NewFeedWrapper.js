@@ -40,12 +40,12 @@ class NewFeedWrapper extends React.Component {
                 </Button>
               </div>
             ) : (
-              <NoMoreContents />
-            )}
+                <NoMoreContents />
+              )}
           </div>
         ) : (
-          <div />
-        )}
+            <div />
+          )}
       </React.Fragment>
     );
   }

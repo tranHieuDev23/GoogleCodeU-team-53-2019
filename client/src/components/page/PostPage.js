@@ -42,6 +42,7 @@ class PostPage extends React.Component {
           <React.Fragment>
             <h1 className='center'>{this.state.post.author.username} post</h1>
             <SinglePost
+              isNewfeed={false}
               userStatus={this.props.userStatus}
               post={this.state.post}
               order={1}
