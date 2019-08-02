@@ -52,16 +52,18 @@ body {
   margin-right: 10px;
 }
 
-.navbar-toggler {
+.nav-link, .ant-btn {
   margin: 2px;
   background-color: #77a6f7;
   color: #ffffff !important;
   border: 1px solid #deeafc !important;
   border-radius: 5px !important;
   text-align: center;
-  padding: 5px 10px;
+  padding: 5px 10px !important;
+  font-size: 1.25rem !important;
+  line-height: 1;
 }
-.navbar-toggler:hover {
+.navbar-link:hover, .ant-btn:hover {
   background-color: #4483ef;
   transition: 0.3s;
 }
