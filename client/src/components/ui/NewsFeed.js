@@ -33,12 +33,13 @@ class NewsFeed extends React.Component {
       const timestamp = date.getTime();
       newItems[index] = (
         <SinglePost
+          isNewfeed={true}
           userStatus={this.props.userStatus}
           post={newPost}
           order={index}
           key={newPost.id + '-' + timestamp}
           onChangePost={this.onChangePost}
-          withComment={false}
+          withComment={true}
           popup={oldPopup}
         />
       );
@@ -62,12 +63,13 @@ class NewsFeed extends React.Component {
         let post = posts[index];
         newItems.push(
           <SinglePost
+            isNewfeed={true}
             userStatus={this.props.userStatus}
             post={post}
             order={index}
             key={post.id}
             onChangePost={this.onChangePost}
-            withComment={false}
+            withComment={true}
             popup={false}
           />
         );

@@ -24,7 +24,11 @@ class CommentBar extends React.Component {
   }
 
   componentDidMount = () => {
-    this.loadMoreComment(10);
+    let numberOfNewComment = 10;
+    const { isNewfeed } = this.props;
+    if (isNewfeed === true)
+      numberOfNewComment = 3;
+    this.loadMoreComment(numberOfNewComment);
   };
 
   componentDidUpdate = () => {
@@ -38,7 +42,11 @@ class CommentBar extends React.Component {
   };
 
   handleShowMoreComment = () => {
-    this.loadMoreComment(10);
+    let numberOfNewComment = 10;
+    const { isNewfeed } = this.props;
+    if (isNewfeed === true)
+      numberOfNewComment = 3;
+    this.loadMoreComment(numberOfNewComment);
   };
 
   handleChangeInput = event => {
@@ -62,7 +70,7 @@ class CommentBar extends React.Component {
           const { onChangePost, order } = this.props;
           await onChangePost(order, true);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           notification.error({
             message: 'Can upload comment',
             description: 'Please check your connection and post it again!!!'
@@ -103,6 +111,10 @@ class CommentBar extends React.Component {
 
   render() {
     const { isLogin } = this.props.userStatus;
+    const { isNewfeed } = this.props;
+    let canComment = true;
+    if (isNewfeed === true)
+      canComment = false;
     return (
       <div className='Post__Comments'>
         {this.state.curIndex > 0 && (
@@ -113,7 +125,7 @@ class CommentBar extends React.Component {
           </div>
         )}
         {this.state.items}
-        {isLogin && (
+        {isLogin && canComment && (
           <Search
             placeholder='Enter your comment here!'
             enterButton='Post'
