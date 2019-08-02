@@ -24,7 +24,7 @@ class NewsFeed extends React.Component {
     else {
       let newItems = [...this.state.items];
       const { posts } = this.props;
-      let newPost = await fetchPost(posts[index].id);
+      let newPost = await fetchPost(posts[index].id, true);
       if (newPost == null) {
         console.log("Can't re fetch single post");
         return;
